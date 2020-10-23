@@ -39,12 +39,10 @@
 |  1   | /blog/input | blog-input.html | 分类列表的新增按钮改为当前页面新增 | 当时暂未想到好的办法，现在已经可以实现 |   3    |
 
 ## 学习交流
-<img src="https://raw.githubusercontent.com/wuGuangLei/ArticalBed/main/Public/QQ.png" width="20%" />
-<img src="https://raw.githubusercontent.com/wuGuangLei/ArticalBed/main/Public/WeChat.png" width="20%"/>
-<br/>
+<img src="https://raw.githubusercontent.com/wuGuangLei/ArticalBed/main/Public/QQ.png" width="20%" /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="https://raw.githubusercontent.com/wuGuangLei/ArticalBed/main/Public/WeChat.png" width="20%"/>
 
 ## 赞助
 
 微信扫一扫,请作者喝一杯咖啡?
 
-<img src="https://raw.githubusercontent.com/wuGuangLei/ArticalBed/main/Public/reward.png" width="30%"/>
+<img src="https://raw.githubusercontent.com/wuGuangLei/ArticalBed/main/Public/Reward.png" width="30%"/>
