@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.noahcode.blog.mapper.BlogsTagMapper">
+    <resultMap id="BaseResultMap" type="cn.noahcode.blog.model.entity.BlogsTag">
+        <!--@mbg.generated-->
+        <!--@Table blogs_tags-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="blog_id" jdbcType="INTEGER" property="blogId"/>
+        <result column="tag_id" jdbcType="INTEGER" property="tagId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, blog_id, tag_id, create_time, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from blogs_tags
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from blogs_tags
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.noahcode.blog.model.entity.BlogsTag"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into blogs_tags (blog_id, tag_id, create_time,
+                                update_time)
+        values (#{blogId,jdbcType=INTEGER}, #{tagId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+                #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.noahcode.blog.model.entity.BlogsTag"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into blogs_tags
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="blogId != null">
+                blog_id,
+            </if>
+            <if test="tagId != null">
+                tag_id,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="blogId != null">
+                #{blogId,jdbcType=INTEGER},
+            </if>
+            <if test="tagId != null">
+                #{tagId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.noahcode.blog.model.entity.BlogsTag">
+        <!--@mbg.generated-->
+        update blogs_tags
+        <set>
+            <if test="blogId != null">
+                blog_id = #{blogId,jdbcType=INTEGER},
+            </if>
+            <if test="tagId != null">
+                tag_id = #{tagId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.noahcode.blog.model.entity.BlogsTag">
+        <!--@mbg.generated-->
+        update blogs_tags
+        set blog_id     = #{blogId,jdbcType=INTEGER},
+            tag_id      = #{tagId,jdbcType=INTEGER},
+            create_time = #{createTime,jdbcType=TIMESTAMP},
+            update_time = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select *
+        from blogs_tags
+        where blog_id = #{blogId,jdbcType=INTEGER}
+    </select>
+</mapper>

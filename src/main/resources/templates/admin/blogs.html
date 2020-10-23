@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>所有文章 - NoahCode's Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+<div th:replace="admin/_fragments :: header" class="ui top attached menu">
+    <a class="ui sidebar-icon item">
+        <i class="ui bars icon"></i>
+    </a>
+    <div class="ui right menu">
+        <a href="#" class="ui item">
+            <i class="ui linkify icon"></i>
+        </a>
+        <div class="ui top right message-icon pointing dropdown item">
+            <i class="ui bell outline icon"></i>
+            <div class="ui menu" style="width: 300px;">
+                <div class="ui header">
+                    <h3 class="ui dividing header">待审核评论</h3>
+                </div>
+                <div class="ui item">
+                    <div class="ui feed">
+                        <div class="ui event">
+                            <div class="label">
+                                <img src="../../static/images/icon.png">
+                            </div>
+                            <div class="ui content">
+                                <div class="ui summary"><a>NoahCode</a>:</div>
+                                <div class="ui extra text" style="word-wrap: break-word;white-space:normal;">
+                                    欢迎使用 Halo，这是你的第一条评论，头像来自 Gravatar，你也可以通过注册 Gravatar 来显示自己的头像。
+                                </div>
+                                <div class="ui extra date">3 天前</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui top right user pointing dropdown item">
+            <div class="ui circular mini image">
+                <img src="../../static/images/icon.png" alt="">
+            </div>
+            <div class="ui menu">
+                <div class="ui item">
+                    <i class="ui user outline icon"></i>个人信息
+                </div>
+                <div class="ui item">
+                    <i class="ui sign-out icon"></i>退出登录
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="admin/_fragments :: sidebar" class="ui tiny inverted left vertical sidebar menu">
+    <div class="ui item">
+        <img class="ui centered mini image" src="../../static/images/icon.png" alt="">
+        <h4 class="ui inverted centered header">NoahCode</h4>
+    </div>
+    <a class="ui item">仪表盘</a>
+    <a class="ui article item">
+        <i class="ui chevron down icon"></i>
+        文章
+    </a>
+    <div class="ui article inverted vertical menu" style="display: none;">
+        <a class="ui item">所有文章</a>
+        <a class="ui item">写文章</a>
+        <a class="ui item">分类目录</a>
+        <a class="ui item">标签</a>
+    </div>
+    <a class="ui item">评论</a>
+    <a class="ui user item">
+        <i class="ui chevron down icon"></i>
+        用户
+    </a>
+    <div class="ui user inverted vertical menu" style="display: none;">
+        <a class="ui item">个人资料</a>
+    </div>
+    <a class="ui system item">
+        <i class="ui chevron down icon"></i>
+        系统
+    </a>
+    <div class="ui system inverted vertical menu" style="display: none;">
+        <a class="ui item">博客设置</a>
+        <a class="ui item">关于</a>
+    </div>
+</div>
+
+<!--面包屑导航条-->
+<div class="ui bottom attached segment">
+    <div class="ui breadcrumb">
+        <a class="ui section">首页</a>
+        <div class="ui divider"> /</div>
+        <div class="ui section">文章</div>
+        <div class="ui divider"> /</div>
+        <div class="ui active section">所有文章</div>
+    </div>
+</div>
+
+<div class="ui bottom attached">
+    <div style="padding-top: 20px;padding-left: 100px;">
+        <header>
+            <span>关键词：</span>
+            <div class="ui input">
+                <input type="text">
+            </div>
+            <span style="margin-left: 20px;">文章状态：</span>
+            <div class="ui state selection dropdown">
+                <input type="hidden" name="state">
+                <i class="dropdown icon"></i>
+                <div class="default text">请选择文章状态</div>
+                <div class="menu">
+                    <div class="ui item">已发布</div>
+                    <div class="ui item">草稿</div>
+                    <div class="ui item">回收站</div>
+                    <div class="ui item">私密</div>
+                </div>
+            </div>
+            <span style="margin-left: 20px;">分类目录：</span>
+            <div class="ui state selection dropdown">
+                <input type="hidden" name="state">
+                <i class="dropdown icon"></i>
+                <div class="default text">请选择分类</div>
+                <div class="menu">
+                    <div class="ui item">默认分类（1）</div>
+                </div>
+            </div>
+            <button class="ui primary button" style="margin-left: 20px;">查询</button>
+            <button class="ui button" style="margin-left: 10px;">重置</button>
+        </header>
+        <div class="ui row" style="padding-top: 20px;padding-bottom: 20px;">
+            <a class="ui primary button" th:href="@{blogs/input}">
+                <i class="ui plus icon"></i> 写文章
+            </a>
+        </div>
+        <table class="ui very basic collapsing celled table">
+            <thead>
+            <tr>
+                <th>
+                    <div class="ui fitted checkbox">
+                        <input type="checkbox" disabled="disabled" style="cursor: not-allowed;">
+                        <label></label>
+                    </div>
+                </th>
+                <th class="two wide">标题</th>
+                <th>状态</th>
+                <th class="four wide">分类</th>
+                <th class="four wide">标签</th>
+                <th>评论</th>
+                <th>访问</th>
+                <th class="two wide">发布时间</th>
+                <th class="two wide">操作</th>
+            </tr>
+            </thead>
+            <tbody th:each="blog:${blogs}">
+            <tr>
+                <td>
+                    <div class="ui fitted checkbox">
+                        <input type="checkbox" disabled="disabled" style="cursor: not-allowed;">
+                        <label></label>
+                    </div>
+                    <input type="hidden" th:value="${blog.id}">
+                </td>
+                <td>
+                    <a href="#" th:text="${blog.title}">测试</a>
+                </td>
+                <td th:switch="${blog.status}">
+                    <div th:case="0">
+                        <i class="ui green empty circular label"></i>
+                        <span>已发布</span>
+                    </div>
+                    <div th:case="1">
+                        <i class="ui yellow empty circular label"></i>
+                        <span>草稿</span>
+                    </div>
+                    <div th:case="2">
+                        <i class="ui red empty circular label"></i>
+                        <span>回收站</span>
+                    </div>
+                    <div th:case="3">
+                        <i class="ui red empty circular label"></i>
+                        <span>私密</span>
+                    </div>
+                </td>
+                <td>
+                    <a class="ui blue label" th:each="category:${blog.categories}"
+                       th:text="${category.name}">默认分类</a>
+                </td>
+                <td>
+                    <a class="ui green label" th:each="tag:${blog.tags}" th:text="${tag.name}">测试</a>
+                </td>
+                <td>
+                    <a class="ui red circular label">2</a>
+                    <!--<a class="ui red circular label" th:text="@{blog.comments}">2</a>-->
+                </td>
+                <td>
+                    <a class="ui blue circular label" th:text="${blog.visits}">2</a>
+                </td>
+                <td>
+                    <span th:text="${#dates.format(blog.editTime,'yyyy-MM-dd HH:mm:ss')}">4分钟前</span>
+                </td>
+                <td>
+                    <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}">编辑</a> |
+                    <a id="recycle-button" href="#">回收站</a> |
+                    <div class="ui flowing popup top center transition hidden">
+                        <div class="ui basic segment">
+                            <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将【测试】文章移到回收站吗？
+                            </div>
+                            <div class="ui basic right floated segment">
+                                <input type="button" value="取消">
+                                <input type="button" value="确定">
+                            </div>
+                        </div>
+                    </div>
+                    <a id="setting-button" href="javascript:void(0)"
+                       th:onclick="openSettingSidebar(${blog.id})">设置</a>
+                </td>
+            </tr>
+            <tfoot>
+            <tr>
+                <th colspan="9">
+                    <div class="ui right floated pagination menu">
+                        <a class="icon item" href="#"
+                           th:href="'/admin/blogs?pageNum='+${pageInfo.prePage}+'&pageSize='+${pageInfo.pageSize}">
+                            <i class="left chevron icon"></i>
+                        </a>
+                        <a class="item" th:each="nav:${pageInfo.navigatepageNums}" th:text="${nav}"
+                           th:href="'/admin/blogs?pageNum='+${nav}+'&pageSize='+${pageInfo.pageSize}">1</a>
+                        <a class="icon item"
+                           th:href="'/admin/blogs?pageNum='+${pageInfo.nextPage}+'&pageSize='+${pageInfo.pageSize}">
+                            <i class="right chevron icon"></i>
+                        </a>
+                        <div class="ui page-size compact selection dropdown">
+                            <input type="hidden" name="pageSize" value="10" th:value="${pageInfo.pageSize}">
+                            <i class="ui dropdown icon"></i>
+                            <div class="ui text">10条/页</div>
+                            <div class="ui menu">
+                                <a class="ui item" data-value="1"
+                                   th:href="'/admin/blogs?pageNum='+${pageInfo.pageNum}+'&pageSize=1'">1条/页</a>
+                                <a class="ui item" data-value="2"
+                                   th:href="'/admin/blogs?pageNum='+${pageInfo.pageNum}+'&pageSize=2'">2条/页</a>
+                                <a class="ui item" data-value="5"
+                                   th:href="'/admin/blogs?pageNum='+${pageInfo.pageNum}+'&pageSize=5'">5条/页</a>
+                                <a class="ui item" data-value="10"
+                                   th:href="'/admin/blogs?pageNum='+${pageInfo.pageNum}+'&pageSize=10'">10条/页</a>
+                                <a class="ui item" data-value="20"
+                                   th:href="'/admin/blogs?pageNum='+${pageInfo.pageNum}+'&pageSize=20'">20条/页</a>
+                                <a class="ui item" data-value="50"
+                                   th:href="'/admin/blogs?pageNum='+${pageInfo.pageNum}+'&pageSize=50'">50条/页</a>
+                                <a class="ui item" data-value="100"
+                                   th:href="'/admin/blogs?pageNum='+${pageInfo.pageNum}+'&pageSize=100'">100条/页</a>
+                            </div>
+                        </div>
+                    </div>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+</div>
+
+<!--右侧边栏-->
+<div class="ui right vertical wide sidebar menu">
+    <form id="blog-form" class="ui form" method="post" action="#">
+        <div class="ui item">
+            <i class="ui small close icon" style="cursor: pointer;"></i>
+            文章设置
+        </div>
+        <div class="ui fragment item">
+            <div class="ui field">
+                <h4 class="ui header">基本设置</h4>
+            </div>
+            <div class="ui field">
+                <label>开启评论</label>
+                <div class="ui inline fields">
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="disallowComment" checked="checked" class="hidden" value="1"
+                                   th:value="true" th:attr="checked=${blog?.disallowComment}?checked">
+                            <label>开启</label>
+                        </div>
+                    </div>
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="disallowComment" class="hidden" value="0" th:value="false"
+                                   th:attr="checked=!${blog?.disallowComment}?checked">
+                            <label>关闭</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui field">
+                <label>是否置顶</label>
+                <div class="ui inline fields">
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="topPriority" class="hidden" value="1" th:value="true"
+                                   th:attr="checked=${blog?.topPriority}?checked">
+                            <label>是</label>
+                        </div>
+                    </div>
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="topPriority" checked="checked" class="hidden" value="0"
+                                   th:value="false" th:attr="checked=!${blog?.topPriority}?checked">
+                            <label>否</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <h4 class="ui header">加密设置</h4>
+            </div>
+            <div class="ui field">
+                <label>访问密码：</label>
+                <div class="ui icon input">
+                    <input id="access-password" type="password" name="password" autoComplete="new-password"
+                           th:value="${blog?.password}">
+                    <i class="ui access-password link eye icon"></i>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <label>分类目录：</label>
+                <div class="ui grouped fields">
+                    <div class="ui field" th:each="category:${categories}">
+                        <div class="ui checkbox"
+                             th:classappend="#{blogsCategories.blogCategories[category.id]}?checked">
+                            <input id="categories" type="checkbox" name="categories" value="0"
+                                   th:value="${category.id}">
+                            <label th:text="${category.name}">默认分类</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui field">
+                <a class="ui basic button" href="categories.html" th:href="@{/admin/categories}">新增</a>
+            </div>
+            <!--<div class="ui field">-->
+            <!--        <div class="ui field">-->
+            <!--            <div class="ui parent-id fluid selection dropdown">-->
+            <!--                <input type="hidden" name="parentId" id="parentId" th:value="0">-->
+            <!--                <div class="ui text" data-value="0" th:data-value="0">0</div>-->
+            <!--                <i class="ui dropdown icon"></i>-->
+            <!--                <div class="ui menu" th:each="category:${categories}">-->
+            <!--                    <div class="ui item" data-value="1" th:data-value="${category.id}"-->
+            <!--                         th:text="${category.name}">-->
+            <!--                        默认分类-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--        </div>-->
+            <!--        <div class="ui field">-->
+            <!--            <input type="text" name="name" id="name" placeholder="分类名称">-->
+            <!--        </div>-->
+            <!--        <div class="ui field">-->
+            <!--            <textarea rows="2" name="description" id="description" placeholder="描述"></textarea>-->
+            <!--        </div>-->
+            <!--        <input class="ui blue button" type="submit" value="保存">-->
+            <!--        <button class="ui basic button">取消</button>-->
+            <!--        <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}"-->
+            <!--             th:text="${message}"></div>-->
+            <!--</div>-->
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <label>标签</label>
+                <div class="ui tags multiple search selection dropdown" style="float: left;width: 220px;">
+                    <input type="hidden" name="tags" th:value="${blogsTags?.blogTags}">
+                    <i class="ui dropdown icon"></i>
+                    <div class="ui default text">选择或输入标签</div>
+                    <div class="ui menu">
+                        <div class="ui item" value="1" th:each="tag:${tags}" th:data-value="${tag.id}"
+                             th:text="${tag.name}">
+                            测试
+                        </div>
+                    </div>
+                </div>
+                <div class="ui basic tag-clear button" style="margin-left: 10px;">
+                    清空
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <label>摘要</label>
+                <textarea rows="2" name="summary"></textarea>
+            </div>
+            <div class="ui error message"></div>
+        </div>
+        <div class="ui field">
+            <div class="ui basic right floated segment">
+                <input id="second-draft-button" class="ui draft red button" type="submit" value="保存草稿"/>
+                <input id="publish-button" class="ui submit blue publish button" type="submit" value="发布"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.message-icon.dropdown.item')
+        .dropdown()
+    $('.ui.user.dropdown.item')
+        .dropdown()
+    $('.ui.sidebar-icon.item')
+        .click(function () {
+            $('.ui.left.sidebar').sidebar('toggle')
+        })
+    $('.ui.article.item')
+        .click(function () {
+            $('.ui.article.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(0)').toggleClass('down')
+                $('.ui.chevron.icon:eq(0)').toggleClass('up')
+            })
+        })
+    $('.ui.user.item')
+        .click(function () {
+            $('.ui.user.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(1)').toggleClass('down')
+                $('.ui.chevron.icon:eq(1)').toggleClass('up')
+            })
+        })
+    $('.ui.system.item')
+        .click(function () {
+            $('.ui.system.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(2)').toggleClass('down')
+                $('.ui.chevron.icon:eq(2)').toggleClass('up')
+            })
+        })
+</script>
+<!--/*/</th:block>/*/-->
+<script>
+    $('.ui.state.dropdown')
+        .dropdown()
+    $('.ui.page-size.dropdown')
+        .dropdown()
+    $('.ui.checkbox').hover(function () {
+
+    })
+    $('#recycle-button')
+        .popup({
+            on: 'click',
+            boundary: '#button-group'
+        })
+
+    function openSettingSidebar(blogId) {
+        $.ajax({
+            url: '/admin/blogs/' + blogId + '/input',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json"
+        })
+        $('.ui.right.sidebar')
+            .sidebar('setting', 'transition', 'overlay')
+            .sidebar('toggle')
+    }
+
+    $('#setting-button').click(function () {
+
+    })
+</script>
+</body>

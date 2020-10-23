@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>写文章 - NoahCode's Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <link rel="stylesheet" href="../../static/lib/editormd/css/editormd.min.css">
+</head>
+<body>
+<div th:replace="admin/_fragments :: header" class="ui top attached menu">
+    <a class="ui sidebar-icon item">
+        <i class="ui bars icon"></i>
+    </a>
+    <div class="ui right menu">
+        <a href="#" class="ui item">
+            <i class="ui linkify icon"></i>
+        </a>
+        <div class="ui top right message-icon pointing dropdown item">
+            <i class="ui bell outline icon"></i>
+            <div class="ui menu" style="width: 300px;">
+                <div class="ui header">
+                    <h3 class="ui dividing header">待审核评论</h3>
+                </div>
+                <div class="ui item">
+                    <div class="ui feed">
+                        <div class="ui event">
+                            <div class="label">
+                                <img src="../../static/images/icon.png">
+                            </div>
+                            <div class="ui content">
+                                <div class="ui summary"><a>NoahCode</a>:</div>
+                                <div class="ui extra text" style="word-wrap: break-word;white-space:normal;">
+                                    欢迎使用 Halo，这是你的第一条评论，头像来自 Gravatar，你也可以通过注册 Gravatar 来显示自己的头像。
+                                </div>
+                                <div class="ui extra date">3 天前</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui top right user pointing dropdown item">
+            <div class="ui circular mini image">
+                <img src="../../static/images/icon.png" alt="">
+            </div>
+            <div class="ui menu">
+                <div class="ui item">
+                    <i class="ui user outline icon"></i>个人信息
+                </div>
+                <div class="ui item">
+                    <i class="ui sign-out icon"></i>退出登录
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="admin/_fragments :: sidebar" class="ui tiny inverted left vertical sidebar menu">
+    <div class="ui item">
+        <img class="ui centered mini image" src="../../static/images/icon.png" alt="">
+        <h4 class="ui inverted centered header">NoahCode</h4>
+    </div>
+    <a class="ui item">仪表盘</a>
+    <a class="ui article item">
+        <i class="ui chevron down icon"></i>
+        文章
+    </a>
+    <div class="ui article inverted vertical menu" style="display: none;">
+        <a class="ui item">所有文章</a>
+        <a class="ui item">写文章</a>
+        <a class="ui item">分类目录</a>
+        <a class="ui item">标签</a>
+    </div>
+    <a class="ui item">评论</a>
+    <a class="ui user item">
+        <i class="ui chevron down icon"></i>
+        用户
+    </a>
+    <div class="ui user inverted vertical menu" style="display: none;">
+        <a class="ui item">个人资料</a>
+    </div>
+    <a class="ui system item">
+        <i class="ui chevron down icon"></i>
+        系统
+    </a>
+    <div class="ui system inverted vertical menu" style="display: none;">
+        <a class="ui item">博客设置</a>
+        <a class="ui item">关于</a>
+    </div>
+</div>
+
+<!--面包屑导航条-->
+<div class="ui bottom attached segment">
+    <div class="ui breadcrumb">
+        <a class="ui section">首页</a>
+        <div class="ui divider"> /</div>
+        <div class="ui section">文章</div>
+        <div class="ui divider"> /</div>
+        <div class="ui active section">写文章</div>
+    </div>
+</div>
+
+<form id="blog-data" class="ui form">
+    <div class="ui field">
+        <input type="hidden" name="id" th:value="${blog?.id}">
+    </div>
+    <div class="ui bottom attached">
+        <div style="padding: 20px;">
+            <div class="ui field">
+                <div class="ui fluid input" style="padding-bottom: 30px;">
+                    <input id="title" type="text" placeholder="请输入文章标题" name="title" autoComplete="new-text"
+                           th:value="${blog?.title}">
+                </div>
+            </div>
+            <div class="ui field">
+                <div id="editor">
+                    <textarea id="content" style="display:none;" name="originalContent"
+                              th:text="${blog?.originalContent}"></textarea>
+                </div>
+            </div>
+            <div class="ui error message"></div>
+            <div class="ui hidden negative message"></div>
+        </div>
+    </div>
+    <div class="ui bottom attached">
+        <div class="ui basic right floated segment">
+            <input id="first-draft-button" class="ui draft red button" type="submit" value="保存草稿"/>
+            <input id="preview-button" class="ui preview basic button" type="submit" value="预览"/>
+            <input id="right-sidebar-button" class="ui blue publish button" type="button" value="发布"/>
+        </div>
+    </div>
+</form>
+<div class="ui right vertical wide sidebar menu">
+    <form id="blog-form" class="ui form" method="post" action="#">
+        <div class="ui item">
+            <i class="ui small close icon" style="cursor: pointer;"></i>
+            文章设置
+        </div>
+        <div class="ui fragment item">
+            <div class="ui field">
+                <h4 class="ui header">基本设置</h4>
+            </div>
+            <div class="ui field">
+                <label>开启评论</label>
+                <div class="ui inline fields">
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="disallowComment" checked="checked" class="hidden" value="1"
+                                   th:value="true" th:attr="checked=${blog?.disallowComment}?checked">
+                            <label>开启</label>
+                        </div>
+                    </div>
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="disallowComment" class="hidden" value="0" th:value="false"
+                                   th:attr="checked=!${blog?.disallowComment}?checked">
+                            <label>关闭</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui field">
+                <label>是否置顶</label>
+                <div class="ui inline fields">
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="topPriority" class="hidden" value="1" th:value="true"
+                                   th:attr="checked=${blog?.topPriority}?checked">
+                            <label>是</label>
+                        </div>
+                    </div>
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="topPriority" checked="checked" class="hidden" value="0"
+                                   th:value="false" th:attr="checked=!${blog?.topPriority}?checked">
+                            <label>否</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <h4 class="ui header">加密设置</h4>
+            </div>
+            <div class="ui field">
+                <label>访问密码：</label>
+                <div class="ui icon input">
+                    <input id="access-password" type="password" name="password" autoComplete="new-password"
+                           th:value="${blog?.password}">
+                    <i class="ui access-password link eye icon"></i>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <label>分类目录：</label>
+                <div class="ui grouped fields">
+                    <div class="ui field" th:each="category:${categories}">
+                        <div class="ui checkbox"
+                             th:classappend="#{blogsCategories.blogCategories[category.id]}?checked">
+                            <input id="categories" type="checkbox" name="categories" value="0"
+                                   th:value="${category.id}">
+                            <label th:text="${category.name}">默认分类</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui field">
+                <a class="ui basic button" href="categories.html" th:href="@{/admin/categories}">新增</a>
+            </div>
+            <!--<div class="ui field">-->
+            <!--        <div class="ui field">-->
+            <!--            <div class="ui parent-id fluid selection dropdown">-->
+            <!--                <input type="hidden" name="parentId" id="parentId" th:value="0">-->
+            <!--                <div class="ui text" data-value="0" th:data-value="0">0</div>-->
+            <!--                <i class="ui dropdown icon"></i>-->
+            <!--                <div class="ui menu" th:each="category:${categories}">-->
+            <!--                    <div class="ui item" data-value="1" th:data-value="${category.id}"-->
+            <!--                         th:text="${category.name}">-->
+            <!--                        默认分类-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--        </div>-->
+            <!--        <div class="ui field">-->
+            <!--            <input type="text" name="name" id="name" placeholder="分类名称">-->
+            <!--        </div>-->
+            <!--        <div class="ui field">-->
+            <!--            <textarea rows="2" name="description" id="description" placeholder="描述"></textarea>-->
+            <!--        </div>-->
+            <!--        <input class="ui blue button" type="submit" value="保存">-->
+            <!--        <button class="ui basic button">取消</button>-->
+            <!--        <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}"-->
+            <!--             th:text="${message}"></div>-->
+            <!--</div>-->
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <label>标签</label>
+                <div class="ui tags multiple search selection dropdown" style="float: left;width: 220px;">
+                    <input type="hidden" name="tags" th:value="${blogsTags?.blogTags}">
+                    <i class="ui dropdown icon"></i>
+                    <div class="ui default text">选择或输入标签</div>
+                    <div class="ui menu">
+                        <div class="ui item" value="1" th:each="tag:${tags}" th:data-value="${tag.id}"
+                             th:text="${tag.name}">
+                            测试
+                        </div>
+                    </div>
+                </div>
+                <div class="ui basic tag-clear button" style="margin-left: 10px;">
+                    清空
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <label>摘要</label>
+                <textarea rows="2" name="summary"></textarea>
+            </div>
+            <div class="ui error message"></div>
+        </div>
+        <div class="ui field">
+            <div class="ui basic right floated segment">
+                <input id="second-draft-button" class="ui draft red button" type="submit" value="保存草稿"/>
+                <input id="publish-button" class="ui submit blue publish button" type="submit" value="发布"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="../../static/lib/editormd/editormd.min.js"></script>
+<script>
+    $('.ui.message-icon.dropdown.item')
+        .dropdown()
+    $('.ui.user.dropdown.item')
+        .dropdown()
+    $('.ui.sidebar-icon.item')
+        .click(function () {
+            $('.ui.left.sidebar').sidebar('toggle')
+        })
+    $('.ui.article.item')
+        .click(function () {
+            $('.ui.article.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(0)').toggleClass('down')
+                $('.ui.chevron.icon:eq(0)').toggleClass('up')
+            })
+        })
+    $('.ui.user.item')
+        .click(function () {
+            $('.ui.user.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(1)').toggleClass('down')
+                $('.ui.chevron.icon:eq(1)').toggleClass('up')
+            })
+        })
+    $('.ui.system.item')
+        .click(function () {
+            $('.ui.system.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(2)').toggleClass('down')
+                $('.ui.chevron.icon:eq(2)').toggleClass('up')
+            })
+        })
+</script>
+<!--/*/</th:block>/*/-->
+<script>
+    $(function () {
+        editormd("editor", {
+            width: "100%",
+            height: "100dp",
+            path: "/lib/editormd/lib/",
+            placeholder: "开始编辑..."
+        })
+    })
+    $('.ui.tags.dropdown')
+        .dropdown({
+            clearable: true,
+            allowAdditions: true
+        })
+    $('.ui.close.icon')
+        .click(function () {
+            $('.ui.right.sidebar').sidebar('hide')
+        })
+    $('.ui.radio.checkbox').checkbox()
+    $('.ui.checked.checkbox').checkbox('checked')
+    $('.ui.access-password.eye.icon')
+        .click(function () {
+            $('.ui.access-password.eye.icon').toggleClass('slash')
+            var input_type = $('#access-password').attr('type')
+            if (input_type === 'password') {
+                $('#access-password').attr('type', 'text')
+            } else {
+                $('#access-password').attr('type', 'password')
+            }
+        })
+    $('.ui.tag-clear.button').click(function () {
+        $('.ui.tags.dropdown').dropdown('clear')
+    })
+    $('#blog-data')
+        .form({
+            fields: {
+                name: {
+                    identifier: 'title',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '请输入标题'
+                    }]
+                },
+                originalContent: {
+                    identifier: 'originalContent',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '请输入内容'
+                    }]
+                }
+            }
+        })
+    $('#right-sidebar-button').click(function () {
+        var title = $('#title').val()
+        var originalContent = $('#content').val()
+        var message = $('.ui.negative.message')
+        if (title == null || title.length == 0 || title == '') {
+            message.removeClass('hidden')
+            message.html('' +
+                '<ul class="list">\n' +
+                '    <li>请输入标题</li>\n' +
+                '  </ul>')
+        } else if (originalContent == null || originalContent.length == 0 || originalContent == '') {
+            message.removeClass('hidden')
+            message.html('' +
+                '<ul class="list">\n' +
+                '    <li>请输入内容</li>\n' +
+                '  </ul>')
+        } else {
+            message.addClass('hidden')
+            $('.ui.checked.checkbox input').attr('checked', 'checked')
+            $('.ui.right.sidebar')
+                .sidebar('setting', 'transition', 'overlay')
+                .sidebar('toggle')
+        }
+    })
+    $('#first-draft-button').click(function () {
+        $('#blog-data').submit(function (event) {
+            event.preventDefault();  // 阻止默认表单的action功能
+            var title = $('#title').val()
+            var originalContent = $('#content').val()
+            data = {
+                "title": title,
+                "originalContent": originalContent,
+                "status": "DRAFT"
+            }
+            $.ajax({
+                url: /*[[@{/admin/blogs/}]]*/'/admin/blogs',
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    window.location.href = "/admin/blogs"
+                }
+            })
+        })
+    })
+    $('#second-draft-button').click(function () {
+        $('#blog-form').submit(function (event) {
+            event.preventDefault();  // 阻止默认表单的action功能
+            var title = $('#title').val()
+            var originalContent = $('#content').val()
+            var summary = $('textarea[name="summary"]').val()
+            var password = $('input[name="password"]').val()
+            var disallowComment = $('input[name="disallowComment"]:checked').val()
+            var topPriority = $('input[name="topPriority"]:checked').val()
+            var categoryIds = []
+            var tagIds = $('input[name="tags"]').val().split(',')
+            $('input[name="categories"]:checked').each(function () {
+                categoryIds.push($(this).val())
+            })
+            data = {
+                "title": title,
+                "originalContent": originalContent,
+                "summary": summary,
+                "password": password,
+                "disallowComment": disallowComment,
+                "topPriority": topPriority,
+                "status": "DRAFT",
+                "categoryIds": categoryIds,
+                "tagIds": tagIds
+            }
+            $.ajax({
+                url: /*[[@{/admin/blogs/}]]*/'/admin/blogs',
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    window.location.href = "/admin/blogs"
+                }
+            })
+        })
+    })
+    $('#publish-button').click(function () {
+        $('#blog-form').submit(function (event) {
+            event.preventDefault();  // 阻止默认表单的action功能
+            var title = $('#title').val()
+            var originalContent = $('#content').val()
+            var summary = $('textarea[name="summary"]').val()
+            var password = $('input[name="password"]').val()
+            var disallowComment = $('input[name="disallowComment"]:checked').val()
+            var topPriority = $('input[name="topPriority"]:checked').val()
+            var categoryIds = []
+            var tagIds = $('input[name="tags"]').val().split(',')
+            $('input[name="categories"]:checked').each(function () {
+                categoryIds.push($(this).val())
+            })
+            data = {
+                "title": title,
+                "originalContent": originalContent,
+                "summary": summary,
+                "password": password,
+                "disallowComment": disallowComment,
+                "topPriority": topPriority,
+                "status": "PUBLISHED",
+                "categoryIds": categoryIds,
+                "tagIds": tagIds
+            }
+            $.ajax({
+                url: /*[[@{/admin/blogs/}]]*/'/admin/blogs',
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function (data) {
+                    window.location.href = "/admin/blogs"
+                }
+            })
+        })
+    })
+</script>
+</body>
+</html>
