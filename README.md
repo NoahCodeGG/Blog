@@ -12,13 +12,13 @@
 - [MyBatis](https://github.com/mybatis/mybatis-3)
 - [MySql](https://www.mysql.com/)
 - [Semantic UI](https://github.com/Semantic-Org/Semantic-UI)
-- 。。。
+- ……
 
 ## 参考资料/项目
 
 - [Halo](https://github.com/halo-dev/halo) | 是一款现代化的个人独立博客系统，给习惯写博客的同学多一个选择。
 - [blog_demo](https://github.com/wuGuangLei/blog_demo) | 自己学习时看的博客开发教程
-- 。。。
+- ……
 
 ## 许可证
 
