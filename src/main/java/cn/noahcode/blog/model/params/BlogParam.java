@@ -13,6 +13,8 @@ import java.util.Set;
 @Data
 public class BlogParam {
 
+    private Integer id;
+
     private String title;
 
     private BlogStatus status = BlogStatus.DRAFT;

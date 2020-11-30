@@ -135,7 +135,7 @@
                 <i class="ui plus icon"></i> 写文章
             </a>
         </div>
-        <table class="ui very basic collapsing celled table">
+        <table id="blogs" th:fragment="blogs" class="ui very basic collapsing celled table">
             <thead>
             <tr>
                 <th>
@@ -154,7 +154,7 @@
                 <th class="two wide">操作</th>
             </tr>
             </thead>
-            <tbody th:each="blog:${blogs}">
+            <tbody th:each="blog,blogStat:${blogs}" class="tbody">
             <tr>
                 <td>
                     <div class="ui fitted checkbox">
@@ -203,19 +203,9 @@
                 </td>
                 <td>
                     <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}">编辑</a> |
-                    <a id="recycle-button" href="#">回收站</a> |
-                    <div class="ui flowing popup top center transition hidden">
-                        <div class="ui basic segment">
-                            <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将【测试】文章移到回收站吗？
-                            </div>
-                            <div class="ui basic right floated segment">
-                                <input type="button" value="取消">
-                                <input type="button" value="确定">
-                            </div>
-                        </div>
-                    </div>
-                    <a id="setting-button" href="javascript:void(0)"
-                       th:onclick="openSettingSidebar(${blog.id})">设置</a>
+                    <a id="recycle-button" th:id="'recycle-button-'+${blog.id}" style="cursor:pointer">回收站</a> |
+                    <a id="setting-button" style="cursor:pointer"
+                       th:onclick="openSettingSidebar([[${categories}]],[[${tags}]],[[${blog}]])">设置</a>
                 </td>
             </tr>
             <tfoot>
@@ -278,15 +268,14 @@
                 <div class="ui inline fields">
                     <div class="ui field">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="disallowComment" checked="checked" class="hidden" value="1"
-                                   th:value="true" th:attr="checked=${blog?.disallowComment}?checked">
+                            <input type="radio" name="disallowComment" checked="checked" class="hidden"
+                                   value="1">
                             <label>开启</label>
                         </div>
                     </div>
                     <div class="ui field">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="disallowComment" class="hidden" value="0" th:value="false"
-                                   th:attr="checked=!${blog?.disallowComment}?checked">
+                            <input type="radio" name="disallowComment" class="hidden" value="0">
                             <label>关闭</label>
                         </div>
                     </div>
@@ -297,15 +286,13 @@
                 <div class="ui inline fields">
                     <div class="ui field">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="topPriority" class="hidden" value="1" th:value="true"
-                                   th:attr="checked=${blog?.topPriority}?checked">
+                            <input type="radio" name="topPriority" class="hidden" value="1">
                             <label>是</label>
                         </div>
                     </div>
                     <div class="ui field">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="topPriority" checked="checked" class="hidden" value="0"
-                                   th:value="false" th:attr="checked=!${blog?.topPriority}?checked">
+                            <input type="radio" name="topPriority" checked="checked" class="hidden" value="0">
                             <label>否</label>
                         </div>
                     </div>
@@ -318,23 +305,20 @@
             <div class="ui field">
                 <label>访问密码：</label>
                 <div class="ui icon input">
-                    <input id="access-password" type="password" name="password" autoComplete="new-password"
-                           th:value="${blog?.password}">
+                    <input id="access-password" type="password" name="password" autoComplete="new-password">
                     <i class="ui access-password link eye icon"></i>
                 </div>
             </div>
             <div class="ui divider"></div>
             <div class="ui field">
                 <label>分类目录：</label>
-                <div class="ui grouped fields">
-                    <div class="ui field" th:each="category:${categories}">
-                        <div class="ui checkbox"
-                             th:classappend="#{blogsCategories.blogCategories[category.id]}?checked">
-                            <input id="categories" type="checkbox" name="categories" value="0"
-                                   th:value="${category.id}">
-                            <label th:text="${category.name}">默认分类</label>
-                        </div>
-                    </div>
+                <div class="ui categories grouped fields">
+                    <!--<div class="ui field">-->
+                    <!--    <div class="ui checkbox">-->
+                    <!--        <input id="categories" type="checkbox" name="categories" value="0">-->
+                    <!--        <label>默认分类</label>-->
+                    <!--    </div>-->
+                    <!--</div>-->
                 </div>
             </div>
             <div class="ui field">
@@ -369,10 +353,10 @@
             <div class="ui field">
                 <label>标签</label>
                 <div class="ui tags multiple search selection dropdown" style="float: left;width: 220px;">
-                    <input type="hidden" name="tags" th:value="${blogsTags?.blogTags}">
-                    <i class="ui dropdown icon"></i>
+                    <input id="tags" type="hidden" name="tags">
+                    <i class="ui tags dropdown icon"></i>
                     <div class="ui default text">选择或输入标签</div>
-                    <div class="ui menu">
+                    <div class="ui tags menu">
                         <div class="ui item" value="1" th:each="tag:${tags}" th:data-value="${tag.id}"
                              th:text="${tag.name}">
                             测试
@@ -402,14 +386,18 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script>
+
     $('.ui.message-icon.dropdown.item')
         .dropdown()
+
     $('.ui.user.dropdown.item')
         .dropdown()
+
     $('.ui.sidebar-icon.item')
         .click(function () {
-            $('.ui.left.sidebar').sidebar('toggle')
-        })
+            $('.ui.left.sidebar').sidebar('fade')
+        });
+
     $('.ui.article.item')
         .click(function () {
             $('.ui.article.vertical.menu').toggle('fast', function () {
@@ -417,6 +405,7 @@
                 $('.ui.chevron.icon:eq(0)').toggleClass('up')
             })
         })
+
     $('.ui.user.item')
         .click(function () {
             $('.ui.user.vertical.menu').toggle('fast', function () {
@@ -424,6 +413,7 @@
                 $('.ui.chevron.icon:eq(1)').toggleClass('up')
             })
         })
+
     $('.ui.system.item')
         .click(function () {
             $('.ui.system.vertical.menu').toggle('fast', function () {
@@ -431,36 +421,145 @@
                 $('.ui.chevron.icon:eq(2)').toggleClass('up')
             })
         })
+
 </script>
 <!--/*/</th:block>/*/-->
 <script>
     $('.ui.state.dropdown')
         .dropdown()
+
     $('.ui.page-size.dropdown')
         .dropdown()
-    $('.ui.checkbox').hover(function () {
 
+    $('.ui.tags.dropdown')
+        .dropdown({
+            clearable: true,
+            allowAdditions: true
+        })
+
+    $('.ui.tag-clear.button').click(function () {
+        $('.ui.tags.dropdown').dropdown('clear')
     })
-    $('#recycle-button')
-        .popup({
-            on: 'click',
-            boundary: '#button-group'
+
+    $('.ui.close.icon')
+        .click(function () {
+            $('.ui.right.sidebar').sidebar('hide')
         })
 
-    function openSettingSidebar(blogId) {
-        $.ajax({
-            url: '/admin/blogs/' + blogId + '/input',
-            type: "POST",
-            data: JSON.stringify(data),
-            contentType: "application/json"
+    $('.ui.radio.checkbox').checkbox()
+
+    $('.ui.access-password.eye.icon')
+        .click(function () {
+            $('.ui.access-password.eye.icon').toggleClass('slash')
+            var input_type = $('#access-password').attr('type')
+            if (input_type === 'password') {
+                $('#access-password').attr('type', 'text')
+            } else {
+                $('#access-password').attr('type', 'password')
+            }
         })
+
+    function hoverRecyclePopup() {
+        $('.ui.popup.transition.visible').transition('zoom')
+    }
+
+    function toRecycle(blogId, pageNum, pageSize) {
+        $.ajax({
+            url: '/admin/blogs/' + blogId + '/recycle',
+            type: "GET",
+            success: $('#blogs').load('/admin/blogs/' + blogId + '/recycle?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        })
+    }
+
+    function openSettingSidebar(categories, tags, blog) {
+        console.log(blog.tags)
+        var disallowComment = $('input[name="disallowComment"]')
+        var topPriority = $('input[name="topPriority"]')
+        var password = $('#access-password')
+        var categoriesList = $('.ui.categories.grouped.fields')
+        var tagsInput = $('#tags')
+        var tagsDropdownIcon = $('.ui.tags.dropdown.icon')
+        var tagsList = $('.ui.tags.menu')
+        if (blog.disallowComment) {
+            disallowComment.eq(0).removeAttr('checked')
+            disallowComment.eq(1).attr('checked', 'checked')
+        } else {
+            disallowComment.eq(0).attr('checked', 'checked')
+            disallowComment.eq(1).removeAttr('checked', '')
+        }
+        if (blog.topPriority) {
+            topPriority.eq(0).attr('checked', 'checked')
+            topPriority.eq(1).removeAttr('checked', '')
+        } else {
+            topPriority.eq(0).removeAttr('checked')
+            topPriority.eq(1).attr('checked', 'checked')
+        }
+        if (blog.password.length != 0) {
+            password.val(blog.password)
+        }
+
+        //初始化分类
+        categoriesList.empty()
+        //初始化标签
+        tags.val = ''
+        $.each(categories, function (index, category) {
+            var isAdd = false
+            $.each(blog.categories, function (index, blogCategory) {
+                if (blogCategory.id === category.id) {
+                    categoriesList.append(
+                        '<div class="ui field">' +
+                        '     <div class="ui checkbox">' +
+                        '          <input type="checkbox" name="categories" checked="checked" value="' + blogCategory.id + '">' +
+                        '          <label>' + blogCategory.name + '</label>' +
+                        '     </div>' +
+                        '</div>'
+                    )
+                    isAdd = true;
+                }
+            })
+            if (!isAdd) {
+                categoriesList.append(
+                    '<div class="ui field">' +
+                    '     <div class="ui checkbox">' +
+                    '          <input type="checkbox" name="categories" value="' + category.id + '">' +
+                    '          <label>' + category.name + '</label>' +
+                    '     </div>' +
+                    '</div>'
+                )
+            }
+        })
+
+        var tagsValue = ''
+        $.each(blog.tags, function (index, tag) {
+            tagsValue += tag.id
+            if (index != blog.tags.length) {
+                tagsValue += ","
+            }
+        })
+        tagsInput.val(tagsValue)
+
         $('.ui.right.sidebar')
             .sidebar('setting', 'transition', 'overlay')
             .sidebar('toggle')
     }
-
-    $('#setting-button').click(function () {
-
+</script>
+<script th:inline="javascript">
+    var blogs = [[${blogs}]]
+    var pageInfo = [[${pageInfo}]]
+    $.each(blogs, function (index, blog) {
+        var id = '#' + 'recycle-button-' + blog.id
+        $(id)
+            .popup({
+                on: 'click',
+                position: 'top center',
+                html: '<div class="ui basic segment" style="width:300px;">' +
+                    '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将【' + blog.title + '】文章移到回收站吗？</div>' +
+                    '       <div class="ui basic right floated segment">' +
+                    '           <input onclick="hoverRecyclePopup()" class="ui mini basic button" type="button" value="取消">' +
+                    '           <input onclick="toRecycle(' + blog.id + ',' + pageInfo.pageNum + ',' + pageInfo.pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                    '       </div>' +
+                    '</div>'
+            })
     })
 </script>
 </body>

@@ -25,4 +25,6 @@ public interface BlogsTagService {
     int updateByPrimaryKey(BlogsTag record);
 
     List<BlogsTag> selectByBlogId(Integer blogId);
+
+    int deleteByBlogId(Integer blogId);
 }

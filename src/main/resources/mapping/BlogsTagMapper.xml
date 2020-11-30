@@ -102,4 +102,10 @@
         from blogs_tags
         where blog_id = #{blogId,jdbcType=INTEGER}
     </select>
+
+    <delete id="deleteByBlogId">
+        delete
+        from blogs_tags
+        where blog_id = #{blogId,jdbcType=INTEGER}
+    </delete>
 </mapper>

@@ -55,4 +55,6 @@ public interface BlogsTagMapper {
     int updateByPrimaryKey(BlogsTag record);
 
     List<BlogsTag> selectById(Integer blogId);
+
+    int deleteByBlogId(Integer blogId);
 }

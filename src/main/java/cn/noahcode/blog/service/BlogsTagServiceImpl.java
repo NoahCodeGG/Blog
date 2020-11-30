@@ -53,4 +53,9 @@ public class BlogsTagServiceImpl implements BlogsTagService {
         return blogsTagMapper.selectById(blogId);
     }
 
+    @Override
+    public int deleteByBlogId(Integer blogId) {
+        return blogsTagMapper.deleteByBlogId(blogId);
+    }
+
 }

@@ -102,7 +102,7 @@
 
 <form id="blog-data" class="ui form">
     <div class="ui field">
-        <input type="hidden" name="id" th:value="${blog?.id}">
+        <input id="id" type="hidden" name="id" th:value="${blog?.id}">
     </div>
     <div class="ui bottom attached">
         <div style="padding: 20px;">
@@ -145,7 +145,8 @@
                 <div class="ui inline fields">
                     <div class="ui field">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="disallowComment" checked="checked" class="hidden" value="1"
+                            <input type="radio" name="disallowComment" checked="checked" class="hidden"
+                                   value="1"
                                    th:value="true" th:attr="checked=${blog?.disallowComment}?checked">
                             <label>开启</label>
                         </div>
@@ -334,25 +335,25 @@
     $('.ui.tag-clear.button').click(function () {
         $('.ui.tags.dropdown').dropdown('clear')
     })
-    $('#blog-data')
-        .form({
-            fields: {
-                name: {
-                    identifier: 'title',
-                    rules: [{
-                        type: 'empty',
-                        prompt: '请输入标题'
-                    }]
-                },
-                originalContent: {
-                    identifier: 'originalContent',
-                    rules: [{
-                        type: 'empty',
-                        prompt: '请输入内容'
-                    }]
-                }
-            }
-        })
+    // $('#blog-data')
+    //     .form({
+    //         fields: {
+    //             name: {
+    //                 identifier: 'title',
+    //                 rules: [{
+    //                     type: 'empty',
+    //                     prompt: '请输入标题'
+    //                 }]
+    //             },
+    //             originalContent: {
+    //                 identifier: 'originalContent',
+    //                 rules: [{
+    //                     type: 'empty',
+    //                     prompt: '请输入内容'
+    //                 }]
+    //             }
+    //         }
+    //     })
     $('#right-sidebar-button').click(function () {
         var title = $('#title').val()
         var originalContent = $('#content').val()
@@ -380,9 +381,11 @@
     $('#first-draft-button').click(function () {
         $('#blog-data').submit(function (event) {
             event.preventDefault();  // 阻止默认表单的action功能
+            var id = $("#id").val()
             var title = $('#title').val()
             var originalContent = $('#content').val()
             data = {
+                "id": id,
                 "title": title,
                 "originalContent": originalContent,
                 "status": "DRAFT"
@@ -401,6 +404,7 @@
     $('#second-draft-button').click(function () {
         $('#blog-form').submit(function (event) {
             event.preventDefault();  // 阻止默认表单的action功能
+            var id = $("#id").val()
             var title = $('#title').val()
             var originalContent = $('#content').val()
             var summary = $('textarea[name="summary"]').val()
@@ -413,6 +417,7 @@
                 categoryIds.push($(this).val())
             })
             data = {
+                "id": id,
                 "title": title,
                 "originalContent": originalContent,
                 "summary": summary,
@@ -437,6 +442,7 @@
     $('#publish-button').click(function () {
         $('#blog-form').submit(function (event) {
             event.preventDefault();  // 阻止默认表单的action功能
+            var id = $('#id').val()
             var title = $('#title').val()
             var originalContent = $('#content').val()
             var summary = $('textarea[name="summary"]').val()
@@ -449,6 +455,7 @@
                 categoryIds.push($(this).val())
             })
             data = {
+                "id": id,
                 "title": title,
                 "originalContent": originalContent,
                 "summary": summary,

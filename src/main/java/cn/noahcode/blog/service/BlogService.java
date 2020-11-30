@@ -25,6 +25,8 @@ public interface BlogService {
     Blog selectByPrimaryKey(Integer id);
 
     List<Blog> listBlog();
+
+    int toRecycle(Integer id);
 }
 
 

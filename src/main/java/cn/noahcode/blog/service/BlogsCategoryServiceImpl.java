@@ -24,6 +24,11 @@ public class BlogsCategoryServiceImpl implements BlogsCategoryService{
     }
 
     @Override
+    public int deleteByBlogId(Integer blogId) {
+        return blogsCategoryMapper.deleteByBlogId(blogId);
+    }
+
+    @Override
     public int insert(BlogsCategory record) {
         return blogsCategoryMapper.insert(record);
     }

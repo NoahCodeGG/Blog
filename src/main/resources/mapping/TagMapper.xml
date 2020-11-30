@@ -100,5 +100,6 @@
         select *
         from tags
         where id in (select tag_id from blogs_tags where blog_id = #{blogId,jdbcType=INTEGER})
+        order by create_time desc
     </select>
 </mapper>

@@ -59,4 +59,6 @@ public interface BlogMapper {
     int updateByPrimaryKey(Blog record);
 
     List<Blog> listBlog();
+
+    int toRecycle(Integer id);
 }

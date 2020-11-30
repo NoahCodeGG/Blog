@@ -102,4 +102,11 @@
         from blogs_categories
         where blog_id = #{blogId,jdbcType=INTEGER}
     </select>
+
+    <delete id="deleteByBlogId">
+        <!--@mbg.generated-->
+        delete
+        from blogs_categories
+        where blog_id = #{blogId,jdbcType=INTEGER}
+    </delete>
 </mapper>

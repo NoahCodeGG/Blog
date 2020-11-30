@@ -50,20 +50,11 @@ public class BlogController {
     public String blogs(@RequestParam(defaultValue = "1", name = "pageNum") Integer pageNum,
                         @RequestParam(defaultValue = "10", name = "pageSize") Integer pageSize,
                         Model model) {
-        PageHelper.startPage(pageNum, pageSize, "create_time desc");
-        PageInfo<Blog> pageInfo = new PageInfo<>(blogService.listBlog());
-        List<Blog> blogList = pageInfo.getList();
-        List<BlogSimpleDTO> blogs = new LinkedList<>();
-        for (Blog blog : blogList) {
-            Integer blogId = blog.getId();
-            BlogSimpleDTO blogSimpleDTO = new BlogSimpleDTO();
-            BeanUtils.copyProperties(blog, blogSimpleDTO);
-            blogSimpleDTO.setCategories(categoryService.selectByBlogId(blogId));
-            blogSimpleDTO.setTags(tagService.selectByBlogId(blogId));
-            blogs.add(blogSimpleDTO);
-        }
-        model.addAttribute("pageInfo", pageInfo);
-        model.addAttribute("blogs", blogs);
+        listBlogs(pageNum, pageSize, model);
+        List<Category> categories = categoryService.listCategory();
+        model.addAttribute("categories", categories);
+        List<Tag> tags = tagService.listTags();
+        model.addAttribute("tags", tags);
         return "/admin/blogs";
     }
 
@@ -106,6 +97,7 @@ public class BlogController {
         System.out.println(blogParam);
         Blog blog = new Blog();
         BeanUtils.copyProperties(blogParam, blog);
+        Integer blogId = blog.getId();
         switch (blogParam.getStatus()) {
             case PUBLISHED:
                 blog.setStatus(BlogStatus.PUBLISHED.getValue());
@@ -120,36 +112,97 @@ public class BlogController {
                 blog.setStatus(BlogStatus.DRAFT.getValue());
         }
         blog.setFormatContent(MarkdownUtils.markdownToHtml(blog.getOriginalContent()));
-        blog.setEditTime(DateUtils.now());
-        blog.setCreateTime(DateUtils.now());
-        blog.setUpdateTime(DateUtils.now());
-        int count = blogService.insertSelective(blog);
-        int blogId = blog.getId();
-        if (count != 0) {
-            if (blogParam.getCategoryIds() != null) {
-                Set<Integer> categoryIds = blogParam.getCategoryIds();
-                for (Integer categoryId : categoryIds) {
-                    BlogsCategory blogsCategory = new BlogsCategory();
-                    blogsCategory.setBlogId(blogId);
-                    blogsCategory.setCategoryId(categoryId);
-                    blogsCategory.setCreateTime(DateUtils.now());
-                    blogsCategory.setUpdateTime(DateUtils.now());
-                    blogsCategoryService.insertSelective(blogsCategory);
+        if (blogId == null) {
+            blog.setCreateTime(DateUtils.now());
+            blog.setEditTime(DateUtils.now());
+            blog.setUpdateTime(DateUtils.now());
+            int insertCount = blogService.insertSelective(blog);
+            blogId = blog.getId();
+            if (insertCount != 0) {
+                if (blogParam.getCategoryIds() != null) {
+                    Set<Integer> categoryIds = blogParam.getCategoryIds();
+                    for (Integer categoryId : categoryIds) {
+                        BlogsCategory blogsCategory = new BlogsCategory();
+                        blogsCategory.setBlogId(blogId);
+                        blogsCategory.setCategoryId(categoryId);
+                        blogsCategory.setCreateTime(DateUtils.now());
+                        blogsCategory.setUpdateTime(DateUtils.now());
+                        blogsCategoryService.insertSelective(blogsCategory);
+                    }
+                }
+                if (blogParam.getTagIds() != null) {
+                    Set<Integer> tagIds = blogParam.getTagIds();
+                    for (Integer tagId : tagIds) {
+                        BlogsTag blogsTag = new BlogsTag();
+                        blogsTag.setBlogId(blogId);
+                        blogsTag.setTagId(tagId);
+                        blogsTag.setCreateTime(DateUtils.now());
+                        blogsTag.setUpdateTime(DateUtils.now());
+                        blogsTagService.insertSelective(blogsTag);
+                    }
                 }
             }
-            if (blogParam.getTagIds() != null) {
-                Set<Integer> tagIds = blogParam.getTagIds();
-                for (Integer tagId : tagIds) {
-                    BlogsTag blogsTag = new BlogsTag();
-                    blogsTag.setBlogId(blogId);
-                    blogsTag.setTagId(tagId);
-                    blogsTag.setCreateTime(DateUtils.now());
-                    blogsTag.setUpdateTime(DateUtils.now());
-                    blogsTagService.insertSelective(blogsTag);
+        } else {
+            blog.setEditTime(DateUtils.now());
+            blog.setUpdateTime(DateUtils.now());
+            int updateCount = blogService.updateByPrimaryKeySelective(blog);
+            if (updateCount != 0) {
+                if (blogParam.getCategoryIds() != null) {
+                    Set<Integer> categoryIds = blogParam.getCategoryIds();
+                    for (Integer categoryId : categoryIds) {
+                        BlogsCategory blogsCategory = new BlogsCategory();
+                        blogsCategory.setBlogId(blogId);
+                        blogsCategory.setCategoryId(categoryId);
+                        blogsCategory.setCreateTime(DateUtils.now());
+                        blogsCategory.setUpdateTime(DateUtils.now());
+                        blogsCategoryService.deleteByBlogId(blogId);
+                        blogsCategoryService.insertSelective(blogsCategory);
+                    }
+                }
+                if (blogParam.getTagIds() != null) {
+                    Set<Integer> tagIds = blogParam.getTagIds();
+                    for (Integer tagId : tagIds) {
+                        BlogsTag blogsTag = new BlogsTag();
+                        blogsTag.setBlogId(blogId);
+                        blogsTag.setTagId(tagId);
+                        blogsTag.setCreateTime(DateUtils.now());
+                        blogsTag.setUpdateTime(DateUtils.now());
+                        blogsTagService.deleteByBlogId(blogId);
+                        blogsTagService.insertSelective(blogsTag);
+                    }
                 }
             }
         }
         return "redirect:/admin/blogs";
     }
 
+    @GetMapping("/blogs/{id}/recycle")
+    public String recycled(@PathVariable Integer id,
+                           @RequestParam(defaultValue = "1", name = "pageNum") Integer pageNum,
+                           @RequestParam(defaultValue = "10", name = "pageSize") Integer pageSize,
+                           Model model) {
+        blogService.toRecycle(id);
+        listBlogs(pageNum, pageSize, model);
+        return "/admin/blogs::blogs";
+    }
+
+    private void listBlogs(@RequestParam(defaultValue = "1", name = "pageNum") Integer pageNum, @RequestParam(defaultValue = "10", name = "pageSize") Integer pageSize, Model model) {
+        PageHelper.startPage(pageNum, pageSize, "edit_time desc");
+        PageInfo<Blog> pageInfo = new PageInfo<>(blogService.listBlog());
+        List<Blog> blogList = pageInfo.getList();
+        List<BlogSimpleDTO> blogs = new LinkedList<>();
+        for (Blog blog : blogList) {
+            Integer blogId = blog.getId();
+            BlogSimpleDTO blogSimpleDTO = new BlogSimpleDTO();
+            BeanUtils.copyProperties(blog, blogSimpleDTO);
+            blogSimpleDTO.setCategories(categoryService.selectByBlogId(blogId));
+            blogSimpleDTO.setTags(tagService.selectByBlogId(blogId));
+            blogs.add(blogSimpleDTO);
+        }
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("blogs", blogs);
+    }
+
 }
+
+

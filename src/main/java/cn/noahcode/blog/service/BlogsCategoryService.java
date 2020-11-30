@@ -14,6 +14,8 @@ public interface BlogsCategoryService {
 
     int deleteByPrimaryKey(Integer id);
 
+    int deleteByBlogId(Integer blogId);
+
     int insert(BlogsCategory record);
 
     int insertSelective(BlogsCategory record);

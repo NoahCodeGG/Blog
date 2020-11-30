@@ -128,5 +128,6 @@
         select *
         from categories
         where id in (select category_id from blogs_categories where blog_id = #{blogId,jdbcType=INTEGER})
+        order by create_time desc
     </select>
 </mapper>
