@@ -7,6 +7,7 @@ import cn.noahcode.blog.model.dto.blog.BlogSimpleDTO;
 import cn.noahcode.blog.model.entity.*;
 import cn.noahcode.blog.model.enums.BlogStatus;
 import cn.noahcode.blog.model.params.BlogParam;
+import cn.noahcode.blog.model.params.SettingParam;
 import cn.noahcode.blog.service.*;
 import cn.noahcode.blog.util.DateUtils;
 import cn.noahcode.blog.util.MarkdownUtils;
@@ -183,6 +184,48 @@ public class BlogController {
                            Model model) {
         blogService.toRecycle(id);
         listBlogs(pageNum, pageSize, model);
+        return "/admin/blogs::blogs";
+    }
+
+    @PostMapping("/blogs/{id}/setting")
+    public String setting(@PathVariable Integer id,
+                          @RequestBody SettingParam settingParam,
+                          @RequestParam(defaultValue = "10", name = "pageSize") Integer pageSize,
+                          Model model) {
+        System.out.println(settingParam);
+        Blog blog = new Blog();
+        BeanUtils.copyProperties(settingParam, blog);
+        blog.setEditTime(DateUtils.now());
+        blog.setUpdateTime(DateUtils.now());
+        System.out.println(blog);
+        int updateCount = blogService.updateByPrimaryKeySelective(blog);
+        if (updateCount != 0) {
+            if (settingParam.getCategoryIds() != null) {
+                Set<Integer> categoryIds = settingParam.getCategoryIds();
+                for (Integer categoryId : categoryIds) {
+                    BlogsCategory blogsCategory = new BlogsCategory();
+                    blogsCategory.setBlogId(id);
+                    blogsCategory.setCategoryId(categoryId);
+                    blogsCategory.setCreateTime(DateUtils.now());
+                    blogsCategory.setUpdateTime(DateUtils.now());
+                    blogsCategoryService.deleteByBlogId(id);
+                    blogsCategoryService.insertSelective(blogsCategory);
+                }
+            }
+            if (settingParam.getTagIds() != null) {
+                Set<Integer> tagIds = settingParam.getTagIds();
+                for (Integer tagId : tagIds) {
+                    BlogsTag blogsTag = new BlogsTag();
+                    blogsTag.setBlogId(id);
+                    blogsTag.setTagId(tagId);
+                    blogsTag.setCreateTime(DateUtils.now());
+                    blogsTag.setUpdateTime(DateUtils.now());
+                    blogsTagService.deleteByBlogId(id);
+                    blogsTagService.insertSelective(blogsTag);
+                }
+            }
+        }
+        listBlogs(1, pageSize, model);
         return "/admin/blogs::blogs";
     }
 

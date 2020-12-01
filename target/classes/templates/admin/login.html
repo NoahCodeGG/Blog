@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录 - NoahCode's Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <style>
+        .ui.field {
+            clear: both;
+            margin: 0em 0em 1em;
+        }
+    </style>
+</head>
+<body>
+<div class="ui middle aligned center aligned grid" style="height: 100%;">
+    <div class="ui column">
+        <div class="ui centered row grid" style="height: 50%;">
+            <div class="ui three wide column segment">
+                <img class="ui centered tiny image" src="../../static/images/icon.png" th:src="@{/images/icon.png}">
+                <h2 class="ui centered header">NoahCode's Blog</h2>
+                <form class="ui form" method="post" action="#" th:action="@{/admin/login}">
+                    <div class="ui field">
+                        <div class="ui fluid left icon input">
+                            <i class="ui user icon"></i>
+                            <input type="text" name="username" id="username" tabindex="1"
+                                   autocapitalize="off" autocorrect="off" autocomplete="username" autofocus="autofocus"
+                                   placeholder="用户名">
+                        </div>
+                    </div>
+                    <div class="ui field">
+                        <div class="ui fluid left icon input">
+                            <i class="ui lock icon"></i>
+                            <input type="password" name="password" id="password" tabindex="2"
+                                   autocomplete="current-password" placeholder="密码">
+                        </div>
+                    </div>
+                    <input class="ui fluid positive button" type="submit" name="commit" value="登录" tabindex="3">
+                    <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}" th:text="${message}"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<!--/*/</th:block>/*/-->
+<script>
+    $('.ui.form')
+        .form({
+            fields: {
+                username: {
+                    identifier: 'username',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '请输入用户名'
+                    }]
+                },
+                password: {
+                    identifier: 'password',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '请输入密码'
+                    }]
+                }
+            }
+        })
+</script>
+</body>
+</html>
