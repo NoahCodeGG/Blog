@@ -163,8 +163,14 @@
                     </div>
                     <input type="hidden" th:value="${blog.id}">
                 </td>
-                <td>
-                    <a href="#" th:text="${blog.title}">测试</a>
+                <td th:switch="${blog.status}">
+                    <div th:case="2">
+                        <span th:text="${blog.title}" style="color:rgba(0,0,0,.25);cursor:default;">测试</span>
+                    </div>
+                    <div th:case="*">
+                        <i class="ui red thumbtack icon" th:if="${blog.topPriority}"></i>
+                        <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}" th:text="${blog.title}">测试</a>
+                    </div>
                 </td>
                 <td th:switch="${blog.status}">
                     <div th:case="0">
@@ -201,9 +207,16 @@
                 <td>
                     <span th:text="${#dates.format(blog.editTime,'yyyy-MM-dd HH:mm:ss')}">4分钟前</span>
                 </td>
-                <td>
-                    <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}">编辑</a> |
-                    <a id="recycle-button" th:id="'recycle-button-'+${blog.id}" style="cursor:pointer">回收站</a> |
+                <td th:switch="${blog.status}">
+                    <span th:case="2">
+                        <a href="#" th:id="'reduction-button-'+${blog.id}" style="cursor:pointer">还原</a> |
+                        <a id="delete-button" th:id="'delete-button-'+${blog.id}" style="cursor:pointer">删除</a> |
+                    </span>
+                    <span th:case="*">
+                        <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}">编辑</a> |
+                        <a id="recycle-button" th:id="'recycle-button-'+${blog.id}" style="cursor:pointer"
+                           th:onclick="recyclePopup($(this),[[${blog.id}]],[[${blog.title}]],[[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">回收站</a> |
+                    </span>
                     <a id="setting-button" style="cursor:pointer"
                        th:onclick="openSettingSidebar([[${categories}]],[[${tags}]],[[${blog}]])">设置</a>
                 </td>
@@ -305,10 +318,7 @@
             </div>
             <div class="ui field">
                 <label>访问密码：</label>
-                <div class="ui icon input">
-                    <input id="access-password" type="password" name="password" autoComplete="new-password">
-                    <i class="ui access-password link eye icon"></i>
-                </div>
+                <input id="access-password" type="password" name="password" autoComplete="new-password">
             </div>
             <div class="ui divider"></div>
             <div class="ui field">
@@ -448,19 +458,22 @@
 
     $('.ui.radio.checkbox').checkbox()
 
-    $('.ui.access-password.eye.icon')
-        .click(function () {
-            $('.ui.access-password.eye.icon').toggleClass('slash')
-            var input_type = $('#access-password').attr('type')
-            if (input_type === 'password') {
-                $('#access-password').attr('type', 'text')
-            } else {
-                $('#access-password').attr('type', 'password')
-            }
+    function recyclePopup(obj, id, title, pageNum, pageSize) {
+        console.log(obj)
+        obj[0].popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将【' + title + '】文章移到回收站吗？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toRecycle(' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
         })
+    }
 
-
-    function hoverRecyclePopup() {
+    function hoverPopup() {
         $('.ui.popup.transition.visible').transition('zoom')
     }
 
@@ -469,6 +482,22 @@
             url: '/admin/blogs/' + blogId + '/recycle',
             type: "GET",
             success: $('#blogs').load('/admin/blogs/' + blogId + '/recycle?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        })
+    }
+
+    function toDelete(blogId, pageNum, pageSize) {
+        $.ajax({
+            url: '/admin/blogs/' + blogId + '/delete',
+            type: "GET",
+            success: $('#blogs').load('/admin/blogs/' + blogId + '/delete?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        })
+    }
+
+    function toReduction(blogId, pageNum, pageSize) {
+        $.ajax({
+            url: '/admin/blogs/' + blogId + '/reduction',
+            type: "GET",
+            success: $('#blogs').load('/admin/blogs/' + blogId + '/reduction?pageNum=' + pageNum + '&pageSize=' + pageSize)
         })
     }
 
@@ -484,11 +513,11 @@
 
         //初始化评论、置顶单选按钮
         if (blog.disallowComment) {
-            disallowComment.eq(0).removeAttr('checked')
-            disallowComment.eq(1).attr('checked', 'checked')
-        } else {
             disallowComment.eq(0).attr('checked', 'checked')
             disallowComment.eq(1).removeAttr('checked', '')
+        } else {
+            disallowComment.eq(0).removeAttr('checked')
+            disallowComment.eq(1).attr('checked', 'checked')
         }
         if (blog.topPriority) {
             topPriority.eq(0).attr('checked', 'checked')
@@ -540,22 +569,49 @@
     var blogs = [[${blogs}]]
     var pageInfo = [[${pageInfo}]]
     $.each(blogs, function (index, blog) {
-        var id = '#' + 'recycle-button-' + blog.id
-        $(id)
+        var recycleId = '#' + 'recycle-button-' + blog.id
+        // $(recycleId)
+        //     .popup({
+        //         on: 'click',
+        //         position: 'top center',
+        //         html: '<div class="ui basic segment" style="width:300px;">' +
+        //             '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将【' + blog.title + '】文章移到回收站吗？</div>' +
+        //             '       <div class="ui basic right floated segment">' +
+        //             '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+        //             '           <input onclick="toRecycle(' + blog.id + ',' + pageInfo.pageNum + ',' + pageInfo.pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+        //             '       </div>' +
+        //             '</div>'
+        //     })
+        var reductionId = '#' + 'reduction-button-' + blog.id
+        $(reductionId)
             .popup({
                 on: 'click',
                 position: 'top center',
                 html: '<div class="ui basic segment" style="width:300px;">' +
-                    '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将【' + blog.title + '】文章移到回收站吗？</div>' +
+                    '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要发布【' + blog.title + '】文章？</div>' +
                     '       <div class="ui basic right floated segment">' +
-                    '           <input onclick="hoverRecyclePopup()" class="ui mini basic button" type="button" value="取消">' +
-                    '           <input onclick="toRecycle(' + blog.id + ',' + pageInfo.pageNum + ',' + pageInfo.pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                    '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                    '           <input onclick="toReduction(' + blog.id + ',' + pageInfo.pageNum + ',' + pageInfo.pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                    '       </div>' +
+                    '</div>'
+            })
+        var deleteId = '#' + 'delete-button-' + blog.id
+        $(deleteId)
+            .popup({
+                on: 'click',
+                position: 'top center',
+                html: '<div class="ui basic segment" style="width:300px;">' +
+                    '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要永久删除【' + blog.title + '】文章？</div>' +
+                    '       <div class="ui basic right floated segment">' +
+                    '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                    '           <input onclick="toDelete(' + blog.id + ',' + pageInfo.pageNum + ',' + pageInfo.pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
                     '       </div>' +
                     '</div>'
             })
     })
 
     $('#publish-button').click(function () {
+        console.log($('#id').val())
         $('#blog-form').submit(function (event) {
             event.preventDefault();  // 阻止默认表单的action功能
             var id = $('#id').val()

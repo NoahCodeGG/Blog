@@ -61,4 +61,6 @@ public interface BlogMapper {
     List<Blog> listBlog();
 
     int toRecycle(Integer id);
+
+    int toReduction(Integer id);
 }

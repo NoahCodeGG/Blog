@@ -1,34 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Title</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-        <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui-css@2.8.7/semantic.min.css">-->
-    </head>
-    <body>
-        <div class="ui field">
-            <label>开启评论</label>
-            <div class="ui inline fields">
-                <div class="ui field">
-                    <div class="ui radio checkbox checked">
-                        <input type="radio" name="disallowComment" checked="checked" class="hidden" value="1">
-                        <label>开启</label>
-                    </div>
-                </div>
-                <div class="ui field">
-                    <div class="ui radio checkbox ">
-                        <input type="radio" name="disallowComment" class="hidden" value="0" checked="checked">
-                        <label>关闭</label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/jquery-address@1.6.0/src/jquery.address.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-        <!--<script src="https://cdn.jsdelivr.net/npm/fomantic-ui-css@2.8.7/semantic.min.js"></script>-->
-        <script>
-        </script>
-    </body>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fomantic-ui-css@2.8.7/semantic.min.css">-->
+</head>
+<body>
+<div class="ui" onclick="aha($(this))">Hover Me</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-address@1.6.0/src/jquery.address.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    function aha(obj) {
+        // console.log('我列开来')
+        console.log(obj)
+        obj.popup({
+            html: 'his popup is very long but wont escape the segment it is placed in'
+        })
+    }
+</script>
+</body>
 </html>

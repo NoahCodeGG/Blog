@@ -149,6 +149,7 @@ public class BlogController {
             int updateCount = blogService.updateByPrimaryKeySelective(blog);
             if (updateCount != 0) {
                 if (blogParam.getCategoryIds() != null) {
+                    blogsCategoryService.deleteByBlogId(blogId);
                     Set<Integer> categoryIds = blogParam.getCategoryIds();
                     for (Integer categoryId : categoryIds) {
                         BlogsCategory blogsCategory = new BlogsCategory();
@@ -156,11 +157,11 @@ public class BlogController {
                         blogsCategory.setCategoryId(categoryId);
                         blogsCategory.setCreateTime(DateUtils.now());
                         blogsCategory.setUpdateTime(DateUtils.now());
-                        blogsCategoryService.deleteByBlogId(blogId);
                         blogsCategoryService.insertSelective(blogsCategory);
                     }
                 }
                 if (blogParam.getTagIds() != null) {
+                    blogsTagService.deleteByBlogId(blogId);
                     Set<Integer> tagIds = blogParam.getTagIds();
                     for (Integer tagId : tagIds) {
                         BlogsTag blogsTag = new BlogsTag();
@@ -168,7 +169,6 @@ public class BlogController {
                         blogsTag.setTagId(tagId);
                         blogsTag.setCreateTime(DateUtils.now());
                         blogsTag.setUpdateTime(DateUtils.now());
-                        blogsTagService.deleteByBlogId(blogId);
                         blogsTagService.insertSelective(blogsTag);
                     }
                 }
@@ -187,20 +187,44 @@ public class BlogController {
         return "/admin/blogs::blogs";
     }
 
+    @GetMapping("/blogs/{id}/delete")
+    public String delete(@PathVariable Integer id,
+                         @RequestParam(defaultValue = "1", name = "pageNum") Integer pageNum,
+                         @RequestParam(defaultValue = "10", name = "pageSize") Integer pageSize,
+                         Model model) {
+        blogsCategoryService.deleteByBlogId(id);
+        blogsTagService.deleteByBlogId(id);
+        blogService.deleteByPrimaryKey(id);
+        listBlogs(pageNum, pageSize, model);
+        return "/admin/blogs::blogs";
+    }
+
+    @GetMapping("/blogs/{id}/reduction")
+    public String reduction(@PathVariable Integer id,
+                           @RequestParam(defaultValue = "1", name = "pageNum") Integer pageNum,
+                           @RequestParam(defaultValue = "10", name = "pageSize") Integer pageSize,
+                           Model model) {
+        blogService.toReduction(id);
+        listBlogs(pageNum, pageSize, model);
+        return "/admin/blogs::blogs";
+    }
+
     @PostMapping("/blogs/{id}/setting")
     public String setting(@PathVariable Integer id,
                           @RequestBody SettingParam settingParam,
                           @RequestParam(defaultValue = "10", name = "pageSize") Integer pageSize,
                           Model model) {
-        System.out.println(settingParam);
+        System.out.println(id);
         Blog blog = new Blog();
         BeanUtils.copyProperties(settingParam, blog);
+        blog.setId(id);
         blog.setEditTime(DateUtils.now());
         blog.setUpdateTime(DateUtils.now());
         System.out.println(blog);
         int updateCount = blogService.updateByPrimaryKeySelective(blog);
         if (updateCount != 0) {
             if (settingParam.getCategoryIds() != null) {
+                blogsCategoryService.deleteByBlogId(id);
                 Set<Integer> categoryIds = settingParam.getCategoryIds();
                 for (Integer categoryId : categoryIds) {
                     BlogsCategory blogsCategory = new BlogsCategory();
@@ -208,11 +232,11 @@ public class BlogController {
                     blogsCategory.setCategoryId(categoryId);
                     blogsCategory.setCreateTime(DateUtils.now());
                     blogsCategory.setUpdateTime(DateUtils.now());
-                    blogsCategoryService.deleteByBlogId(id);
                     blogsCategoryService.insertSelective(blogsCategory);
                 }
             }
             if (settingParam.getTagIds() != null) {
+                blogsTagService.deleteByBlogId(id);
                 Set<Integer> tagIds = settingParam.getTagIds();
                 for (Integer tagId : tagIds) {
                     BlogsTag blogsTag = new BlogsTag();
@@ -220,7 +244,6 @@ public class BlogController {
                     blogsTag.setTagId(tagId);
                     blogsTag.setCreateTime(DateUtils.now());
                     blogsTag.setUpdateTime(DateUtils.now());
-                    blogsTagService.deleteByBlogId(id);
                     blogsTagService.insertSelective(blogsTag);
                 }
             }

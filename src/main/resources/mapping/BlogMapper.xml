@@ -225,4 +225,10 @@
         set `status` = 2
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <update id="toReduction">
+        update blogs
+        set `status` = 0
+        where id = #{id,jdbcType=INTEGER}
+    </update>
 </mapper>

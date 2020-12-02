@@ -58,6 +58,11 @@ public class BlogServiceImpl implements BlogService {
         return blogMapper.toRecycle(id);
     }
 
+    @Override
+    public int toReduction(Integer id) {
+        return blogMapper.toReduction(id);
+    }
+
 }
 
 

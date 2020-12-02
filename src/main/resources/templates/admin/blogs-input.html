@@ -185,11 +185,8 @@
             </div>
             <div class="ui field">
                 <label>访问密码：</label>
-                <div class="ui icon input">
-                    <input id="access-password" type="password" name="password" autoComplete="new-password"
-                           th:value="${blog?.password}">
-                    <i class="ui access-password link eye icon"></i>
-                </div>
+                <input id="access-password" type="password" name="password" autoComplete="new-password"
+                       th:value="${blog?.password}">
             </div>
             <div class="ui divider"></div>
             <div class="ui field">
@@ -322,16 +319,6 @@
         })
     $('.ui.radio.checkbox').checkbox()
     $('.ui.checked.checkbox').checkbox('checked')
-    $('.ui.access-password.eye.icon')
-        .click(function () {
-            $('.ui.access-password.eye.icon').toggleClass('slash')
-            var input_type = $('#access-password').attr('type')
-            if (input_type === 'password') {
-                $('#access-password').attr('type', 'text')
-            } else {
-                $('#access-password').attr('type', 'password')
-            }
-        })
     $('.ui.tag-clear.button').click(function () {
         $('.ui.tags.dropdown').dropdown('clear')
     })
@@ -401,6 +388,7 @@
             })
         })
     })
+
     $('#second-draft-button').click(function () {
         $('#blog-form').submit(function (event) {
             event.preventDefault();  // 阻止默认表单的action功能
