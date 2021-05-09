@@ -216,7 +216,7 @@ CodeMirror.defineMode("xquery", function() {
     }
   }
 
-  // handle comments, including nested
+  // handle articleComments, including nested
   function tokenComment(stream, state) {
     var maybeEnd = false, maybeNested = false, nestedCount = 0, ch;
     while (ch = stream.next()) {
@@ -354,7 +354,7 @@ CodeMirror.defineMode("xquery", function() {
     return ret("attribute", "attribute");
   }
 
-  // handle comments, including nested
+  // handle articleComments, including nested
   function tokenXMLComment(stream, state) {
     var ch;
     while (ch = stream.next()) {

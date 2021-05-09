@@ -5,12 +5,12 @@ import lombok.Data;
 
 /**
  * @author NoahCode
- * @date 2020/9/29
+ * @date 12/31/2020
  * @description
  */
 @Data
 public class Tag {
-    private Integer id;
+    private Long id;
 
     private String name;
 

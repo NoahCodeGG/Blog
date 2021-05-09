@@ -71,6 +71,13 @@
         <a class="ui item">标签</a>
     </div>
     <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
     <a class="ui user item">
         <i class="ui chevron down icon"></i>
         用户
@@ -98,17 +105,17 @@
 </div>
 
 <div class="ui bottom attached">
-    <div style="padding-top: 20px;padding-left: 100px;">
+    <div style="padding: 20px;">
         <!--仪表盘-->
         <div class="ui relaxed grid">
             <div class="ui four column row">
                 <div class="ui column">
-                    <div class="ui card">
+                    <div class="ui fluid card">
                         <div class="ui content">
-                            <a href="#"><i class="right floated plus icon"></i></a>
+                            <a th:href="@{/admin/blogs/input}"><i class="right floated plus icon"></i></a>
                             <div class="header">文章</div>
                             <div class="ui statistic">
-                                <div class="ui value">
+                                <div class="ui value" th:text="${blogCounts}">
                                     5,550
                                 </div>
                             </div>
@@ -116,12 +123,12 @@
                     </div>
                 </div>
                 <div class="ui column">
-                    <div class="ui card">
+                    <div class="ui fluid card">
                         <div class="ui content">
-                            <a href="#"><i class="ui right floated list ul icon"></i></a>
+                            <a th:href="@{/admin/comments}"><i class="ui right floated list ul icon"></i></a>
                             <div class="header">评论</div>
                             <div class="ui statistic">
-                                <div class="ui value">
+                                <div class="ui value" th:text="${commentCounts}">
                                     5,550
                                 </div>
                             </div>
@@ -129,12 +136,12 @@
                     </div>
                 </div>
                 <div class="ui column">
-                    <div class="ui card">
+                    <div class="ui fluid card">
                         <div class="ui content">
                             <a href="#"><i class="ui right floated info circle icon"></i></a>
                             <div class="header">阅读量</div>
                             <div class="ui statistic">
-                                <div class="ui value">
+                                <div class="ui value" th:text="${viewCounts}">
                                     5,550
                                 </div>
                             </div>
@@ -142,12 +149,12 @@
                     </div>
                 </div>
                 <div class="ui column">
-                    <div class="ui card">
+                    <div class="ui fluid card">
                         <div class="ui content">
                             <a href="#"><i class="ui right floated info circle icon"></i></a>
                             <div class="header">建立天数</div>
                             <div class="ui statistic">
-                                <div class="ui value">
+                                <div class="ui value" th:text="${creatDays}">
                                     5,550
                                 </div>
                             </div>
@@ -160,40 +167,68 @@
         <div class="ui relaxed grid">
             <div class="ui three column row">
                 <div class="ui column">
-                    <div class="ui card">
+                    <div class="ui fluid card">
                         <div class="ui content">
                             <div class="ui header">新动态</div>
                         </div>
                         <div class="ui content">
                             <div class="ui top attached tabular menu">
-                                <div class="ui active item" data-tab="article">最新文章</div>
+                                <div class="ui active item" data-tab="blog">最新文章</div>
                                 <div class="ui item" data-tab="comment">最新评论</div>
                             </div>
-                            <div class="ui bottom attached active tab segment" data-tab="article">
+                            <div class="ui bottom attached active tab segment" data-tab="blog">
                                 <div class="ui divided items">
-                                    <div class="ui item">
+                                    <div class="ui item" th:each="newBlog:${newBlogs}">
                                         <div class="ui content">
-                                            <a href="#" class="ui header">测试</a>
+                                            <a href="#" class="ui header" th:text="${newBlog.title}">测试</a>
                                             <div class="ui right floated meta">
-                                                <span>一天前</span>
+                                                <span th:text="${#dates.format(newBlog.createTime,'yyyy-MM-dd HH:mm:ss')}">一天前</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="ui bottom attached tab segment" data-tab="comment">
-                                <div class="ui divided items">
-                                    <div class="ui item">
-                                        <div class="ui mini circular image">
-                                            <img src="../../static/images/icon.png" alt="" th:src="@{/images/icon.png}">
-                                        </div>
-                                        <div class="ui content">
-                                            <a href="#" class="ui header">测试</a>
-                                            <div class="ui right floated meta">
-                                                <span>一天前</span>
+                                <div class="ui pointing secondary menu">
+                                    <a class="item active" data-tab="article">文章</a>
+                                    <a class="item" data-tab="page">页面</a>
+                                </div>
+                                <div class="ui tab segment active" data-tab="article">
+                                    <div class="ui divided items">
+                                        <div class="ui item" th:each="newBlogComment:${newBlogComments}">
+                                            <div class="ui mini circular image">
+                                                <img src="../../static/images/icon.png" alt=""
+                                                     th:src="@{/images/icon.png}">
                                             </div>
-                                            <div class="ui description">
-                                                <p>测试</p>
+                                            <div class="ui content">
+                                                <a href="#" class="ui header"
+                                                   th:text="${newBlogComment.postTitle}">测试</a>
+                                                <div class="ui right floated meta">
+                                                    <span th:text="${#dates.format(newBlogComment.createTime,'yyyy-MM-dd HH:mm:ss')}">一天前</span>
+                                                </div>
+                                                <div class="ui description">
+                                                    <p th:text="${newBlogComment.content}">测试</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui tab segment" data-tab="page">
+                                    <div class="ui divided items">
+                                        <div class="ui item" th:each="newPageComment:${newPageComments}">
+                                            <div class="ui mini circular image">
+                                                <img src="../../static/images/icon.png" alt=""
+                                                     th:src="@{/images/icon.png}">
+                                            </div>
+                                            <div class="ui content">
+                                                <a href="#" class="ui header"
+                                                   th:text="${newPageComment.pageTitle}">测试</a>
+                                                <div class="ui right floated meta">
+                                                    <span th:text="${#dates.format(newPageComment.createTime,'yyyy-MM-dd HH:mm:ss')}">一天前</span>
+                                                </div>
+                                                <div class="ui description">
+                                                    <p th:text="${newPageComment.content}">测试</p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -203,25 +238,25 @@
                     </div>
                 </div>
                 <div class="ui column">
-                    <div class="ui card">
+                    <div class="ui fluid card">
                         <div class="ui content">
                             <div class="ui header">
                                 速记
-                                <a href="#"><i class="ui right floated info circle icon"></i></a>
+                                <a><i id="journalInfo" class="ui right floated info circle icon" data-content="内容将保存到页面/所有页面/日志页面"></i></a>
                             </div>
                         </div>
                         <div class="ui content">
                             <form class="ui reply form">
                                 <div class="field">
-                                    <textarea placeholder="写点什么吧..."></textarea>
+                                    <textarea id="sourceContent" name="sourceContent" placeholder="写点什么吧..."></textarea>
                                 </div>
-                                <div class="ui blue submit button">保存</div>
+                                <input class="ui blue submit button" type="button" value="发布" onclick="postJournal()"/>
                             </form>
                         </div>
                     </div>
                 </div>
                 <div class="ui column">
-                    <div class="ui card">
+                    <div class="ui fluid card">
                         <div class="ui content">
                             <div class="ui header">
                                 操作记录
@@ -255,6 +290,27 @@
 <script>
     $('.menu .item')
         .tab()
+
+    $('#journalInfo')
+        .popup({
+            position: 'top center'
+        })
+
+    function postJournal() {
+        var sourceContent = $('#sourceContent').val()
+        data = {
+            "sourceContent": sourceContent
+        }
+        $.ajax({
+            url: '/admin/journals/add',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function () {
+                window.location.href = "/admin/index"
+            }
+        })
+    }
 </script>
 </body>
 </html>

@@ -9,10 +9,10 @@ import java.util.List;
  * @date 2020/9/29
  * @description
  */
-public interface TagService{
+public interface TagService {
 
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(Tag record);
 
@@ -22,11 +22,14 @@ public interface TagService{
 
     int updateByPrimaryKey(Tag record);
 
-    Tag selectByPrimaryKey(Integer id);
+    Tag selectByPrimaryKey(Long id);
 
     Tag selectByName(String name);
 
-    List<Tag> selectByBlogId(Integer blogId);
+    List<Tag> selectByPostId(Long blogId);
 
     List<Tag> listTags();
+
+    int tagCount();
 }
+

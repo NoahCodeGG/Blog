@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head th:replace="admin/_fragments :: head(~{::title})">
     <meta charset="UTF-8">
     <title>标签 - NoahCode's Blog</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <link rel="stylesheet" href="../../static/css/editormd.min.css">
 </head>
 <body>
 <div div th:replace="admin/_fragments :: header" class="ui top attached menu">
@@ -72,6 +71,13 @@
         <a class="ui item">标签</a>
     </div>
     <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
     <a class="ui user item">
         <i class="ui chevron down icon"></i>
         用户
@@ -92,7 +98,7 @@
 <!--面包屑导航条-->
 <div class="ui bottom attached segment">
     <div class="ui breadcrumb">
-        <a class="ui section">首页</a>
+        <a class="ui section" href="index.html" th:href="@{/admin/index}">首页</a>
         <div class="ui divider"> /</div>
         <div class="ui section">文章</div>
         <div class="ui divider"> /</div>
@@ -100,7 +106,7 @@
     </div>
 </div>
 
-<div class="ui bottom attached">
+<div th:fragment="tags" id="tags" class="ui bottom attached">
     <div class="ui relaxed grid" style="padding: 40px;">
         <div class="ui two column row">
             <div class="ui column card">
@@ -109,14 +115,21 @@
                 </div>
                 <div class="ui content">
                     <form class="ui form" method="post" action="#" th:action="@{/admin/tags/input}">
-                        <div class="ui field">
+                        <div class="ui hidden field">
+                            <input id="id" type="hidden" name="id">
+                        </div>
+                        <div class="ui required field">
                             <label>名称：</label>
                             <input type="text" name="name" id="name">
                             <div class="ui meta">
                                 * 页面上所显示的名称
                             </div>
                         </div>
-                        <input class="ui blue button" type="submit" value="保存">
+                        <div class="ui field">
+                            <div id="buttons" class="ui buttons">
+                                <input id="submitButton" class="ui blue button" type="submit" value="保存">
+                            </div>
+                        </div>
                         <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}"
                              th:text="${message}"></div>
                     </form>
@@ -127,7 +140,8 @@
                     <div class="header">所有标签</div>
                 </div>
                 <div class="ui content">
-                    <a class="ui blue label" th:each="tag:${tags}" th:text="${tag.name}">测试</a>
+                    <a class="ui blue label" th:each="tag:${tags}" th:text="${tag.name}" th:onclick="edit([[${tag}]])"
+                       style="margin: 3px;">测试</a>
                 </div>
             </div>
         </div>
@@ -139,14 +153,18 @@
 <script>
     $('.ui.father-type.dropdown')
         .dropdown()
+
     $('.ui.message-icon.dropdown.item')
         .dropdown()
+
     $('.ui.user.dropdown.item')
         .dropdown()
+
     $('.ui.sidebar-icon.item')
         .click(function () {
             $('.ui.left.sidebar').sidebar('toggle')
         })
+
     $('.ui.article.item')
         .click(function () {
             $('.ui.article.vertical.menu').toggle('fast', function () {
@@ -154,6 +172,7 @@
                 $('.ui.chevron.icon:eq(0)').toggleClass('up')
             })
         })
+
     $('.ui.user.item')
         .click(function () {
             $('.ui.user.vertical.menu').toggle('fast', function () {
@@ -161,6 +180,7 @@
                 $('.ui.chevron.icon:eq(1)').toggleClass('up')
             })
         })
+
     $('.ui.system.item')
         .click(function () {
             $('.ui.system.vertical.menu').toggle('fast', function () {
@@ -183,6 +203,58 @@
                 }
             }
         })
+
+    function hoverPopup() {
+        $('.ui.popup.transition.visible').transition('zoom')
+    }
+
+    function deletePopup(obj, id, title) {
+        console.log(title)
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要永久删除【' + title + '】标签？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toDelete(' + id + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function edit(tag) {
+        $('#id').val(tag.id)
+        $('#name').val(tag.name)
+        $('#submitButton').val('更新')
+        if ($('#backButton').length == 0) {
+            $('#buttons').append('<input id="backButton" class="ui basic button" type="button" value="返回添加" style="border: 1px dashed #d9d9d9;color: rgba(0,0,0,.65);margin-left: -1px;" onclick="back()"/>')
+        }
+        if ($('#deleteButton').length == 0) {
+            $('#buttons').after('<input id="deleteButton" class="ui right floated red button" type="button" onclick="deletePopup($(this),\'' + $('#id').val() + '\',\'' + $('#name').val() + '\')" value="删除">')
+        } else {
+            $('#deleteButton').attr('onclick', 'deletePopup($(this),\'' + $('#id').val() + '\',\'' + $('#name').val() + '\')')
+        }
+    }
+
+    function toDelete(id) {
+        $.ajax({
+            url: '/admin/tags/' + id + '/delete',
+            type: "GET",
+            success: function () {
+                $('#tags').load('/admin/tags/' + id + '/delete')
+            }
+        })
+    }
+
+    function back() {
+        $('#submitButton').val('保存')
+        $('#backButton').remove()
+        $('#deleteButton').remove()
+        $('#id').val('')
+        $('#name').val('')
+    }
 </script>
 </body>
 </html>

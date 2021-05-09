@@ -1,12 +1,11 @@
 package cn.noahcode.blog.controller.admin;
 
-import cn.noahcode.blog.config.ServerConfig;
+import cn.hutool.core.date.BetweenFormatter;
+import cn.hutool.core.date.DateUtil;
 import cn.noahcode.blog.model.entity.User;
 import cn.noahcode.blog.model.params.PasswordParam;
 import cn.noahcode.blog.model.params.UserParam;
-import cn.noahcode.blog.service.UserService;
-import cn.noahcode.blog.util.CountDownUtils;
-import cn.noahcode.blog.util.DateUtils;
+import cn.noahcode.blog.service.*;
 import cn.noahcode.blog.util.MD5Utils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,26 +26,48 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PersonInformationController {
 
     @Autowired
-    private ServerConfig serverConfig;
+    private UserService userService;
 
     @Autowired
-    private UserService userService;
+    private OptionService optionService;
+
+    @Autowired
+    private PostService postService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private TagService tagService;
+
+    @Autowired
+    private CommentService commentService;
 
     @GetMapping("/personal-information")
     public String personalInformation(Model model) {
+        int blogCounts = postService.blogCount();
+        int categoryCounts = categoryService.categoryCount();
+        int tagCounts = tagService.tagCount();
+        int commentCounts = commentService.commentCount();
+        int viewCounts = postService.visitCount();
         User user = userService.selectByPrimaryKey(1);
-        String countDown = CountDownUtils.getCountDown(user.getCreateTime(), DateUtils.now());
-        model.addAttribute("url", serverConfig.getUrl());
+        String countDown = DateUtil.formatBetween(user.getCreateTime(), DateUtil.date(), BetweenFormatter.Level.DAY);
+        model.addAttribute("url", optionService.selectByOptionKey("blogUrl").getOptionValue());
         model.addAttribute("user", user);
         model.addAttribute("countDown", countDown);
-        return "/admin/personal-information";
+        model.addAttribute("blogCounts", blogCounts);
+        model.addAttribute("categoryCounts", categoryCounts);
+        model.addAttribute("tagCounts", tagCounts);
+        model.addAttribute("commentCounts", commentCounts);
+        model.addAttribute("viewCounts", viewCounts);
+        return "admin/personal-information";
     }
 
     @PostMapping("/personal-information")
     public String updatePersonalInformation(UserParam userParam, Model model) {
         User user = new User();
         BeanUtils.copyProperties(userParam, user);
-        user.setUpdateTime(DateUtils.now());
+        user.setUpdateTime(DateUtil.date());
         userService.updateUser(user, 1);
         return "redirect:/admin/personal-information";
     }

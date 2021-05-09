@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.noahcode.blog.mapper.PostsCategoryMapper">
+  <resultMap id="BaseResultMap" type="cn.noahcode.blog.model.entity.PostsCategory">
+    <!--@mbg.generated-->
+    <!--@Table posts_categories-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+    <result column="post_id" jdbcType="BIGINT" property="postId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, category_id, post_id, create_time, update_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from posts_categories
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from posts_categories
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.noahcode.blog.model.entity.PostsCategory" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into posts_categories (category_id, post_id, create_time, 
+      update_time)
+    values (#{categoryId,jdbcType=BIGINT}, #{postId,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.noahcode.blog.model.entity.PostsCategory" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into posts_categories
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="postId != null">
+        post_id,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="postId != null">
+        #{postId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.noahcode.blog.model.entity.PostsCategory">
+    <!--@mbg.generated-->
+    update posts_categories
+    <set>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="postId != null">
+        post_id = #{postId,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.noahcode.blog.model.entity.PostsCategory">
+    <!--@mbg.generated-->
+    update posts_categories
+    set category_id = #{categoryId,jdbcType=BIGINT},
+      post_id = #{postId,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <select id="selectByBlogId" resultMap="BaseResultMap">
+        select *
+        from posts_categories
+        where post_id = #{blogId,jdbcType=INTEGER}
+    </select>
+
+    <select id="countByCategoryId" resultType="java.lang.Long">
+        select count(*)
+        from posts_categories
+        where category_id = #{categoryId,jdbcType=INTEGER}
+    </select>
+
+    <delete id="deleteByBlogId">
+        delete
+        from posts_categories
+        where post_id = #{blogId,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByCategoryId">
+        delete
+        from posts_categories
+        where category_id = #{categoryId,jdbcType=BIGINT}
+    </delete>
+</mapper>

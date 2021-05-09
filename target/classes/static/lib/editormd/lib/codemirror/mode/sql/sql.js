@@ -73,12 +73,12 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
       return "comment";
     } else if ((support.commentHash && ch == "#")
         || (ch == "-" && stream.eat("-") && (!support.commentSpaceRequired || stream.eat(" ")))) {
-      // 1-line comments
+      // 1-line articleComments
       // ref: https://kb.askmonty.org/en/comment-syntax/
       stream.skipToEnd();
       return "comment";
     } else if (ch == "/" && stream.eat("*")) {
-      // multi-line comments
+      // multi-line articleComments
       // ref: https://kb.askmonty.org/en/comment-syntax/
       state.tokenize = tokenComment;
       return state.tokenize(stream, state);
@@ -380,9 +380,9 @@ CodeMirror.defineMode("sql", function(config, parserConfig) {
     * doubleQuote
     * nCharCast: N'string'
     * charsetCast: _utf8'string'
-    * commentHash: use # char for comments
-    * commentSlashSlash: use // for comments
-    * commentSpaceRequired: require a space after -- for comments
+    * commentHash: use # char for articleComments
+    * commentSlashSlash: use // for articleComments
+    * commentSpaceRequired: require a space after -- for articleComments
   atoms:
     Keywords that must be highlighted as atoms,. Some DBMS's support more atoms than others:
     UNKNOWN, INFINITY, UNDERFLOW, NaN...

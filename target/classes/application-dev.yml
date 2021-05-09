@@ -3,10 +3,23 @@ server:
 
 spring:
   datasource:
+    # MySQL database configuration
     username: root
-    password: 5945
+    password: root
     url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&serverTimezone=Asia/Shanghai
     driver-class-name: com.mysql.cj.jdbc.Driver
+#    # H2 database configuration.
+#    driver-class-name: org.h2.Driver
+#    url: jdbc:h2:file:~/.noahcode/db/noahcode
+#    username: admin
+#    password: admin
+#
+#  h2:
+#    console:
+#      settings:
+#        web-allow-others: false
+#      path: /h2-console
+#      enabled: false
 
 mybatis:
   configuration:

@@ -111,7 +111,7 @@
     var self = this, mode = self.getModeAt(from);
     var end = Math.min(to.ch != 0 || to.line == from.line ? to.line : to.line - 1, self.lastLine()), start = Math.min(from.line, end);
 
-    // Try finding line comments
+    // Try finding line articleComments
     var lineString = options.lineComment || mode.lineComment, lines = [];
     var pad = options.padding == null ? " " : options.padding, didSomething;
     lineComment: {
@@ -137,7 +137,7 @@
       if (didSomething) return true;
     }
 
-    // Try block comments
+    // Try block articleComments
     var startString = options.blockCommentStart || mode.blockCommentStart;
     var endString = options.blockCommentEnd || mode.blockCommentEnd;
     if (!startString || !endString) return false;
@@ -153,7 +153,7 @@
         !/comment/.test(self.getTokenTypeAt(Pos(end, close + 1))))
       return false;
 
-    // Avoid killing block comments completely outside the selection.
+    // Avoid killing block articleComments completely outside the selection.
     // Positions of the last startString before the start of the selection, and the first endString after it.
     var lastStart = startLine.lastIndexOf(startString, from.ch);
     var firstEnd = lastStart == -1 ? -1 : startLine.slice(0, from.ch).indexOf(endString, lastStart + startString.length);

@@ -1,13 +1,11 @@
 package cn.noahcode.blog.mapper;
 
 import cn.noahcode.blog.model.entity.Tag;
-import org.apache.ibatis.annotations.Mapper;
-
-import java.util.List;
+import org.apache.ibatis.annotations.Mapper;import java.util.List;
 
 /**
  * @author NoahCode
- * @date 2020/9/29
+ * @date 12/31/2020
  * @description
  */
 @Mapper
@@ -18,7 +16,7 @@ public interface TagMapper {
      * @param id primaryKey
      * @return deleteCount
      */
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     /**
      * insert record to table
@@ -42,7 +40,7 @@ public interface TagMapper {
      * @param id primary key
      * @return object by primary key
      */
-    Tag selectByPrimaryKey(Integer id);
+    Tag selectByPrimaryKey(Long id);
 
     /**
      * update record selective
@@ -64,5 +62,7 @@ public interface TagMapper {
 
     List<Tag> listTags();
 
-    List<Tag> selectByBlogId(Integer blogId);
+    List<Tag> selectByBlogId(Long blogId);
+
+    int tagCount();
 }

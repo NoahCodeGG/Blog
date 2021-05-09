@@ -131,7 +131,7 @@
           return 'variable' + stt.state;
         }
 
-        // comments
+        // articleComments
         if (mat[1] === '\\') {
           stream.skipToEnd();
             return 'comment' + stt.state;

@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="zh" class="" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="keywords" content="NoahCode's Blog,后端,Java博客,技术分享,程序员">
+    <meta name="description" content="NoahCode's Blog致力于Java技术的学习交流，记录所学所感，涉及前端技术、Java后端、服务器运维和作品设计">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Halo 1.4.2">
+    <link rel="shortcut icon" type="images/x-icon"
+          href="https://picsum.photos/id/10/1920/1080">
+    <script src="https://zz.bdstatic.com/linksubmit/push.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/volfclub/travellings/assets/travelling.min.js"></script>
+    <meta name="google-site-verification" content="cH9NFZpPFO51sBXAKWIksozvZpk5BVY3Adn-EL6t_1w">
+    <script data-ad-client="ca-pub-5596873171318955" async=""
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <title th:text="${page.title}+' | NoahCode\'s Blog'">NoahCode's Blog</title>
+    <style type="text/css">
+        :root {
+            --base-bg-color: #fff;
+            --header-bg-color: #fff;
+            --link-color: #52616a;
+            --header-text-color: #252c41;
+            --header-link-color: #252c41;
+            --toc-active-color: #dddfe6;
+            --base-hover-color: #f1404b;
+            --base-hl-color: #f1404b;
+            --page-text-color: #fff;
+            --cover-no-img-bg: #fff;
+            --cover-default-bg: #101012;
+            --menu-btn-color: #52616a;
+            --header-sub-bg-color: #f0f5f9;
+            --header-sub-hover-bg-color: #c9d6de;
+            --base-color: #4facfe;
+            --cd-hover-color: #E53A40;
+            --btn-pri-bg-color: #E53A40;
+            --base-txt-color: #363636;
+
+
+            /*--btn-pri-bg-color: #ff5f5f;*/
+            --text-color: #333333;
+            --text-hover-color: #4facfe;
+            --toc-bg-color: #8e8787;
+            /*夜晚默认*/
+            --night-toc-bg-color: #e5e5e5;
+            --night-tag-txt-color: #e5e5e5;
+            --night-tag-bg-color: #555;
+            --night-link-card-bg-color: rgba(0, 0, 0, .4);
+            --night-background: #292a2d;
+            --night-txt-color: #a9a9b3;
+            --night-input-backgrround: #2d2d2d;
+            --night-code-txt-color: #c5c8c6;
+            --night-code-color: #969896;
+            --night-code-bg-color: #2d2d2d;
+            --night-code-hljs-string-color: #0857b3;
+            --night-page-a-color: #fff;
+            --monospace: "Lucida Console", Consolas, "Courier", monospace;
+        }
+
+
+        @media only screen and (min-width: 861px) {
+            .home-cover {
+                height: 100vh !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@1.4.6/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.1.2/styles/github-gist.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+          integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/xzzai/static@master/css/jqcloud.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
+</head>
+<body>
+<header th:replace="_fragments :: header(${menus})" class="nav-wrapper -sticky" id="navHeader">
+    <button class="collapse-nav" onclick="collapseNav()" id="collapseNav" style="">
+        <div class="collapse-burger -squeeze">
+            <span class="burger-lines"></span>
+        </div>
+    </button>
+    <nav class="nav slideOut opacity-0" id="nav">
+        <button class="toggle-nav">
+            <div class="burger -squeeze">
+                <span class="burger-lines"></span>
+            </div>
+        </button>
+        <ul class="nav-list" role="navigation">
+            <div class="list -left " id="menuLinks">
+                <li class="item ">
+                    <a class="link md:text-base sm:text-sm" href="/" target="_self">首页</a>
+                </li>
+                <li class="item ">
+                    <a class="link md:text-base sm:text-sm" href="/archives" target="_self">归档</a>
+                </li>
+                <!--<li class="item ">-->
+                <!--    <a class="link md:text-base sm:text-sm" href="/journals" target="_self">动态</a>-->
+                <!--</li>-->
+                <!--<li class="item ">-->
+                <!--    <a class="link md:text-base sm:text-sm" href="/photos" target="_self">画簿</a>-->
+                <!--</li>-->
+                <!--<li class="item ">-->
+                <!--    <a class="link md:text-base sm:text-sm" href="/links" target="_self">友链</a>-->
+                <!--</li>-->
+                <li class="item ">
+                    <a class="link md:text-base sm:text-sm" href="https://github.com/guqing" target="_blank">Github</a>
+                </li>
+                <li class="item ">
+                    <a class="link md:text-base sm:text-sm" href="/me/about" target="_self">关于我</a>
+                </li>
+            </div>
+            <div class="list -right">
+                <div class="overlay"></div>
+            </div>
+        </ul>
+        <div class="day-switch" style="position: relative; right: 40px">
+            <div class="day-night-switch" role="button" onclick="dayNightSwitch()">
+                <div class="onOff daySwitch" id="daySwitch">
+                    <div class="star star1"></div>
+                    <div class="star star2"></div>
+                    <div class="star star3"></div>
+                    <div class="star star4"></div>
+                    <div class="star star5"></div>
+                    <div class="star sky"></div>
+                    <div class="sunMoon">
+                        <div class="crater crater1"></div>
+                        <div class="crater crater2"></div>
+                        <div class="crater crater3"></div>
+                        <div class="cloud part1"></div>
+                        <div class="cloud part2"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+<main class="mx-auto" id="container">
+    <header class="bg-cover post-cover">
+        <div class="placeholder-bg">
+        </div>
+        <div class="cover-content flex justify-center">
+            <!-- 封面内容 -->
+            <div class="inner flex flex-col justify-center">
+                <p class="cover-title text-base md:text-4xl lg:text-4xl xl:text-5xl" th:text="${page.title}">关于页面</p>
+            </div>
+        </div>
+    </header>
+    <div class="container mx-auto md-content px-4 mt-16 max-w-6xl tracking-wider md:leading-relaxed sm:leading-normal ct-container cn-pd content-container"
+         id="write" th:utext="${page.formatContent}">
+        <style type="text/css">
+            ol, ul {
+                list-style-type: disc;
+            }
+        </style>
+        <h2 style="margin-top:1em;margin-bottom:1em;"><span style="color: #E53A40;">自</span>语</h2>
+        <ul>
+            <li>大家好，我是一枚会前端的后端开发工程师👨🏻‍💻，目前主攻Java后端开发.</li>
+            <li>我希望用代码改变世界,我也在改变世界,自豪脸😏</li>
+            <li>目前正走在成为一个厉害(<s>Zhuang Bi</s>)程序猿的路上. 前途很艰辛, 但是我会坚持!</li>
+            <li>生活不止有撸码和工作, 也有诗和远方. 在快乐中生活, 在快乐中工作, 爱家人, 爱自己</li>
+        </ul>
+        <p><strong>子曰：生而知之者，上也；学而知之者，次也；困而学之，又其次也；困而不学，民斯为下矣。</strong><br>
+            <strong>人生得意须尽欢，莫使金樽空对月。</strong><br>
+            <strong>少小须勤学，文章可立身。满朝朱紫贵，尽是读书人。</strong></p>
+        <h2 style="margin-top:1em;margin-bottom:1em;"><span style="color: #E53A40;">技</span>能</h2>
+        <ul>
+            <li>语言：Java, JavaScript, HTML, CSS</li>
+            <li>数据库：MySQL, Redis, Oracle</li>
+            <li>开发框架：Spring, Spring Boot, Spring Cloud, MyBatis, Guice, Shiro, React, JQuery，Bootstrap</li>
+            <li>中间件：Kafka, Zookeeper</li>
+            <li>构建工具： Maven, Tomcat</li>
+            <li>环境： Mac, Ubuntu, Linux, Git, Intellij IDEA</li>
+        </ul>
+        <h2 style="margin-top:1em;margin-bottom:1em;"><span style="color: #E53A40;">学</span>习</h2>
+        <ul>
+            <li>有道是学无止境，Java 后端开发的路很难走，但是既然走了这条路，那就得一直走下去。</li>
+            <li>Java 相关的技术栈很多，学起来很不容易，最近两年的行情也是优胜劣汰，希望自己能够快速成长起来</li>
+            <li>夯实基础，学习源码</li>
+            <li>今年想要学习一下Golang</li>
+        </ul>
+        <h2 style="margin-top:1em;margin-bottom:1em;"><span style="color: #E53A40; ">博</span>客</h2>
+        <ul>
+            <li>期望：平时生活和工作一种记录, 希望之后回过头再来看自己的博客也会有所收获或感想</li>
+            <li>技术、电影与生活</li>
+            <li>对生活和学习的一个记录</li>
+            <li>希望自己越来越强大，越来越开心</li>
+        </ul>
+        <h2 style="margin-top:1em;margin-bottom:1em;"><span style="color: #E53A40;">免</span>责声明</h2>
+        <ul>
+            <li>本站所有文章为了记录工作、学习中遇到的问题，可能由于本人技术有限，有些不正确的地方，仅供参考</li>
+            <li>本站文章引用或转载写明来源，感谢原作者的辛苦写作，如果有异议或侵权，及时联系我处理，谢谢！</li>
+            <li>如他人引用本站中的文章或内容，请注明出处。但其文章或内容已不是本人原本的意思，请各位注意辨别！</li>
+            <li>本站所有文章仅代表个人当时意见和想法</li>
+            <li>欢迎指出有问题的地方，我会尽快修正，谢谢！</li>
+            <li>内容转载请保留署名以及原文连接，谢谢?</li>
+            <li>本网站所有作品采用 <a rel="license" target="_blank" href="http://creativecommons.org/licenses/by-sa/4.0/">知识共享署名-相同方式共享
+                4.0 国际许可协议</a> 进行许可。 <a rel="license" target="_blank"
+                                        href="http://creativecommons.org/licenses/by-sa/4.0/"> <img alt="知识共享许可协议"
+                                                                                                    src="https://i.creativecommons.org/l/by-sa/4.0/80x15.png">
+            </a></li>
+        </ul>
+        <h2 style="margin-top:1em;margin-bottom:1em;"><span style="color: #E53A40;">关</span>注我</h2>
+        <img src="https://cdn.jsdelivr.net/gh/hshanx/static@master/uPic/扫码_搜索联合传播样式-标准色版.png" alt="关注我"
+             style="zoom:30%;">
+    </div>
+
+    <div class="container mx-auto px-4 mt-16 max-w-6xl tracking-wider md:leading-relaxed sm:leading-normal ct-container cn-pd">
+        <halo-comment id="240" type="post">
+            <div id="halo-comment" class="halo-comment">
+                <section id="replyForm-0" role="form" class="comment-editor">
+                    <div class="inner">
+                        <div class="commentator">
+                            <img src="//cdn.v2ex.com/gravatar?d=mm" class="avatar">
+                        </div>
+                        <form class="comment-form">
+                            <div class="author-info">
+                                <input type="text" id="author" tabindex="1" required="required" aria-required="true"
+                                       placeholder="* 昵称">
+                                <input type="text" id="email" tabindex="2" required="required" aria-required="true"
+                                       placeholder="* 电子邮件">
+                                <input type="text" id="authorUrl" tabindex="3" placeholder="个人站点">
+                            </div>
+                            <div class="comment-textarea">
+                                <textarea id="content" required="required" aria-required="true" tabindex="4"
+                                          placeholder="撰写评论..."></textarea>
+                            </div>
+                            <ul class="comment-buttons">
+                                <!--<li class="middle" style="margin-right: 5px;">-->
+                                <!--    <a href="javascript:void(0)"-->
+                                <!--       rel="nofollow noopener"-->
+                                <!--       class="button-preview-edit">预览</a>-->
+                                <!--</li>-->
+                                <li class="middle">
+                                    <a tabindex="5"
+                                       class="button-submit" th:onclick="applyComment(0,[[${page.id}]])">提交</a>
+                                </li>
+                            </ul>
+                            <div class="comment-alert" style="display: none;">
+                                <div class="alert info">
+                                    <span class="closebtn" onclick="hideAlert(0)">×</span>
+                                    <strong>您的评论已经投递至博主，等待博主审核！</strong>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+                <div class="comment-loader-container" style="display: none;">
+                    <div class="comment-loader"></div>
+                </div>
+                <ol class="comment-nodes" th:if="${comments}!=null">
+                    <li th:id="'li-comment-'+${comment.value.id}" itemtype="http://schema.org/Comment"
+                        itemprop="comment"
+                        class="comment index-1" th:each="comment:${comments}">
+                        <div th:id="'comment-'+${comment.value.id}" class="comment-body">
+                            <div class="comment-avatar">
+                                <a href="#" th:href="${comment.value.authorUrl}" rel="nofollow" target="_blank">
+                                    <img src="//cdn.v2ex.com/gravatar/fb5c5e1b3f459fd6db362860866b6469?s=256&amp;d=mm"
+                                         class="avatar">
+                                </a>
+                            </div>
+                            <div class="contain-main">
+                                <div class="comment-meta">
+                                    <div itemprop="author" class="comment-author">
+                                        <a href="#" th:href="${comment.value.authorUrl}" rel="nofollow" target="_blank"
+                                           class="author-name" th:text="${comment.value.author}">小枫</a>
+                                        <span class="comment-reply" style="cursor: pointer;"
+                                              th:onclick="showReplyForm($(this),[[${comment.value.id}]])">回复</span>
+                                        <span class="is-admin" th:if="${comment.value.isAdmin}">
+                                            <svg viewBox="0 0 1024 1024" version="1.1"
+                                                 xmlns="http://www.w3.org/2000/svg" width="14" height="14" class="icon">
+                                                <path d="M512 0C229.248 0 0 229.248 0 512s229.248 512 512 512 512-229.248 512-512S794.752 0 512 0z m0 896c-212.032 0-384-171.968-384-384S299.968 128 512 128s384 171.968 384 384-171.968 384-384 384z m94.08-513.408L512 192.064l-94.016 190.528-210.304 30.592 152.192 148.288-35.968 209.344L512 672l188.032 98.88-35.904-209.344 152.128-148.288-210.176-30.656z"
+                                                      p-id="6998" fill="#1296db"></path>
+                                            </svg>
+                                        </span>
+                                        <div class="useragent-info" th:text="${comment.value.userAgent}">Chrome
+                                            81.0.4044.122 in Windows 10
+                                        </div>
+                                    </div>
+                                    <time itemprop="datePublished" class="comment-time"
+                                          th:text="${#dates.format(comment.value.createTime,'yyyy/MM/dd HH:mm')}">
+                                        2020/06/08 00:17
+                                    </time>
+                                    <a th:href="'#comment-'+${comment.value.id}" class="comment-id"
+                                       th:text="'#'+${comment.value.id}">#149</a>
+                                </div>
+                                <div itemprop="description" class="comment-content markdown-body"
+                                     th:utext="${comment.value.content}"></div>
+                            </div>
+                        </div>
+                        <section th:id="'replyForm-'+${comment.value.id}" role="form" class="comment-editor"
+                                 style="display: none;">
+                            <div class="inner">
+                                <div class="commentator">
+                                    <img src="//cdn.v2ex.com/gravatar?d=mm" class="avatar">
+                                </div>
+                                <form class="comment-form">
+                                    <input type="hidden" name="postId">
+                                    <input type="hidden" name="parentId">
+                                    <div class="author-info">
+                                        <input type="text" id="author" name="author" tabindex="1" placeholder="* 昵称">
+                                        <input type="text" id="email" name="email" tabindex="2" placeholder="* 电子邮件">
+                                        <input type="text" id="authorUrl" name="authorUrl" tabindex="3"
+                                               placeholder="个人站点">
+                                    </div>
+                                    <div class="comment-textarea">
+                                        <textarea id="content" required="required" name="content"
+                                                  aria-required="true" tabindex="4"
+                                                  placeholder="撰写评论..."></textarea>
+                                    </div>
+                                    <ul class="comment-buttons">
+                                        <li class="middle">
+                                            <a tabindex="5" rel="nofollow noopener"
+                                               class="button-submit"
+                                               th:onclick="applyComment([[${comment.value.id}]],[[${page.id}]])">提交</a>
+                                        </li>
+                                    </ul>
+                                    <div class="comment-alert" style="display: none;">
+                                        <div class="alert info">
+                                            <span class="closebtn"
+                                                  th:onclick="hideAlert([[${comment.value.id}]])">×</span>
+                                            <strong>您的评论已经投递至博主，等待博主审核！</strong>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </section>
+                        <ol class="children" th:if="${comment.value.hasChildren}"
+                            th:each="children:${comment.value.children}">
+                            <li th:id="'li-comment-'+${children.id}" itemtype="http://schema.org/Comment"
+                                itemprop="comment"
+                                class="comment">
+                                <div th:id="'comment-'+${children.id}" class="comment-body">
+                                    <div class="comment-avatar">
+                                        <a th:href="${children.authorUrl}" rel="nofollow" target="_blank">
+                                            <img src="//cdn.v2ex.com/gravatar?d=mm" class="avatar">
+                                        </a>
+                                    </div>
+                                    <div class="contain-main">
+                                        <div class="comment-meta">
+                                            <div itemprop="author" class="comment-author">
+                                                <a th:href="${children.authorUrl}" rel="nofollow"
+                                                   target="_blank" class="author-name"
+                                                   th:text="${children.author}">小枫</a>
+                                                <span class="comment-reply" style="cursor: pointer;"
+                                                      th:onclick="showReplyForm($(this),[[${children.id}]])">回复</span>
+                                                <span class="is-admin" th:if="${children.isAdmin}">
+                                                    <svg viewBox="0 0 1024 1024" version="1.1"
+                                                         xmlns="http://www.w3.org/2000/svg" width="14" height="14"
+                                                         class="icon">
+                                                        <path d="M512 0C229.248 0 0 229.248 0 512s229.248 512 512 512 512-229.248 512-512S794.752 0 512 0z m0 896c-212.032 0-384-171.968-384-384S299.968 128 512 128s384 171.968 384 384-171.968 384-384 384z m94.08-513.408L512 192.064l-94.016 190.528-210.304 30.592 152.192 148.288-35.968 209.344L512 672l188.032 98.88-35.904-209.344 152.128-148.288-210.176-30.656z"
+                                                              p-id="6998" fill="#1296db"></path>
+                                                    </svg>
+                                                </span>
+                                                <div class="useragent-info" th:text="${children.userAgent}">Chrome
+                                                    75.0.3770.100 in Windows 10
+                                                </div>
+                                            </div>
+                                            <time itemprop="datePublished" class="comment-time"
+                                                  th:text="${#dates.format(children.createTime,'yyyy/MM/dd HH:mm')}">
+                                                2020/09/03 13:50
+                                            </time>
+                                            <a th:href="'#comment-'+${children.id}" class="comment-id"
+                                               th:text="'#'+${children.id}"></a>
+                                        </div>
+                                        <div itemprop="description" class="comment-content markdown-body"
+                                             th:utext="${children.content}">
+                                            <a th:href="'#comment-'+${comment.value.id}">#149</a>
+                                        </div>
+                                    </div>
+                                    <section th:id="'replyForm-'+${children.id}" role="form" class="comment-editor"
+                                             style="display: none;">
+                                        <div class="inner">
+                                            <div class="commentator">
+                                                <img src="//cdn.v2ex.com/gravatar?d=mm" class="avatar">
+                                            </div>
+                                            <form class="comment-form">
+                                                <input type="hidden" name="postId">
+                                                <input type="hidden" name="parentId">
+                                                <div class="author-info">
+                                                    <input type="text" id="author" name="author" tabindex="1"
+                                                           placeholder="* 昵称">
+                                                    <input type="text" id="email" name="email" tabindex="2"
+                                                           placeholder="* 电子邮件">
+                                                    <input type="text" id="authorUrl" name="authorUrl" tabindex="3"
+                                                           placeholder="个人站点">
+                                                </div>
+                                                <div class="comment-textarea">
+                                                    <textarea id="content" required="required" name="content"
+                                                              aria-required="true" tabindex="4"
+                                                              placeholder="撰写评论..."></textarea>
+                                                </div>
+                                                <ul class="comment-buttons"><!---->
+                                                    <li class="middle">
+                                                        <a tabindex="5" rel="nofollow noopener"
+                                                           class="button-submit"
+                                                           th:onclick="applyComment([[${children.id}]],[[${page.id}]])">提交</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="comment-alert" style="display: none;">
+                                                    <div class="alert info">
+                                                        <span class="closebtn"
+                                                              th:onclick="hideAlert([[${children.id}]])">×</span>
+                                                        <strong>您的评论已经投递至博主，等待博主审核！</strong>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </section>
+                                </div>
+                            </li>
+                        </ol>
+                    </li>
+                </ol>
+                <div class="comment-empty" th:if="${comments}==null">暂无评论</div>
+            </div>
+        </halo-comment>
+    </div>
+</main>
+<footer th:replace="_fragments :: footer" class="footer mt-8">
+    <div class="inner container mx-auto flex flex-row lg:justify-between  md:justify-center items-center grid lg:grid-cols-2 md:grid-cols-1">
+        <div class="offsite-links flex flex-row justify-center flex-wrap">
+            <a href="https://weibo.com/guqing3478520" class="circle pad-10" target="_blank" rel="noopener">
+                <span class="iconfont icon-weibo"> </span>
+            </a>
+            <a href="https://t.me/guching" class="circle pad-10" target="_blank" rel="noopener" title="Telegram Chat">
+                <span class="iconfont icon-telegram"> </span>
+            </a>
+            <a href="https://github.com/guqing" class="circle pad-10" target="_blank" rel="noopener" title="Github">
+                <span class="iconfont icon-github"> </span>
+            </a>
+            <a href="https://www.guqing.xyz/atom.xml" class="circle pad-10" target="_blank" rel="noopener" title="RSS">
+                <span class="iconfont icon-rss"> </span>
+            </a>
+        </div>
+
+        <div class="site-info flex flex-col justify-center">
+            <script>
+                window.dataLayer = window.dataLayer || [];
+
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+
+                gtag('js', new Date());
+                gtag('config', 'UA-143641169-1');
+            </script>
+
+            <!-- 请尊重作者，请务必保留版权 -->
+            <div class="badges">
+                <div class="github-badge">
+                    <a style="color: #fff" rel="license" href="http://halo.run" target="_blank">
+                        <span class="badge-subject">Powered</span>
+                        <span class="badge-value bg-blue">Halo</span>
+                    </a>
+                </div>
+                <div class="github-badge">
+                    <a style="color: #fff" rel="license" href="https://github.com/xzzai/halo-theme-xue.git"
+                       target="_blank">
+                        <span class="badge-subject">Theme</span>
+                        <span class="badge-value bg-red">Xue</span>
+                    </a>
+                </div>
+
+                <div class="github-badge">
+                    <a style="color: #fff" rel="license" href="javascript:void(0)">
+                        <span class="badge-subject">运行</span>
+                        <span class="badge-value bg-orange" id="span_dt_dt">558天16小时48分45秒</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<div class="moon-menu" id="moonMenu">
+    <div class="moon-menu-items">
+        <span class="moon-menu-item pl-6 iconfont icon-up" onclick="ckBack2Top()"> </span>
+        <span class="moon-menu-item pl-6 iconfont icon-down" onclick="ckBack2Bottom()"> </span>
+        <span class="moon-menu-item pl-6 iconfont icon-search" onclick="toggleSearchBox()"></span>
+        <span class="moon-menu-item pl-6 iconfont icon-toc hidden" onclick="ckShowContent()" id="smallToc"></span>
+    </div>
+
+    <div class="moon-menu-button" onclick="ckMoonButton()">
+        <svg class="moon-menu-bg">
+            <circle class="moon-menu-cricle" cx="50%" cy="50%" r="44%"></circle>
+            <circle class="moon-menu-border" cx="50%" cy="50%" r="48%" style="stroke-dasharray: 0, 196;"></circle>
+            <g class="moon-dot" style="">
+                <circle r=".2rem" cx="0" cy="-.8rem"></circle>
+                <circle r=".2rem"></circle>
+                <circle r=".2rem" cx="0" cy=".8rem"></circle>
+            </g>
+        </svg>
+        <div class="moon-menu-content">
+            <div class="moon-menu-icon" style="display: block;"></div>
+            <div class="moon-menu-text" style="display: none;">1%</div>
+        </div>
+    </div>
+</div>
+
+<div class="moon-content menu-bg" id="moonToc">
+</div>
+<form method="get" action="/search">
+    <div class="hidden search-box" id="searchBox">
+        <div class="search-ipt ipt ipt-w">
+            <div class="ipt-ct ct-bg search-container" id="searchInput">
+                <label class="sh-lab">
+                    <input class="sh-ipt" maxlength="30" name="keyword" id="searchBoxInput" spellcheck="false"
+                           placeholder="Search" autofocus="autofocus" autocomplete="off">
+                    <i class="sh-icon iconfont icon-search"></i>
+                </label>
+                <a class="sh-exit iconfont icon-exit" onclick="toggleSearchBox()"></a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<!-- markdown 插件 -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!--图片预览插件-->
+<script src="https://cdn.jsdelivr.net/npm/viewerjs@1.5.0/dist/viewer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/xzzai/static@master/js/linesNumber.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tocbot@4.11.2/dist/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/isotope-layout@3.0.6/dist/isotope.pkgd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/xzzai/static@master/js/moon.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hshanx/static@master/js/simply-nav.js"></script>
+<script type="text/javascript">
+    let openKatex = false;
+    const katex_config = {
+        delimiters:
+            [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\(", right: "\\)", display: false},
+                {left: "\\[", right: "\\]", display: true},
+            ]
+    };
+    openKatex = true;
+
+    // 是否开启代码高亮
+    let enableCodeHighlight = false;
+    let collpaseCode = false;
+    enableCodeHighlight = true;
+    let enableLineNumber = false;
+    // 是否开启行号
+    enableLineNumber = typeof lineNumbersBlock === 'function';
+
+
+    function renderTagCloud() {
+        // 标签云
+        var tagCloud = $("#tagCloud");
+        if (!(tagCloud && tagCloud.children().length === 0)) {
+            return;
+        }
+        // 标签
+        var tagArray = [
+            {'text': 'Halo', 'weight': '4', 'link': 'https://halo.hshan.fun/tags/halo'},
+        ];
+
+        // 标签云
+        tagCloud.jQCloud(tagArray, {autoResize: true, delayedMode: true});
+
+    }
+
+    function renderCategoryCloud() {
+        // 分类云
+        var categoryCloud = $("#categoryCloud");
+        if (!(categoryCloud && categoryCloud.children().length === 0)) {
+            return;
+        }
+        // 分类
+        var array = [
+            {
+                'text': 'Halo',
+                'weight': '4',
+                'link': 'https://halo.hshan.fun/categories/halo'
+            },
+            {
+                'text': '默认分类',
+                'weight': '0',
+                'link': 'https://halo.hshan.fun/categories/default'
+            },
+        ];
+
+        categoryCloud.jQCloud(array, {autoResize: true, delayedMode: true});
+    }
+</script>
+<script src="https://halo.hshan.fun/themes/bao/source/js/main.js?ver=202012182202"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+        integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+        crossorigin="anonymous"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+        integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+        crossorigin="anonymous"></script>
+<script type="text/javascript">
+    // console.clear();
+    console.log("%c 有朋自远方来, 不亦说乎.", "background:#24272A; color:#ffffff", "");
+    console.log("%c Github %c", "background:#24272A; color:#ffffff", "", "https://github.com/xzhuz");
+</script>
+<script type="text/javascript">
+    const loading = "https://halo.hshan.fun/themes/bao/source/images/loading-45.svg";
+    var photoList = `https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/wallhaven-96qy3w-1600.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/viZSANTFbjM-1600.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/umgirl-1600.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/dark-hair-2200.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/wye1qr-1900.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/eyykl8-1600.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/dgkq7g.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/839kvo.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/wyeder.jpg;
+https://cdn.jsdelivr.net/gh/xzzai/static@master/uPic/gjo13q.png`;
+    var photos = new Array();
+    if (photoList && photoList.trim() !== '') {
+        if (photoList.endsWith(';')) {
+            photoList = photoList.substring(0, photoList.length - 1);
+        }
+        var photoArr = photoList.split(";");
+        // 过滤photos中的空字符
+        for (let i = 0; i < photoArr.length; i++) {
+            if (photoArr[i] && photoArr[i].trim().length > 0) {
+                photos.push(photoArr[i].trim());
+            }
+
+        }
+    }
+    // 默认收缩菜单
+    var hideMenu = false;
+
+    var autoNightMode = false
+    autoNightMode = true;
+</script>
+<script src="https://cdn.jsdelivr.net/gh/xzzai/static@master/js/jquery.pjax.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css">
+<script type="text/javascript">
+    $(document).pjax(
+        'a[href]:not([href^="#"]):not([data-not-pjax]):not([target^="_blank"]), form',
+        '#container', {fragment: '#container', timeout: 8000});
+
+    $(document).on('pjax:send', function () {
+        NProgress.start();
+    })
+
+    $(document).on('pjax:complete', function () {
+        NProgress.done();
+
+        // 检查夜间模式
+        checkNightMode()
+
+        // 自动切换夜间模式
+        if (autoNightMode) {
+            autoDayNight();
+        }
+
+        // 删除listener
+        removeScrollTocFixed();
+
+        // 重新加载 评论
+        $('script[data-pjax-comment]').each(function () {
+            var commentParent = $(this).parent()
+            var comment = $(this).remove();
+            commentParent.append(comment);
+        });
+
+        if ($('#container').find('.ziyan').length > 0) {
+            // 计算时间
+            setTimeAgo();
+
+            // 自言代码高亮
+            hljsZiYanCode()
+
+        }
+
+        // 存在 markdown 页面的功能
+        if ($("#container").find('.md-content').length > 0) {
+            // 格式化内容
+            // 格式化markdown文章
+            const format = formatContent();
+
+            if ($('#container').find('.md-content').length > 0 && format) {
+                return;
+            } else {
+                loadGallery();
+                lazyloadImg();
+            }
+
+            // 小屏幕下面初始化 toc
+            if (typeof tocbot !== "undefined" && document.getElementById("toc")) {
+                dealContentToc()
+            }
+        }
+
+        // 相册页面功能
+        if ($("#container").find('.photos-page').length > 0) {
+            loadGallery();
+        }
+
+        // 图片懒加载
+        lazyloadImg()
+
+        //重载
+        if (typeof _hmt !== 'undefined') {
+            // support 百度统计
+            _hmt.push(['_trackPageview', location.pathname + location.search]);
+        }
+        if (typeof ga !== 'undefined') {
+            // support google analytics
+            ga('send', 'pageview', location.pathname + location.search);
+        }
+
+        if ($('#container').find('.jqcloud').length > 0) {
+            if (typeof $.fn.jQCloud !== "function") {
+                $.getScript(
+                    "https://cdn.jsdelivr.net/gh/xzzai/static@master/js/jqcloud-1.0.4.min.js",
+                    function () {
+                        renderTagCloud();
+                        renderCategoryCloud();
+                    });
+            } else {
+                renderTagCloud();
+                renderCategoryCloud();
+            }
+
+        }
+
+        ;
+
+    });
+
+    $(document).on('pjax:error', function () {
+        NProgress.done();
+    });
+</script>
+<!--/*/</th:block>/*/-->
+<script>
+    function showReplyForm(obj, id) {
+        $('#replyForm-' + id).show()
+        obj.css('display', 'block')
+        obj.text('取消回复')
+        obj.attr('onclick', 'hideReplyForm($(this),' + id + ')')
+    }
+
+    function hideReplyForm(obj, id) {
+        $('#replyForm-' + id).hide()
+        obj.css('display', '')
+        obj.text('回复')
+        obj.attr('onclick', 'showReplyForm($(this),' + id + ')')
+    }
+
+    function applyComment(parentId, postId) {
+        var author, email, authorUrl, content
+        author = $('#replyForm-' + parentId).children('.inner').children('.comment-form').children('.author-info').children('#author').val()
+        email = $('#replyForm-' + parentId).children('.inner').children('.comment-form').children('.author-info').children('#email').val()
+        authorUrl = $('#replyForm-' + parentId).children('.inner').children('.comment-form').children('.author-info').children('#authorUrl').val()
+        content = $('#replyForm-' + parentId).children('.inner').children('.comment-form').children('.comment-textarea').children('#content').val()
+        data = {
+            "postId": postId,
+            "parentId": parentId,
+            "author": author,
+            "email": email,
+            "authorUrl": authorUrl,
+            "content": content
+        }
+        $.ajax({
+            url: '/comments/page',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function () {
+                $('#replyForm-' + parentId).children('.inner').children('.comment-form').children('.comment-alert').show()
+            }
+        })
+    }
+
+    function hideAlert(parentId) {
+        $('#replyForm-' + parentId).children('.inner').children('.comment-form').children('.comment-alert').hide()
+    }
+</script>
+</body>
+</html>

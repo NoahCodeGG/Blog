@@ -1,9 +1,8 @@
 package cn.noahcode.blog.model.dto;
 
-import cn.noahcode.blog.model.entity.Category;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Date;
 
 /**
  * @author NoahCode
@@ -13,6 +12,16 @@ import java.util.List;
 @Data
 public class CategoryDTO {
 
-    private List<Category> categories;
+    private Long id;
+
+    private String name;
+
+    private String description;
+
+    private Integer parentId;
+
+    private Date createTime;
+
+    private Date updateTime;
 
 }

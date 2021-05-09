@@ -19,7 +19,7 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryMapper categoryMapper;
 
     @Override
-    public int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(Long id) {
         return categoryMapper.deleteByPrimaryKey(id);
     }
 
@@ -44,7 +44,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category selectByPrimaryKey(Integer id) {
+    public Category selectByPrimaryKey(Long id) {
         return categoryMapper.selectByPrimaryKey(id);
     }
 
@@ -54,8 +54,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> selectByBlogId(Integer blogId) {
-        return categoryMapper.selectByBlogId(blogId);
+    public List<Category> selectByPostId(Long blogId) {
+        return categoryMapper.selectByPostId(blogId);
     }
 
     @Override
@@ -63,4 +63,10 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.listCategory();
     }
 
+    @Override
+    public int categoryCount() {
+        return categoryMapper.categoryCount();
+    }
+
 }
+

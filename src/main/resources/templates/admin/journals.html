@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title th:text="${journalsTitle.optionValue} + ' - NoahCode\'s Blog'">日志 - NoahCode's Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+<div th:replace="admin/_fragments :: header" class="ui top attached menu">
+    <a class="ui sidebar-icon item">
+        <i class="ui bars icon"></i>
+    </a>
+    <div class="ui right menu">
+        <a href="#" class="ui item">
+            <i class="ui linkify icon"></i>
+        </a>
+        <div class="ui top right message-icon pointing dropdown item">
+            <i class="ui bell outline icon"></i>
+            <div class="ui menu" style="width: 300px;">
+                <div class="ui header">
+                    <h3 class="ui dividing header">待审核评论</h3>
+                </div>
+                <div class="ui item">
+                    <div class="ui feed">
+                        <div class="ui event">
+                            <div class="label">
+                                <img src="../../static/images/icon.png">
+                            </div>
+                            <div class="ui content">
+                                <div class="ui summary"><a>NoahCode</a>:</div>
+                                <div class="ui extra text" style="word-wrap: break-word;white-space:normal;">
+                                    欢迎使用 Halo，这是你的第一条评论，头像来自 Gravatar，你也可以通过注册 Gravatar 来显示自己的头像。
+                                </div>
+                                <div class="ui extra date">3 天前</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui top right user pointing dropdown item">
+            <div class="ui circular mini image">
+                <img src="../../static/images/icon.png" alt="">
+            </div>
+            <div class="ui menu">
+                <div class="ui item">
+                    <i class="ui user outline icon"></i>个人信息
+                </div>
+                <div class="ui item">
+                    <i class="ui sign-out icon"></i>退出登录
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="admin/_fragments :: sidebar" class="ui tiny inverted left vertical sidebar menu">
+    <div class="ui item">
+        <img class="ui centered mini image" src="../../static/images/icon.png" alt="">
+        <h4 class="ui inverted centered header">NoahCode</h4>
+    </div>
+    <a class="ui item">仪表盘</a>
+    <a class="ui article item">
+        <i class="ui chevron down icon"></i>
+        文章
+    </a>
+    <div class="ui article inverted vertical menu" style="display: none;">
+        <a class="ui item">所有文章</a>
+        <a class="ui item">写文章</a>
+        <a class="ui item">分类目录</a>
+        <a class="ui item">标签</a>
+    </div>
+    <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
+    <a class="ui user item">
+        <i class="ui chevron down icon"></i>
+        用户
+    </a>
+    <div class="ui user inverted vertical menu" style="display: none;">
+        <a class="ui item">个人资料</a>
+    </div>
+    <a class="ui system item">
+        <i class="ui chevron down icon"></i>
+        系统
+    </a>
+    <div class="ui system inverted vertical menu" style="display: none;">
+        <a class="ui item">博客设置</a>
+        <a class="ui item">关于</a>
+    </div>
+</div>
+
+<!--面包屑导航条-->
+<div class="ui bottom attached segment">
+    <div class="ui breadcrumb">
+        <a class="ui section" href="index.html" th:href="@{/admin/index}">首页</a>
+        <div class="ui divider"> /</div>
+        <div class="ui section">页面</div>
+        <div class="ui divider"> /</div>
+        <div class="ui active section" th:text="${journalsTitle.optionValue}">日志</div>
+    </div>
+</div>
+
+<div class="ui bottom attached">
+    <div class="ui publish tiny modal">
+        <div class="ui header">
+            <span id="modalHeader">发表</span> :
+        </div>
+        <div class="ui content">
+            <form id="modalForm" class="ui form">
+                <div class="ui field">
+                    <input id="id" name="id" type="hidden">
+                </div>
+                <div class="ui relaxed field">
+                    <textarea id="sourceContent" name="sourceContent"></textarea>
+                </div>
+                <div class="ui field">
+                    <div class="ui toggle checkbox">
+                        <input id="type" type="checkbox" name="type">
+                        <label id="typeLabel">私密</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="ui actions">
+            <input id="publishBtn" type="button" class="ui primary button" value="发布"
+                   th:onclick="postJournal([[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])"/>
+        </div>
+    </div>
+    <div style="padding:20px 40px;">
+        <header>
+            <span>关键词：</span>
+            <div class="ui input">
+                <input type="text">
+            </div>
+            <span style="margin-left: 20px;">状态：</span>
+            <div class="ui state selection dropdown">
+                <input type="hidden" name="state">
+                <i class="dropdown icon"></i>
+                <div class="default text"></div>
+                <div class="menu">
+                    <div class="ui item">公开</div>
+                    <div class="ui item">私密</div>
+                </div>
+            </div>
+            <button class="ui primary button" style="margin-left: 20px;">查询</button>
+            <button class="ui button" style="margin-left: 10px;">重置</button>
+        </header>
+        <div class="ui row" style="padding-top: 20px;padding-bottom: 20px;">
+            <a class="ui primary button" onclick="openModal(null)">
+                <i class="ui plus icon"></i> 写日志
+            </a>
+        </div>
+        <div id="journalList" class="ui relaxed middle aligned selection celled list">
+            <div th:fragment="journalList" class="ui item" th:each="journal : ${journals}">
+                <img class="ui avatar image" src="../../static/images/icon.png" th:src="@{/images/icon.png}"
+                     style="width: 60px;height: 60px;">
+                <div class="ui content" style="padding: 10px;">
+                    <div class="header" style="padding: 5px;"
+                         th:text="${#dates.format(journal.createTime,'yyyy-MM-dd HH:mm')}">2021-01-27 12:41
+                    </div>
+                    <div class="description" style="padding: 5px;" th:utext="${journal.content}">测试日志</div>
+                </div>
+                <div class="ui right floated" style="padding: 20px;">
+                    <a th:onclick="openModal([[${journal}]])">编辑</a>
+                    |
+                    <a th:onclick="deletePopup($(this),[[${journal.id}]],[[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">删除</a>
+                </div>
+                <!--<div style="padding: 10px;">-->
+                <!--    <span><i class="ui blue thumbs up outline icon"></i>0</span> |-->
+                <!--    <span><i class="ui blue comment outline icon"></i>0</span> |-->
+                <!--    <span><i class="ui blue lock open icon"></i></span>-->
+                <!--</div>-->
+            </div>
+        </div>
+        <div class="ui right floated pagination menu">
+            <a class="icon item" href="#"
+               th:href="'/admin/journals?pageNum='+${pageInfo.prePage}+'&pageSize='+${pageInfo.pageSize}">
+                <i class="left chevron icon"></i>
+            </a>
+            <a class="item" th:each="nav:${pageInfo.navigatepageNums}" th:text="${nav}"
+               th:href="'/admin/journals?pageNum='+${nav}+'&pageSize='+${pageInfo.pageSize}">1</a>
+            <a class="icon item"
+               th:href="'/admin/journals?pageNum='+${pageInfo.nextPage}+'&pageSize='+${pageInfo.pageSize}">
+                <i class="right chevron icon"></i>
+            </a>
+            <div class="ui page-size compact selection dropdown">
+                <input type="hidden" name="pageSize" value="10" th:value="${pageInfo.pageSize}">
+                <i class="ui dropdown icon"></i>
+                <div class="ui text">10条/页</div>
+                <div class="ui menu">
+                    <a class="ui item" data-value="1"
+                       th:href="'/admin/journals?pageNum='+${pageInfo.pageNum}+'&pageSize=1'">1条/页</a>
+                    <a class="ui item" data-value="2"
+                       th:href="'/admin/journals?pageNum='+${pageInfo.pageNum}+'&pageSize=2'">2条/页</a>
+                    <a class="ui item" data-value="5"
+                       th:href="'/admin/journals?pageNum='+${pageInfo.pageNum}+'&pageSize=5'">5条/页</a>
+                    <a class="ui item" data-value="10"
+                       th:href="'/admin/journals?pageNum='+${pageInfo.pageNum}+'&pageSize=10'">10条/页</a>
+                    <a class="ui item" data-value="20"
+                       th:href="'/admin/journals?pageNum='+${pageInfo.pageNum}+'&pageSize=20'">20条/页</a>
+                    <a class="ui item" data-value="50"
+                       th:href="'/admin/journals?pageNum='+${pageInfo.pageNum}+'&pageSize=50'">50条/页</a>
+                    <a class="ui item" data-value="100"
+                       th:href="'/admin/journals?pageNum='+${pageInfo.pageNum}+'&pageSize=100'">100条/页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="position: fixed; bottom: 30px; right: 30px;">
+        <button type="button" class="ui large primary circular icon button" onclick="showSettingModal()">
+            <i class="ui cog icon"></i>
+        </button>
+    </div>
+    <div class="ui setting tiny modal">
+        <div class="ui header">页面设置</div>
+        <div class="ui content">
+            <form id="editSettingForm" class="ui form" th:method="get"
+                  th:action="'/admin/journals/setting?pageNum='+${pageInfo.pageNum}+'&pageSize='+${pageInfo.pageSize}">
+                <div class="ui field">
+                    <label>页面标题：</label>
+                    <input name="journalsTitle" type="text" th:value="${journalsTitle.optionValue}">
+                </div>
+                <div class="ui field">
+                    <label>每页显示条数：</label>
+                    <input name="journalsPageSize" type="number" th:value="${journalsPageSize.optionValue}">
+                </div>
+            </form>
+        </div>
+        <div class="ui actions">
+            <input id="replyBtn" type="button" class="ui primary button" value="保存" onclick="submitSettingModal()"/>
+        </div>
+    </div>
+</div>
+
+
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+
+    $('.ui.message-icon.dropdown.item')
+        .dropdown()
+
+    $('.ui.user.dropdown.item')
+        .dropdown()
+
+    $('.ui.sidebar-icon.item')
+        .click(function () {
+            $('.ui.left.sidebar').sidebar('fade')
+        });
+
+    $('.ui.article.item')
+        .click(function () {
+            $('.ui.article.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(0)').toggleClass('down')
+                $('.ui.chevron.icon:eq(0)').toggleClass('up')
+            })
+        })
+
+    $('.ui.user.item')
+        .click(function () {
+            $('.ui.user.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(1)').toggleClass('down')
+                $('.ui.chevron.icon:eq(1)').toggleClass('up')
+            })
+        })
+
+    $('.ui.system.item')
+        .click(function () {
+            $('.ui.system.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(2)').toggleClass('down')
+                $('.ui.chevron.icon:eq(2)').toggleClass('up')
+            })
+        })
+
+</script>
+<!--/*/</th:block>/*/-->
+<script>
+    $('.ui.state.dropdown')
+        .dropdown()
+
+    $('.ui.page-size.dropdown')
+        .dropdown()
+
+    $('.ui.toggle.checkbox')
+        .checkbox({
+            onChecked: function () {
+                $(this).val('PUBLIC')
+                $('#typeLabel').text('公开')
+            },
+            onUnchecked: function () {
+                $(this).val('INTIMATE')
+                $('#typeLabel').text('私密')
+            }
+        })
+
+    function openModal(journal) {
+        var modalTitle = $('#modalHeader')
+        var id = $('#id')
+        var sourceContent = $('#sourceContent')
+        var type = $('#type')
+        var typeLabel = $('#typeLabel')
+        if (journal === null) {
+            modalTitle.text('发表')
+            id.val('')
+            sourceContent.val('')
+            $('.ui.publish.modal')
+                .modal({
+                    centered: false
+                })
+                .modal('show')
+        } else {
+            modalTitle.text('编辑')
+            id.val(journal.id)
+            sourceContent.val(journal.sourceContent)
+            console.log(journal.type)
+            if (journal.type === 'INTIMATE') {
+                type.removeAttr('checked')
+                typeLabel.text('私密')
+            } else {
+                type.attr('checked', 'checked')
+                typeLabel.text('公开')
+            }
+            $('.ui.publish.modal')
+                .modal({
+                    centered: false
+                })
+                .modal('show')
+        }
+    }
+
+    function showSettingModal() {
+        $('.ui.setting.modal')
+            .modal({
+                centered: false
+            })
+            .modal('show')
+    }
+
+    function submitSettingModal() {
+        $('#editSettingForm').submit()
+    }
+
+    function deletePopup(obj, id, pageNum, pageSize) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要删除这条日志？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toDelete(' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function hoverPopup() {
+        $('.ui.popup.transition.visible').transition('zoom')
+    }
+
+    function toDelete(id, pageNum, pageSize) {
+        $('#journalList').load('/admin/journals/' + id + '/delete?pageNum=' + pageNum + '&pageSize=' + pageSize)
+    }
+
+    function postJournal(pageNum, pageSize) {
+        var id = $('#id').val()
+        var sourceContent = $('#sourceContent').val()
+        var type = $('#type').val()
+        data = {
+            "sourceContent": sourceContent,
+            "type": type
+        }
+        if (id === null || id.length == 0 || id === '') {
+            $.ajax({
+                url: '/admin/journals/add?pageSize=' + pageSize,
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function () {
+                    window.location.href = "/admin/journals?pageNum=" + pageNum + '&pageSize=' + pageSize
+                }
+            })
+        } else {
+            $.ajax({
+                url: '/admin/journals/' + id + '/edit?pageNum=' + pageSize + '&pageSize=' + pageSize,
+                type: "POST",
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success: function () {
+                    window.location.href = "/admin/journals?pageNum=" + pageNum + '&pageSize=' + pageSize
+                }
+            })
+        }
+    }
+
+</script>
+</body>

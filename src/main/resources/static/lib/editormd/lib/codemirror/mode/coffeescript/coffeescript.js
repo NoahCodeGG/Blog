@@ -78,7 +78,7 @@ CodeMirror.defineMode("coffeescript", function(conf, parserConf) {
       return "comment";
     }
 
-    // Handle multi line comments
+    // Handle multi line articleComments
     if (stream.match("###")) {
       state.tokenize = longComment;
       return state.tokenize(stream, state);

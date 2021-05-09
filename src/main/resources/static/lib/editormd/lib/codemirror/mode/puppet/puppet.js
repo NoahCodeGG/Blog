@@ -157,7 +157,7 @@ CodeMirror.defineMode("puppet", function () {
       stream.match(/(\s+)?[@]{1,2}/);
       return 'special';
     }
-    // Match all the comments. All of them.
+    // Match all the articleComments. All of them.
     if (ch == "#") {
       stream.skipToEnd();
       return "comment";

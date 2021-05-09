@@ -1,101 +1,428 @@
 <!DOCTYPE html>
-<html lang="zh">
-<head>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
     <meta charset="UTF-8">
     <title>评论 - NoahCode's Blog</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
 </head>
 <body>
-<div class="ui bottom attached segment pushable">
-    <div style="padding-top: 20px;padding-left: 100px;">
-        <header>
-            <span>关键词：</span>
-            <div class="ui input">
-                <input type="text">
-            </div>
-            <span>评论状态：</span>
-            <div class="ui state selection dropdown">
-                <input type="hidden" name="state">
-                <i class="dropdown icon"></i>
-                <div class="default text">请选择文章状态</div>
-                <div class="menu">
-                    <div class="ui item">已发布</div>
-                    <div class="ui item">待审核</div>
-                    <div class="ui item">回收站</div>
+<div th:replace="admin/_fragments :: header" class="ui top attached menu">
+    <a class="ui sidebar-icon item">
+        <i class="ui bars icon"></i>
+    </a>
+    <div class="ui right menu">
+        <a href="#" class="ui item">
+            <i class="ui linkify icon"></i>
+        </a>
+        <div class="ui top right message-icon pointing dropdown item">
+            <i class="ui bell outline icon"></i>
+            <div class="ui menu" style="width: 300px;">
+                <div class="ui header">
+                    <h3 class="ui dividing header">待审核评论</h3>
+                </div>
+                <div class="ui item">
+                    <div class="ui feed">
+                        <div class="ui event">
+                            <div class="label">
+                                <img src="../../static/images/icon.png">
+                            </div>
+                            <div class="ui content">
+                                <div class="ui summary"><a>NoahCode</a>:</div>
+                                <div class="ui extra text" style="word-wrap: break-word;white-space:normal;">
+                                    欢迎使用 Halo，这是你的第一条评论，头像来自 Gravatar，你也可以通过注册 Gravatar 来显示自己的头像。
+                                </div>
+                                <div class="ui extra date">3 天前</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <button class="ui primary button">查询</button>
-            <button class="ui button">重置</button>
-        </header>
-        <table class="ui very basic collapsing celled table">
-            <thead>
-            <tr>
-                <th>
-                    <div class="ui fitted checkbox">
-                        <input type="checkbox">
-                        <label></label>
-                    </div>
-                </th>
-                <th class="ui three wide">昵称</th>
-                <th class="ui five wide">内容</th>
-                <th>状态</th>
-                <th class="ui three wide">评论文章</th>
-                <th class="ui two wide">日期</th>
-                <th class="ui two wide">操作</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <div class="ui fitted checkbox">
-                        <input type="checkbox">
-                        <label></label>
-                    </div>
-                </td>
-                <td>
-                    <span>NoahCode</span>
-                </td>
-                <td>
-                    <span>测试</span>
-                </td>
-                <td>
-                    <i class="ui yellow empty circular label"></i>待审核
-                </td>
-                <td>
-                    <a src="#">测试</a>
-                </td>
-                <td>
-                    <span>1分钟前</span>
-                </td>
-                <td>
-                    <span>
-                        <a href="#">通过</a> |
-                        <a href="#">回收站</a>
-                    </span>
-                </td>
-            </tr>
-            </tbody>
-            <tfoot>
-            <tr>
-                <th colspan="7">
-                    <div class="ui right floated pagination menu">
-                        <a class="icon item">
-                            <i class="left chevron icon"></i>
-                        </a>
-                        <a class="item">1</a>
-                        <a class="item">2</a>
-                        <a class="item">3</a>
-                        <a class="item">4</a>
-                        <a class="icon item">
-                            <i class="right chevron icon"></i>
-                        </a>
-                    </div>
-                </th>
-            </tr>
-            </tfoot>
-        </table>
+        </div>
+        <div class="ui top right user pointing dropdown item">
+            <div class="ui circular mini image">
+                <img src="../../static/images/icon.png" alt="">
+            </div>
+            <div class="ui menu">
+                <div class="ui item">
+                    <i class="ui user outline icon"></i>个人信息
+                </div>
+                <div class="ui item">
+                    <i class="ui sign-out icon"></i>退出登录
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<div th:replace="admin/_fragments :: sidebar" class="ui tiny inverted left vertical sidebar menu">
+    <div class="ui item">
+        <img class="ui centered mini image" src="../../static/images/icon.png" alt="">
+        <h4 class="ui inverted centered header">NoahCode</h4>
+    </div>
+    <a class="ui item">仪表盘</a>
+    <a class="ui article item">
+        <i class="ui chevron down icon"></i>
+        文章
+    </a>
+    <div class="ui article inverted vertical menu" style="display: none;">
+        <a class="ui item">所有文章</a>
+        <a class="ui item">写文章</a>
+        <a class="ui item">分类目录</a>
+        <a class="ui item">标签</a>
+    </div>
+    <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
+    <a class="ui user item">
+        <i class="ui chevron down icon"></i>
+        用户
+    </a>
+    <div class="ui user inverted vertical menu" style="display: none;">
+        <a class="ui item">个人资料</a>
+    </div>
+    <a class="ui system item">
+        <i class="ui chevron down icon"></i>
+        系统
+    </a>
+    <div class="ui system inverted vertical menu" style="display: none;">
+        <a class="ui item">博客设置</a>
+        <a class="ui item">关于</a>
+    </div>
+</div>
+
+<!--面包屑导航条-->
+<div class="ui bottom attached segment">
+    <div class="ui breadcrumb">
+        <a class="ui section" href="index.html" th:href="@{/admin/index}">首页</a>
+        <div class="ui divider"> /</div>
+        <div class="ui active section">评论</div>
+    </div>
+</div>
+
+<div class="ui bottom attached pushable">
+    <div class="ui tiny modal">
+        <div id="modalHeader" class="ui header">回复给：NoahCode</div>
+        <div class="ui content">
+            <form id="modalForm" class="ui form" method="post" action="#">
+                <div class="ui field">
+                    <input id="postId" name="postId" type="hidden">
+                </div>
+                <div class="ui relaxed field">
+                    <textarea name="content"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="ui actions">
+            <input id="replyBtn" type="button" class="ui primary button" value="回复"/>
+        </div>
+    </div>
+    <div class="ui relaxed" style="padding: 20px;">
+        <div class="ui top attached tabular menu">
+            <a class="active item" data-tab="blog">文章</a>
+            <a class="item" data-tab="page">页面</a>
+        </div>
+        <div class="ui bottom attached active tab segment" data-tab="blog">
+            <div>
+                <div style="padding-left: 30px;">
+                    <header>
+                        <span>关键词：</span>
+                        <div class="ui input">
+                            <input id="blog_keyword" type="text" name="keyword">
+                        </div>
+                        <span>评论状态：</span>
+                        <div id="blog_status" class="ui state selection dropdown">
+                            <input type="hidden" name="state">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">请选择文章状态</div>
+                            <div class="menu">
+                                <div class="ui item" data-value="PUBLISH">已发布</div>
+                                <div class="ui item" data-value="AUDITING">待审核</div>
+                                <div class="ui item" data-value="RECYCLE">回收站</div>
+                            </div>
+                        </div>
+                        <button class="ui primary button"
+                                th:onclick="search('blog',[[${blogCommentPageInfo.pageNum}]],[[${blogCommentPageInfo.pageSize}]])">
+                            查询
+                        </button>
+                        <button class="ui button" onclick="reset('blog')">重置</button>
+                    </header>
+                    <table th:fragment="blogComments" id="blogComments" class="ui very basic table">
+                        <thead>
+                        <tr>
+                            <th class="ui">昵称</th>
+                            <th class="ui">内容</th>
+                            <th>状态</th>
+                            <th class="ui">评论文章</th>
+                            <th class="ui">日期</th>
+                            <th class="ui">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="blogComment:${blogComments}">
+                            <input type="hidden" th:value="${blogComment.id}">
+                            <td>
+                                <i class="ui user outline icon" th:if="${blogComment.isAdmin}"></i>
+                                <a th:href="@{blogComment.authorUrl}" th:text="${blogComment.author}"
+                                   th:if="${blogComment.authorUrl}!=null">NoahCode</a>
+                                <span th:text="${blogComment.author}"
+                                      th:if="${blogComment.authorUrl}==null">NoahCode</span>
+                            </td>
+                            <td>
+                                <span th:text="${blogComment.content}">测试</span>
+                            </td>
+                            <td th:switch="${blogComment.status}">
+                                <div th:case="0">
+                                    <i class="ui green empty circular label"></i>
+                                    <span>已发布</span>
+                                </div>
+                                <div th:case="1">
+                                    <i class="ui yellow empty circular label"></i>
+                                    <span>待审核</span>
+                                </div>
+                                <div th:case="2">
+                                    <i class="ui red empty circular label"></i>
+                                    <span>回收站</span>
+                                </div>
+                            </td>
+                            <td>
+                                <a src="#" th:text="${blogComment.postTitle}">测试</a>
+                            </td>
+                            <td>
+                                <span th:text="${#dates.format(blogComment.createTime,'yyyy-MM-dd HH:mm:ss')}">1分钟前</span>
+                            </td>
+                            <td th:switch="${blogComment.status}">
+                            <span th:case="0">
+                                <a style="cursor:pointer;"
+                                   th:onclick="replyModal([[${blogComment.type}]],[[${blogComment.id}]],[[${blogComment.author}]],[[${blogComment.postId}]],[[${blogCommentPageInfo.pageNum}]],[[${blogCommentPageInfo.pageSize}]])">回复</a>
+                                |
+                            <a class="recycle" style="cursor:pointer"
+                               th:onclick="recyclePopup($(this),[[${blogComment.type}]],[[${blogComment.id}]],[[${blogCommentPageInfo.pageNum}]],[[${blogCommentPageInfo.pageSize}]])">回收站</a>
+                            </span>
+                                <span th:case="1">
+                                <a class="ui adopt dropdown">
+                                    <div class="text">通过</div>
+                                    <div class="ui menu">
+                                        <div class="ui adopt item"
+                                             th:onclick="toAdopt([[${blogComment.type}]],[[${blogComment.id}]],[[${blogCommentPageInfo.pageNum}]],[[${blogCommentPageInfo.pageSize}]])">
+                                            通过
+                                        </div>
+                                        <div class="ui adoptRecycle item"
+                                             th:onclick="toAdoptAndRecycle([[${blogComment.type}]],[[${blogComment.id}]],[[${blogComment.author}]],[[${blogComment.postId}]],[[${blogCommentPageInfo.pageNum}]],[[${blogCommentPageInfo.pageSize}]])">通过并回复</div>
+                                    </div>
+                                </a>
+                                |
+                            <a class="recycle" style="cursor:pointer"
+                               th:onclick="recyclePopup($(this),[[${blogComment.type}]],[[${blogComment.id}]],[[${blogCommentPageInfo.pageNum}]],[[${blogCommentPageInfo.pageSize}]])">回收站</a>
+                            </span>
+                                <span th:case="2">
+                                <a style="cursor:pointer;"
+                                   th:onclick="reductionPopup($(this),[[${blogComment.type}]],[[${blogComment.id}]],[[${blogCommentPageInfo.pageNum}]],[[${blogCommentPageInfo.pageSize}]])">还原</a>
+                                |
+                            <a class="recycle" style="cursor:pointer"
+                               th:onclick="deletePopup($(this),[[${blogComment.type}]],[[${blogComment.id}]],[[${blogCommentPageInfo.pageNum}]],[[${blogCommentPageInfo.pageSize}]])">删除</a>
+                            </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th colspan="9">
+                                <div class="ui right floated pagination menu">
+                                    <a class="icon item" href="#"
+                                       th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.prePage}+'&pageSize='+${blogCommentPageInfo.pageSize}+'#/blog'">
+                                        <i class="left chevron icon"></i>
+                                    </a>
+                                    <a class="item" th:each="nav:${blogCommentPageInfo.navigatepageNums}"
+                                       th:text="${nav}"
+                                       th:href="'/admin/comments?pageNum='+${nav}+'&pageSize='+${blogCommentPageInfo.pageSize}+'#/blog'">1</a>
+                                    <a class="icon item"
+                                       th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.nextPage}+'&pageSize='+${blogCommentPageInfo.pageSize}+'#/blog'">
+                                        <i class="right chevron icon"></i>
+                                    </a>
+                                    <div class="ui page-size compact selection dropdown">
+                                        <input type="hidden" name="pageSize" value="10"
+                                               th:value="${blogCommentPageInfo.pageSize}">
+                                        <i class="ui dropdown icon"></i>
+                                        <div class="ui text">10条/页</div>
+                                        <div class="ui menu">
+                                            <a class="ui item" data-value="1"
+                                               th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.pageNum}+'&pageSize=1'+'#/blog'">1条/页</a>
+                                            <a class="ui item" data-value="2"
+                                               th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.pageNum}+'&pageSize=2'+'#/blog'">2条/页</a>
+                                            <a class="ui item" data-value="5"
+                                               th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.pageNum}+'&pageSize=5'+'#/blog'">5条/页</a>
+                                            <a class="ui item" data-value="10"
+                                               th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.pageNum}+'&pageSize=10'+'#/blog'">10条/页</a>
+                                            <a class="ui item" data-value="20"
+                                               th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.pageNum}+'&pageSize=20'+'#/blog'">20条/页</a>
+                                            <a class="ui item" data-value="50"
+                                               th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.pageNum}+'&pageSize=50'+'#/blog'">50条/页</a>
+                                            <a class="ui item" data-value="100"
+                                               th:href="'/admin/comments?pageNum='+${blogCommentPageInfo.pageNum}+'&pageSize=100'+'#/blog'">100条/页</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui bottom attached tab segment" data-tab="page">
+            <div>
+                <div style="padding-left: 30px;">
+                    <header>
+                        <span>关键词：</span>
+                        <div class="ui input">
+                            <input id="page_keyword" type="text">
+                        </div>
+                        <span>评论状态：</span>
+                        <div id="page_status" class="ui state selection dropdown">
+                            <input type="hidden" name="state">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">请选择文章状态</div>
+                            <div class="menu">
+                                <div class="ui item" data-value="PUBLISH">已发布</div>
+                                <div class="ui item" data-value="AUDITING">待审核</div>
+                                <div class="ui item" data-value="RECYCLE">回收站</div>
+                            </div>
+                        </div>
+                        <button class="ui primary button" th:onclick="search('page',[[${pageCommentPageInfo.pageNum}]],[[${pageCommentPageInfo.pageSize}]])">查询</button>
+                        <button class="ui button" onclick="reset('page')">重置</button>
+                    </header>
+                    <table th:fragment="pageComments" id="pageComments" class="ui very basic table">
+                        <thead>
+                        <tr>
+                            <th>昵称</th>
+                            <th>内容</th>
+                            <th>状态</th>
+                            <th>评论页面</th>
+                            <th>日期</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="pageComment:${pageComments}">
+                            <input type="hidden" th:value="${pageComment.id}">
+                            <td>
+                                <i class="ui user outline icon" th:if="${pageComment.isAdmin}"></i>
+                                <a th:href="@{pageComment.authorUrl}" th:text="${pageComment.author}"
+                                   th:if="${pageComment.authorUrl}!=null">NoahCode</a>
+                                <span th:text="${pageComment.author}"
+                                      th:if="${pageComment.authorUrl}==null">NoahCode</span>
+                            </td>
+                            <td>
+                                <span th:text="${pageComment.content}">测试</span>
+                            </td>
+                            <td th:switch="${pageComment.status}">
+                                <div th:case="0">
+                                    <i class="ui green empty circular label"></i>
+                                    <span>已发布</span>
+                                </div>
+                                <div th:case="1">
+                                    <i class="ui yellow empty circular label"></i>
+                                    <span>待审核</span>
+                                </div>
+                                <div th:case="2">
+                                    <i class="ui red empty circular label"></i>
+                                    <span>回收站</span>
+                                </div>
+                            </td>
+                            <td>
+                                <a src="#" th:text="${pageComment.pageTitle}">测试</a>
+                            </td>
+                            <td>
+                                <span th:text="${#dates.format(pageComment.createTime,'yyyy-MM-dd HH:mm:ss')}">1分钟前</span>
+                            </td>
+                            <td th:switch="${pageComment.status}">
+                            <span th:case="0">
+                                <a style="cursor:pointer;"
+                                   th:onclick="replyModal([[${pageComment.type}]],[[${pageComment.id}]],[[${pageComment.author}]],[[${pageComment.postId}]],[[${pageCommentPageInfo.pageNum}]],[[${pageCommentPageInfo.pageSize}]])">回复</a>
+                                |
+                            <a class="recycle" style="cursor:pointer"
+                               th:onclick="recyclePopup($(this),[[${pageComment.type}]],[[${pageComment.id}]],[[${pageCommentPageInfo.pageNum}]],[[${pageCommentPageInfo.pageSize}]])">回收站</a>
+                            </span>
+                                <span th:case="1">
+                                <a class="ui adopt dropdown">
+                                    <div class="text">通过</div>
+                                    <div class="ui menu">
+                                        <div class="ui adopt item"
+                                             th:onclick="toAdopt([[${pageComment.type}]],[[${pageComment.id}]],[[${pageCommentPageInfo.pageNum}]],[[${pageCommentPageInfo.pageSize}]])">
+                                            通过
+                                        </div>
+                                        <div class="ui adoptRecycle item"
+                                             th:onclick="toAdoptAndRecycle([[${pageComment.type}]],[[${pageComment.id}]],[[${pageComment.author}]],[[${pageComment.postId}]],[[${pageCommentPageInfo.pageNum}]],[[${pageCommentPageInfo.pageSize}]])">通过并回复</div>
+                                    </div>
+                                </a>
+                                |
+                            <a class="recycle" style="cursor:pointer"
+                               th:onclick="recyclePopup($(this),[[${pageComment.type}]],[[${pageComment.id}]],[[${pageCommentPageInfo.pageNum}]],[[${pageCommentPageInfo.pageSize}]])">回收站</a>
+                            </span>
+                                <span th:case="2">
+                                <a style="cursor:pointer;"
+                                   th:onclick="reductionPopup($(this),[[${pageComment.type}]],[[${pageComment.id}]],[[${pageCommentPageInfo.pageNum}]],[[${pageCommentPageInfo.pageSize}]])">还原</a>
+                                |
+                            <a class="recycle" style="cursor:pointer"
+                               th:onclick="deletePopup($(this),[[${pageComment.type}]],[[${pageComment.id}]],[[${pageCommentPageInfo.pageNum}]],[[${pageCommentPageInfo.pageSize}]])">删除</a>
+                            </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th colspan="9">
+                                <div class="ui right floated pagination menu">
+                                    <a class="icon item" href="#"
+                                       th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.prePage}+'&pageSize='+${pageCommentPageInfo.pageSize}+'#/page'">
+                                        <i class="left chevron icon"></i>
+                                    </a>
+                                    <a class="item" th:each="nav:${pageCommentPageInfo.navigatepageNums}"
+                                       th:text="${nav}"
+                                       th:href="'/admin/comments?pageNum='+${nav}+'&pageSize='+${pageCommentPageInfo.pageSize}+'#/page'">1</a>
+                                    <a class="icon item"
+                                       th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.nextPage}+'&pageSize='+${pageCommentPageInfo.pageSize}+'#/page'">
+                                        <i class="right chevron icon"></i>
+                                    </a>
+                                    <div class="ui page-size compact selection dropdown">
+                                        <input type="hidden" name="pageSize" value="10"
+                                               th:value="${pageCommentPageInfo.pageSize}">
+                                        <i class="ui dropdown icon"></i>
+                                        <div class="ui text">10条/页</div>
+                                        <div class="ui menu">
+                                            <a class="ui item" data-value="1"
+                                               th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.pageNum}+'&pageSize=1'+'#/page'">1条/页</a>
+                                            <a class="ui item" data-value="2"
+                                               th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.pageNum}+'&pageSize=2'+'#/page'">2条/页</a>
+                                            <a class="ui item" data-value="5"
+                                               th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.pageNum}+'&pageSize=5'+'#/page'">5条/页</a>
+                                            <a class="ui item" data-value="10"
+                                               th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.pageNum}+'&pageSize=10'+'#/page'">10条/页</a>
+                                            <a class="ui item" data-value="20"
+                                               th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.pageNum}+'&pageSize=20'+'#/page'">20条/页</a>
+                                            <a class="ui item" data-value="50"
+                                               th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.pageNum}+'&pageSize=50'+'#/page'">50条/页</a>
+                                            <a class="ui item" data-value="100"
+                                               th:href="'/admin/comments?pageNum='+${pageCommentPageInfo.pageNum}+'&pageSize=100'+'#/page'">100条/页</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 <script>
@@ -130,5 +457,160 @@
         })
     $('.ui.state.dropdown')
         .dropdown()
+</script>
+<!--/*/</th:block>/*/-->
+<script>
+    $('.ui.state.dropdown')
+        .dropdown()
+
+    $('.ui.page-size.dropdown')
+        .dropdown()
+
+    $('.ui.tabular.menu .item')
+        .tab({
+            history: true
+        })
+
+    $('.ui.adopt.dropdown')
+        .dropdown()
+
+    $('.recycle')
+        .popup({
+            on: 'click',
+            position: 'top center'
+        })
+
+    function replyModal(type, id, author, postId, pageNum, pageSize) {
+        var modalForm = $('#modalForm')
+        $('#modalHeader').text('回复给：' + author)
+        $('#postId').attr('value', postId)
+        $('#replyBtn').attr('onclick', 'submitModal(' + type + ')')
+        if (type === 0) {
+            modalForm.attr('action', '/admin/comments/blog/' + id + '/reply?pageNum=' + pageNum + '&pageSize=' + pageSize + '#blog')
+        } else {
+            modalForm.attr('action', '/admin/comments/page/' + id + '/reply?pageNum=' + pageNum + '&pageSize=' + pageSize + '#page')
+        }
+        $('.ui.modal')
+            .modal({
+                centered: false
+            })
+            .modal('show')
+    }
+
+    function submitModal(type) {
+        if (type === 0) {
+            $('#modalForm').submit()
+        } else {
+            $('#modalForm').submit()
+        }
+    }
+
+    function toAdopt(type, id, pageNum, pageSize) {
+        if (type === 0) {
+            $('#blogComments').load('/admin/comments/blog/' + id + '/adopt?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        } else {
+            $('#pageComments').load('/admin/comments/page/' + id + '/adopt?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        }
+    }
+
+    function toAdoptAndRecycle(type, id, author, postId, pageNum, pageSize) {
+        if (type === 0) {
+            $('#blogComments').load('/admin/comments/blog/' + id + '/adopt?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        } else {
+            $('#pageComments').load('/admin/comments/page/' + id + '/adopt?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        }
+        replyModal(type, id, author, postId, pageNum, pageSize)
+    }
+
+    function recyclePopup(obj, type, id, pageNum, pageSize) {
+        obj.removeAttr('onclick')
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将该评论移到回收站？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toRecycle(' + type + ',' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+    }
+
+    function reductionPopup(obj, type, id, pageNum, pageSize) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要还原该评论？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toReduction(' + type + ',' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function deletePopup(obj, type, id, pageNum, pageSize) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要永久删除该评论？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toDelete(' + type + ',' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function hoverPopup() {
+        $('.ui.popup.transition.visible').transition('zoom')
+    }
+
+    function toRecycle(type, id, pageNum, pageSize) {
+        if (type === 0) {
+            $('#blogComments').load('/admin/comments/blog/' + id + '/recycle?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        } else {
+            $('#pageComments').load('/admin/comments/page/' + id + '/recycle?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        }
+    }
+
+    function toReduction(type, id, pageNum, pageSize) {
+        if (type === 0) {
+            $('#blogComments').load('/admin/comments/blog/' + id + '/reduction?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        } else {
+            $('#pageComments').load('/admin/comments/page/' + id + '/reduction?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        }
+    }
+
+    function toDelete(type, id, pageNum, pageSize) {
+        if (type === 0) {
+            $('#blogComments').load('/admin/comments/blog/' + id + '/delete?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        } else {
+            $('#pageComments').load('/admin/comments/page/' + id + '/delete?pageNum=' + pageNum + '&pageSize=' + pageSize)
+        }
+    }
+
+    function search(type, pageNum, pageSize) {
+        var keyword = $('#' + type + '_keyword').val()
+        var status = $('#' + type + '_status').children('input').val()
+        var url = '/admin/comments/' + type + '/search?'
+        url += 'keyword=' + keyword
+        if (status.length != 0 && status != null && status != '') {
+            url += '&status=' + status
+        }
+        url += '&pageNum=' + pageNum + '&pageSize=' + pageSize
+        $('#' + type + 'Comments').load(url)
+    }
+
+    function reset(type) {
+        $('#' + type + '_keyword').val('')
+        $('#' + type + '_status').dropdown('clear')
+        $('#' + type + 'Comments').load('/admin/comments/' + type + '/search?keyword')
+    }
 </script>
 </body>

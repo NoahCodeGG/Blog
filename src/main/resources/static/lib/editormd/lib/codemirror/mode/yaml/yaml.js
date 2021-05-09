@@ -21,7 +21,7 @@ CodeMirror.defineMode("yaml", function() {
       var ch = stream.peek();
       var esc = state.escaped;
       state.escaped = false;
-      /* comments */
+      /* articleComments */
       if (ch == "#" && (stream.pos == 0 || /\s/.test(stream.string.charAt(stream.pos - 1)))) {
         stream.skipToEnd();
         return "comment";

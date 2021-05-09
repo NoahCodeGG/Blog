@@ -1,6 +1,6 @@
 package cn.noahcode.blog.model.params;
 
-import cn.noahcode.blog.model.enums.BlogStatus;
+import cn.noahcode.blog.model.enums.PostStatus;
 import lombok.Data;
 
 import java.util.Set;
@@ -13,11 +13,13 @@ import java.util.Set;
 @Data
 public class BlogParam {
 
-    private Integer id;
+    private Long id;
 
     private String title;
 
-    private BlogStatus status = BlogStatus.DRAFT;
+    private PostStatus status = PostStatus.DRAFT;
+
+    private String slug;
 
     private String originalContent;
 
@@ -29,8 +31,8 @@ public class BlogParam {
 
     private boolean topPriority = false;
 
-    private Set<Integer> tagIds;
+    private Set<Long> tagIds;
 
-    private Set<Integer> categoryIds;
+    private Set<Long> categoryIds;
 
 }

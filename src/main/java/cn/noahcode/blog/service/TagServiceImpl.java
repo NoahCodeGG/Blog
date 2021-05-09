@@ -13,13 +13,13 @@ import java.util.List;
  * @description
  */
 @Service
-public class TagServiceImpl implements TagService{
+public class TagServiceImpl implements TagService {
 
     @Resource
     private TagMapper tagMapper;
 
     @Override
-    public int deleteByPrimaryKey(Integer id) {
+    public int deleteByPrimaryKey(Long id) {
         return tagMapper.deleteByPrimaryKey(id);
     }
 
@@ -44,7 +44,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    public Tag selectByPrimaryKey(Integer id) {
+    public Tag selectByPrimaryKey(Long id) {
         return tagMapper.selectByPrimaryKey(id);
     }
 
@@ -54,7 +54,7 @@ public class TagServiceImpl implements TagService{
     }
 
     @Override
-    public List<Tag> selectByBlogId(Integer blogId) {
+    public List<Tag> selectByPostId(Long blogId) {
         return tagMapper.selectByBlogId(blogId);
     }
 
@@ -63,4 +63,10 @@ public class TagServiceImpl implements TagService{
         return tagMapper.listTags();
     }
 
+    @Override
+    public int tagCount() {
+        return tagMapper.tagCount();
+    }
+
 }
+

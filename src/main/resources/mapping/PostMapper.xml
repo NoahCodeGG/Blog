@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.noahcode.blog.mapper.PostMapper">
+    <resultMap id="BaseResultMap" type="cn.noahcode.blog.model.entity.Post">
+        <!--@mbg.generated-->
+        <!--@Table posts-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="slug" jdbcType="VARCHAR" property="slug"/>
+        <result column="original_content" jdbcType="LONGVARCHAR" property="originalContent"/>
+        <result column="format_content" jdbcType="LONGVARCHAR" property="formatContent"/>
+        <result column="summary" jdbcType="LONGVARCHAR" property="summary"/>
+        <result column="visits" jdbcType="BIGINT" property="visits"/>
+        <result column="disallow_comment" jdbcType="BIT" property="disallowComment"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="top_priority" jdbcType="BIT" property="topPriority"/>
+        <result column="likes" jdbcType="BIGINT" property="likes"/>
+        <result column="word_count" jdbcType="BIGINT" property="wordCount"/>
+        <result column="edit_time" jdbcType="TIMESTAMP" property="editTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `type`, title, `status`, slug, original_content, format_content, summary, visits,
+        disallow_comment, `password`, top_priority, likes, word_count, edit_time, create_time,
+        update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from posts
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        <!--@mbg.generated-->
+        delete
+        from posts
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.noahcode.blog.model.entity.Post"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into posts (`type`, title, `status`,
+                           slug, original_content, format_content,
+                           summary, visits, disallow_comment,
+                           `password`, top_priority, likes,
+                           word_count, edit_time, create_time,
+                           update_time)
+        values (#{type,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER},
+                #{slug,jdbcType=VARCHAR}, #{originalContent,jdbcType=LONGVARCHAR},
+                #{formatContent,jdbcType=LONGVARCHAR},
+                #{summary,jdbcType=LONGVARCHAR}, #{visits,jdbcType=BIGINT}, #{disallowComment,jdbcType=BIT},
+                #{password,jdbcType=VARCHAR}, #{topPriority,jdbcType=BIT}, #{likes,jdbcType=BIGINT},
+                #{wordCount,jdbcType=BIGINT}, #{editTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP},
+                #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.noahcode.blog.model.entity.Post"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into posts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">
+                `type`,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="status != null">
+                `status`,
+            </if>
+            <if test="slug != null">
+                slug,
+            </if>
+            <if test="originalContent != null">
+                original_content,
+            </if>
+            <if test="formatContent != null">
+                format_content,
+            </if>
+            <if test="summary != null">
+                summary,
+            </if>
+            <if test="visits != null">
+                visits,
+            </if>
+            <if test="disallowComment != null">
+                disallow_comment,
+            </if>
+            <if test="password != null">
+                `password`,
+            </if>
+            <if test="topPriority != null">
+                top_priority,
+            </if>
+            <if test="likes != null">
+                likes,
+            </if>
+            <if test="wordCount != null">
+                word_count,
+            </if>
+            <if test="editTime != null">
+                edit_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="slug != null">
+                #{slug,jdbcType=VARCHAR},
+            </if>
+            <if test="originalContent != null">
+                #{originalContent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="formatContent != null">
+                #{formatContent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="summary != null">
+                #{summary,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="visits != null">
+                #{visits,jdbcType=BIGINT},
+            </if>
+            <if test="disallowComment != null">
+                #{disallowComment,jdbcType=BIT},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="topPriority != null">
+                #{topPriority,jdbcType=BIT},
+            </if>
+            <if test="likes != null">
+                #{likes,jdbcType=BIGINT},
+            </if>
+            <if test="wordCount != null">
+                #{wordCount,jdbcType=BIGINT},
+            </if>
+            <if test="editTime != null">
+                #{editTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.noahcode.blog.model.entity.Post">
+        <!--@mbg.generated-->
+        update posts
+        <set>
+            <if test="type != null">
+                `type` = #{type,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="slug != null">
+                slug = #{slug,jdbcType=VARCHAR},
+            </if>
+            <if test="originalContent != null">
+                original_content = #{originalContent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="formatContent != null">
+                format_content = #{formatContent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="summary != null">
+                summary = #{summary,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="visits != null">
+                visits = #{visits,jdbcType=BIGINT},
+            </if>
+            <if test="disallowComment != null">
+                disallow_comment = #{disallowComment,jdbcType=BIT},
+            </if>
+            <if test="password != null">
+                `password` = #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="topPriority != null">
+                top_priority = #{topPriority,jdbcType=BIT},
+            </if>
+            <if test="likes != null">
+                likes = #{likes,jdbcType=BIGINT},
+            </if>
+            <if test="wordCount != null">
+                word_count = #{wordCount,jdbcType=BIGINT},
+            </if>
+            <if test="editTime != null">
+                edit_time = #{editTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.noahcode.blog.model.entity.Post">
+        <!--@mbg.generated-->
+        update posts
+        set `type`           = #{type,jdbcType=INTEGER},
+            title            = #{title,jdbcType=VARCHAR},
+            `status`         = #{status,jdbcType=INTEGER},
+            slug             = #{slug,jdbcType=VARCHAR},
+            original_content = #{originalContent,jdbcType=LONGVARCHAR},
+            format_content   = #{formatContent,jdbcType=LONGVARCHAR},
+            summary          = #{summary,jdbcType=LONGVARCHAR},
+            visits           = #{visits,jdbcType=BIGINT},
+            disallow_comment = #{disallowComment,jdbcType=BIT},
+            `password`       = #{password,jdbcType=VARCHAR},
+            top_priority     = #{topPriority,jdbcType=BIT},
+            likes            = #{likes,jdbcType=BIGINT},
+            word_count       = #{wordCount,jdbcType=BIGINT},
+            edit_time        = #{editTime,jdbcType=TIMESTAMP},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            update_time      = #{updateTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <select id="listBlog" resultMap="BaseResultMap">
+        select *
+        from posts
+        where type = 0
+    </select>
+
+    <update id="toRecycle">
+        update posts
+        set `status` = 2
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <update id="toReduction">
+        update posts
+        set `status` = 0
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="blogCount" resultType="int">
+        select count(1)
+        from posts
+        where type = 0
+    </select>
+
+    <select id="visitCount" resultType="int">
+        select ifnull(sum(visits), 0)
+        from posts
+    </select>
+
+    <select id="listNewBlog" resultMap="BaseResultMap">
+        select *
+        from posts
+        where type = 0
+        order by create_time desc
+        limit 5
+    </select>
+
+    <select id="listPublishedBlog" resultMap="BaseResultMap">
+        select *
+        from posts
+        where type = 0
+          and `status` = 0
+    </select>
+
+    <update id="addVisitor">
+        update posts
+        set visits = visits + 1
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <select id="listPage" resultMap="BaseResultMap">
+        select *
+        from posts
+        where type = 1
+    </select>
+
+    <select id="listYear" resultType="java.lang.Integer">
+        select year(create_time) as year
+        from posts
+        where type = 0
+          and status = 0
+        group by year
+        order by year desc
+    </select>
+
+    <select id="listMouth" resultType="java.lang.Integer">
+        select month(create_time) as month
+        from posts
+        where type = 0
+          and status = 0
+          and year(create_time) = #{year,jdbcType=INTEGER}
+        group by month
+        order by month desc
+    </select>
+
+    <select id="listMouthArchive" resultMap="BaseResultMap">
+        select *
+        from posts
+        where type = 0
+          and status = 0
+          and year(create_time) = #{param1,jdbcType=INTEGER}
+          and month(create_time) = #{param2,jdbcType=INTEGER}
+        order by create_time desc
+    </select>
+
+    <select id="selectBySlug" resultMap="BaseResultMap">
+        select *
+        from posts
+        where type = 1
+          and slug = #{slug,jdbcType=VARCHAR}
+    </select>
+
+    <select id="listQueryBlog" resultMap="BaseResultMap">
+        select *
+        from posts
+                where type = 0
+                  and
+        <if test="status != null">
+            status = #{status}
+                    and
+        </if>
+        <if test="keyword != null">
+            (title like '%${keyword}%'
+                    or original_content like '%${keyword}%')
+        </if>
+        order by edit_time desc
+    </select>
+</mapper>

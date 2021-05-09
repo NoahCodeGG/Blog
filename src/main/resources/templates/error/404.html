@@ -1,131 +1,96 @@
-<!DOCTYPE html>
-<html lang="en">
 <html><head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>404 | Not Found</title>
-
-    <style type="text/css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <title>~你似乎来到了没有知识的荒原~</title>
+    <style>
         body {
-            padding: 30px 20px;
-            font-family: -apple-system, BlinkMacSystemFont,
-            "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
-            "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-            color: #727272;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        h1 {
             margin: 0;
-            font-size: 60px;
+            padding: 0;
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        }
+        .body404 {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: #fff;
+            background-size: auto 100%;
+        }
+        .info404 {
+            position: absolute;
+            top: 50%;
+            text-align: center;
+            width: 100%;
+            margin-top: -160px;
+        }
+        .site-name404 {
+            margin: 0 auto;
+            text-align: center;
+            letter-spacing: 2px;
+            font-size: 150px;
             line-height: 1;
-            color: #252427;
-            font-weight: 700;
+            font-weight: 100;
+            color: #f35626;
+            background-image: -webkit-linear-gradient(92deg, #f35626, #feab3a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            -webkit-animation: hue 60s infinite linear;
+        }
+        .title404 p {
+            font-size: 20px;
+            line-height: 1.5;
+            margin: 0;
+            color: #7b8993;
+        }
+        .index404 {
+            margin-top: 24px;
             display: inline-block;
-        }
-
-        h2 {
-            margin: 100px 0 0;
-            font-weight: 600;
-            letter-spacing: 0.1em;
-            color: #A299AC;
-            text-transform: uppercase;
-        }
-
-        p {
-            font-size: 16px;
-            margin: 1em 0;
-        }
-
-        @media screen and (min-width: 768px) {
-            body {
-                padding: 50px;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            h1 {
-                font-size: 48px;
-            }
-        }
-
-        .title {
-            position: relative;
-        }
-
-        .title::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background-color: #000;
-            transform-origin: bottom right;
-            transform: scaleX(0);
-            transition: transform 0.5s ease;
-        }
-
-        .title:hover::before {
-            transform-origin: bottom left;
-            transform: scaleX(1);
-        }
-
-        .back-home button {
-            z-index: 1;
-            position: relative;
-            font-size: inherit;
-            font-family: inherit;
-            color: white;
-            padding: 0.5em 1em;
-            outline: none;
-            border: none;
-            background-color: hsl(0, 0%, 0%);
-            overflow: hidden;
-            transition: color 0.4s ease-in-out;
-        }
-
-        .back-home button::before {
-            content: '';
-            z-index: -1;
-            position: absolute;
-            top: 100%;
-            left: 100%;
-            width: 1em;
-            height: 1em;
-            border-radius: 50%;
-            background-color: #fff;
-            transform-origin: center;
-            transform: translate3d(-50%, -50%, 0) scale3d(0, 0, 0);
-            transition: transform 0.45s ease-in-out;
-        }
-
-        .back-home button:hover {
+            white-space: nowrap;
             cursor: pointer;
-            color: #000;
+            text-decoration: none;
+            letter-spacing: 1px;
+            font-size: 14px;
+            -moz-user-select: -moz-none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;
+            text-shadow: none;
+            border: 2px solid #7b8993;
+            line-height: 36px;
+            text-align: center;
+            height: 36px;
+            padding: 0 25px;
+            border-radius: 25px;
+            background-color: #fff;
+            color: #7b8993;
         }
-
-        .back-home button:hover::before {
-            transform: translate3d(-50%, -50%, 0) scale3d(15, 15, 15);
+        @-webkit-keyframes hue {
+            from {
+                -webkit-filter: hue-rotate(0deg);
+            }
+            to {
+                -webkit-filter: hue-rotate(-360deg);
+            }
         }
     </style>
 </head>
-
 <body>
-
-<div class="container">
-    <h2>404</h2>
-    <h1 class="title">Not Found.</h1>
-    <p></p>
-    <div class="back-home">
-        <button onclick="window.location.href='https://guqing.xyz'">首页</button>
+<div class="body404">
+    <div class="info404">
+        <header id="header404" class="clearfix">
+            <div class="site-name404">404</div>
+        </header>
+        <section>
+            <div class="title404">
+                <p>你似乎来到了没有知识的荒原.</p>
+            </div>
+            <a href="http://127.0.0.1:8090/" class="index404">回到首页</a>
+        </section>
     </div>
 </div>
-
 
 </body></html>

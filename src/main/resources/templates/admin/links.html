@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title th:text="${linksTitle.optionValue} + ' - NoahCode\'s Blog'">友情链接 - NoahCode's Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+<div th:replace="admin/_fragments :: header" class="ui top attached menu">
+    <a class="ui sidebar-icon item">
+        <i class="ui bars icon"></i>
+    </a>
+    <div class="ui right menu">
+        <a href="#" class="ui item">
+            <i class="ui linkify icon"></i>
+        </a>
+        <div class="ui top right message-icon pointing dropdown item">
+            <i class="ui bell outline icon"></i>
+            <div class="ui menu" style="width: 300px;">
+                <div class="ui header">
+                    <h3 class="ui dividing header">待审核评论</h3>
+                </div>
+                <div class="ui item">
+                    <div class="ui feed">
+                        <div class="ui event">
+                            <div class="label">
+                                <img src="../../static/images/icon.png">
+                            </div>
+                            <div class="ui content">
+                                <div class="ui summary"><a>NoahCode</a>:</div>
+                                <div class="ui extra text" style="word-wrap: break-word;white-space:normal;">
+                                    欢迎使用 Halo，这是你的第一条评论，头像来自 Gravatar，你也可以通过注册 Gravatar 来显示自己的头像。
+                                </div>
+                                <div class="ui extra date">3 天前</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui top right user pointing dropdown item">
+            <div class="ui circular mini image">
+                <img src="../../static/images/icon.png" alt="">
+            </div>
+            <div class="ui menu">
+                <div class="ui item">
+                    <i class="ui user outline icon"></i>个人信息
+                </div>
+                <div class="ui item">
+                    <i class="ui sign-out icon"></i>退出登录
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="admin/_fragments :: sidebar" class="ui tiny inverted left vertical sidebar menu">
+    <div class="ui item">
+        <img class="ui centered mini image" src="../../static/images/icon.png" alt="">
+        <h4 class="ui inverted centered header">NoahCode</h4>
+    </div>
+    <a class="ui item">仪表盘</a>
+    <a class="ui article item">
+        <i class="ui chevron down icon"></i>
+        文章
+    </a>
+    <div class="ui article inverted vertical menu" style="display: none;">
+        <a class="ui item">所有文章</a>
+        <a class="ui item">写文章</a>
+        <a class="ui item">分类目录</a>
+        <a class="ui item">标签</a>
+    </div>
+    <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
+    <a class="ui user item">
+        <i class="ui chevron down icon"></i>
+        用户
+    </a>
+    <div class="ui user inverted vertical menu" style="display: none;">
+        <a class="ui item">个人资料</a>
+    </div>
+    <a class="ui system item">
+        <i class="ui chevron down icon"></i>
+        系统
+    </a>
+    <div class="ui system inverted vertical menu" style="display: none;">
+        <a class="ui item">博客设置</a>
+        <a class="ui item">关于</a>
+    </div>
+</div>
+
+<!--面包屑导航条-->
+<div class="ui bottom attached segment">
+    <div class="ui breadcrumb">
+        <a class="ui section" href="index.html" th:href="@{/admin/index}">首页</a>
+        <div class="ui divider"> /</div>
+        <div class="ui section">页面</div>
+        <div class="ui divider"> /</div>
+        <div class="ui active section" th:text="${linksTitle.optionValue}">友情链接</div>
+    </div>
+</div>
+
+<div th:fragment="links" id="links" class="ui bottom attached">
+    <div class="ui relaxed grid" style="padding: 40px;">
+        <div class="ui two column row">
+            <div class="ui column card">
+                <div class="ui content">
+                    <div class="header">添加<span th:text="${linksTitle.optionValue}">友情链接</span></div>
+                </div>
+                <div class="ui content">
+                    <form class="ui form" method="post" action="#" th:action="@{/admin/links/input}">
+                        <div class="ui hidden field">
+                            <input id="id" type="hidden" name="id">
+                        </div>
+                        <div class="ui required field">
+                            <label>网站名称：</label>
+                            <input id="name" type="text" name="name">
+                        </div>
+                        <div class="ui required field">
+                            <label>网站地址：</label>
+                            <input id="url" type="url" name="url">
+                            <div class="ui meta">
+                                * 需要加上 http://
+                            </div>
+                        </div>
+                        <div class="ui field">
+                            <label>Logo：</label>
+                            <input id="logo" type="text" name="logo">
+                        </div>
+                        <div class="ui field">
+                            <label>排序编号：</label>
+                            <input id="priority" type="number" name="priority" min="0">
+                        </div>
+                        <div class="ui field">
+                            <label>描述：</label>
+                            <textarea id="description" rows="2" name="description"></textarea>
+                        </div>
+                        <div id="buttons" class="ui buttons">
+                            <input id="submitButton" class="ui blue button" type="submit" value="保存">
+                        </div>
+                        <div class="ui mini negative message" th:unless="${#strings.isEmpty(message)}"
+                             th:text="${message}"></div>
+                    </form>
+                </div>
+            </div>
+            <div class="ui column card">
+                <div class="ui content">
+                    <div class="header">所有<span th:text="${linksTitle.optionValue}">友情链接</span></div>
+                </div>
+                <div class="ui content" id="categories-list">
+                    <table id="links-list" class="ui very basic table" th:fragment="links-list">
+                        <thead>
+                        <tr>
+                            <th>名称</th>
+                            <th>网址</th>
+                            <th>排序</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="link:${links}">
+                            <td th:text="${link.name}">fasf</td>
+                            <td th:text="${link.url}">http://127.0.0.1:8080</td>
+                            <td th:text="${link.priority}">0</td>
+                            <td>
+                                <a th:onclick="edit([[${link}]])">编辑</a> |
+                                <a th:onclick="deletePopup($(this),[[${link.id}]],[[${link.name}]],[[${pageInfo.pageNum}]])">删除</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <th colspan="5">
+                                <div class="ui right floated pagination menu">
+                                    <a class="icon item" th:onclick="get([[${pageInfo.prePage}]])">
+                                        <i class="left chevron icon"></i>
+                                    </a>
+                                    <a class="item" onclick="get(1)"
+                                       th:onclick="get([[${nav}]])"
+                                       th:each="nav:${pageInfo.navigatepageNums}" th:text="${nav}">1</a>
+                                    <a class="icon item" th:onclick="get([[${pageInfo.nextPage}]])">
+                                        <i class="right chevron icon"></i>
+                                    </a>
+                                </div>
+                            </th>
+                        </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div style="position: fixed; bottom: 30px; right: 30px;">
+                <button type="button" class="ui large primary circular icon button" onclick="showModal()">
+                    <i class="ui cog icon"></i>
+                </button>
+            </div>
+            <div class="ui tiny modal">
+                <div class="ui header">页面设置</div>
+                <div class="ui content">
+                    <form id="editTitleForm" class="ui form" th:method="get"
+                          th:action="'/admin/links/setting?pageNum='+${pageInfo.pageNum}">
+                        <div class="ui field">
+                            <label>页面标题：</label>
+                            <input name="linksTitle" type="text" th:value="${linksTitle.optionValue}">
+                        </div>
+                    </form>
+                </div>
+                <div class="ui actions">
+                    <input id="replyBtn" type="button" class="ui primary button" value="保存" onclick="submitModal()"/>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.message-icon.dropdown.item')
+        .dropdown()
+
+    $('.ui.user.dropdown.item')
+        .dropdown()
+
+    $('.ui.sidebar-icon.item')
+        .click(function () {
+            $('.ui.left.sidebar').sidebar('toggle')
+        })
+
+    $('.ui.article.item')
+        .click(function () {
+            $('.ui.article.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(0)').toggleClass('down')
+                $('.ui.chevron.icon:eq(0)').toggleClass('up')
+            })
+        })
+
+    $('.ui.user.item')
+        .click(function () {
+            $('.ui.user.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(1)').toggleClass('down')
+                $('.ui.chevron.icon:eq(1)').toggleClass('up')
+            })
+        })
+
+    $('.ui.system.item')
+        .click(function () {
+            $('.ui.system.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(2)').toggleClass('down')
+                $('.ui.chevron.icon:eq(2)').toggleClass('up')
+            })
+        })
+</script>
+<!--/*/</th:block>/*/-->
+<script>
+    $('.ui.parent-id.dropdown')
+        .dropdown({
+            clearable: true
+        })
+
+    $('.ui.form')
+        .form({
+            fields: {
+                name: {
+                    identifier: 'name',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '请输入网站名称'
+                    }]
+                },
+                url: {
+                    identifier: 'url',
+                    rules: [{
+                        type: 'empty',
+                        prompt: '请输入网站地址'
+                    }]
+                }
+            }
+        })
+
+    function showModal() {
+        $('.ui.modal')
+            .modal({
+                centered: false
+            })
+            .modal('show')
+    }
+
+    function submitModal() {
+        $('#editTitleForm').submit()
+    }
+
+    function get(pageNum) {
+        $("#links-list").load('/admin/links/list?pageNum=' + pageNum)
+    }
+
+    function hoverPopup() {
+        $('.ui.popup.transition.visible').transition('zoom')
+    }
+
+    function deletePopup(obj, id, title, pageNum) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要永久删除【' + title + '】链接？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toDelete(' + id + ',' + pageNum + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function toDelete(id, pageNum) {
+        $.ajax({
+            url: '/admin/links/' + id + '/delete',
+            type: "GET",
+            success: function () {
+                $('#links-list').load('/admin/links/' + id + '/delete?pageNum=' + pageNum)
+            }
+        })
+    }
+
+    function edit(link) {
+        $('#id').val(link.id)
+        $('#name').val(link.name)
+        $('#url').val(link.url)
+        $('#logo').val(link.logo)
+        $('#priority').val(link.priority)
+        $('#description').val(link.description)
+        $('#submitButton').val('更新')
+        if ($('#backButton').length == 0) {
+            $('#buttons').append('<input id="backButton" class="ui basic button" type="button" value="返回添加" style="border: 1px dashed #d9d9d9;color: rgba(0,0,0,.65);margin-left: -1px;" onclick="back()"/>')
+        }
+    }
+
+    function back() {
+        $('#submitButton').val('保存')
+        $('#backButton').remove()
+        $('#id').val('')
+        $('#name').val('')
+        $('#url').val('')
+        $('#logo').val('')
+        $('#priority').val('')
+        $('#description').val('')
+    }
+</script>
+</body>
+</html>

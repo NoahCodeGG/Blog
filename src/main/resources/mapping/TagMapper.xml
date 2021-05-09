@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="cn.noahcode.blog.model.entity.Tag">
         <!--@mbg.generated-->
         <!--@Table tags-->
-        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
@@ -13,18 +13,18 @@
         <!--@mbg.generated-->
         id, `name`, create_time, update_time
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
         from tags
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
         <!--@mbg.generated-->
         delete
         from tags
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </delete>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.noahcode.blog.model.entity.Tag"
             useGeneratedKeys="true">
@@ -73,7 +73,7 @@
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.noahcode.blog.model.entity.Tag">
         <!--@mbg.generated-->
@@ -81,7 +81,7 @@
         set `name`      = #{name,jdbcType=VARCHAR},
             create_time = #{createTime,jdbcType=TIMESTAMP},
             update_time = #{updateTime,jdbcType=TIMESTAMP}
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=BIGINT}
     </update>
 
     <select id="listTags" resultMap="BaseResultMap">
@@ -99,7 +99,12 @@
     <select id="selectByBlogId" resultMap="BaseResultMap">
         select *
         from tags
-        where id in (select tag_id from blogs_tags where blog_id = #{blogId,jdbcType=INTEGER})
+        where id in (select tag_id from posts_tags where post_id = #{blogId,jdbcType=INTEGER})
         order by create_time desc
+    </select>
+
+    <select id="tagCount" resultType="int">
+        select count(1)
+        from tags
     </select>
 </mapper>

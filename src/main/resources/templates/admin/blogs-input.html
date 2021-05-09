@@ -72,6 +72,13 @@
         <a class="ui item">标签</a>
     </div>
     <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
     <a class="ui user item">
         <i class="ui chevron down icon"></i>
         用户
@@ -92,7 +99,7 @@
 <!--面包屑导航条-->
 <div class="ui bottom attached segment">
     <div class="ui breadcrumb">
-        <a class="ui section">首页</a>
+        <a class="ui section" href="index.html" th:href="@{/admin/index}">首页</a>
         <div class="ui divider"> /</div>
         <div class="ui section">文章</div>
         <div class="ui divider"> /</div>
@@ -124,14 +131,14 @@
     </div>
     <div class="ui bottom attached">
         <div class="ui basic right floated segment">
-            <input id="first-draft-button" class="ui draft red button" type="submit" value="保存草稿"/>
-            <input id="preview-button" class="ui preview basic button" type="submit" value="预览"/>
+            <input id="first-draft-button" class="ui draft red button" type="button" value="保存草稿"/>
+            <input id="preview-button" class="ui preview basic button" type="button" value="预览"/>
             <input id="right-sidebar-button" class="ui blue publish button" type="button" value="发布"/>
         </div>
     </div>
 </form>
 <div class="ui right vertical wide sidebar menu">
-    <form id="blog-form" class="ui form" method="post" action="#">
+    <form class="ui form">
         <div class="ui item">
             <i class="ui small close icon" style="cursor: pointer;"></i>
             文章设置
@@ -140,7 +147,11 @@
             <div class="ui field">
                 <h4 class="ui header">基本设置</h4>
             </div>
-            <div class="ui field">
+            <div class="ui required field">
+                <label>文章别名：</label>
+                <input id="slug" type="text" name="slug" th:value="${blog?.slug}">
+            </div>
+            <div class="ui required field">
                 <label>开启评论</label>
                 <div class="ui inline fields">
                     <div class="ui field">
@@ -160,7 +171,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui field">
+            <div class="ui required field">
                 <label>是否置顶</label>
                 <div class="ui inline fields">
                     <div class="ui field">
@@ -193,10 +204,10 @@
                 <label>分类目录：</label>
                 <div class="ui grouped fields">
                     <div class="ui field" th:each="category:${categories}">
-                        <div class="ui checkbox"
-                             th:classappend="#{blogsCategories.blogCategories[category.id]}?checked">
-                            <input id="categories" type="checkbox" name="categories" value="0"
-                                   th:value="${category.id}">
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="categories" value="0"
+                                   th:value="${category.id}"
+                                   th:checked="${blogsCategories}!=null?${blogsCategories.postCategories.get(category.id)}">
                             <label th:text="${category.name}">默认分类</label>
                         </div>
                     </div>
@@ -234,7 +245,7 @@
             <div class="ui field">
                 <label>标签</label>
                 <div class="ui tags multiple search selection dropdown" style="float: left;width: 220px;">
-                    <input type="hidden" name="tags" th:value="${blogsTags?.blogTags}">
+                    <input type="hidden" name="tags" th:value="${blogsTags?.postTags}">
                     <i class="ui dropdown icon"></i>
                     <div class="ui default text">选择或输入标签</div>
                     <div class="ui menu">
@@ -251,14 +262,14 @@
             <div class="ui divider"></div>
             <div class="ui field">
                 <label>摘要</label>
-                <textarea rows="2" name="summary"></textarea>
+                <textarea rows="2" name="summary" th:text="${blog?.summary}"></textarea>
             </div>
             <div class="ui error message"></div>
         </div>
         <div class="ui field">
             <div class="ui basic right floated segment">
-                <input id="second-draft-button" class="ui draft red button" type="submit" value="保存草稿"/>
-                <input id="publish-button" class="ui submit blue publish button" type="submit" value="发布"/>
+                <input id="second-draft-button" class="ui draft red button" type="button" value="保存草稿"/>
+                <input id="publish-button" class="ui submit blue publish button" type="button" value="发布"/>
             </div>
         </div>
     </form>
@@ -341,6 +352,7 @@
     //             }
     //         }
     //     })
+
     $('#right-sidebar-button').click(function () {
         var title = $('#title').val()
         var originalContent = $('#content').val()
@@ -365,105 +377,101 @@
                 .sidebar('toggle')
         }
     })
+
     $('#first-draft-button').click(function () {
-        $('#blog-data').submit(function (event) {
-            event.preventDefault();  // 阻止默认表单的action功能
-            var id = $("#id").val()
-            var title = $('#title').val()
-            var originalContent = $('#content').val()
-            data = {
-                "id": id,
-                "title": title,
-                "originalContent": originalContent,
-                "status": "DRAFT"
+        var id = $("#id").val()
+        var title = $('#title').val()
+        var originalContent = $('#content').val()
+        data = {
+            "id": id,
+            "title": title,
+            "originalContent": originalContent,
+            "status": "DRAFT"
+        }
+        $.ajax({
+            url: '/admin/blogs',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (data) {
+                window.location.href = "/admin/blogs"
             }
-            $.ajax({
-                url: /*[[@{/admin/blogs/}]]*/'/admin/blogs',
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                success: function (data) {
-                    window.location.href = "/admin/blogs"
-                }
-            })
         })
     })
 
     $('#second-draft-button').click(function () {
-        $('#blog-form').submit(function (event) {
-            event.preventDefault();  // 阻止默认表单的action功能
-            var id = $("#id").val()
-            var title = $('#title').val()
-            var originalContent = $('#content').val()
-            var summary = $('textarea[name="summary"]').val()
-            var password = $('input[name="password"]').val()
-            var disallowComment = $('input[name="disallowComment"]:checked').val()
-            console.log(disallowComment)
-            var topPriority = $('input[name="topPriority"]:checked').val()
-            var categoryIds = []
-            var tagIds = $('input[name="tags"]').val().split(',')
-            $('input[name="categories"]:checked').each(function () {
-                categoryIds.push($(this).val())
-            })
-            data = {
-                "id": id,
-                "title": title,
-                "originalContent": originalContent,
-                "summary": summary,
-                "password": password,
-                "disallowComment": disallowComment,
-                "topPriority": topPriority,
-                "status": "DRAFT",
-                "categoryIds": categoryIds,
-                "tagIds": tagIds
+        var id = $("#id").val()
+        var title = $('#title').val()
+        var originalContent = $('#content').val()
+        var slug = $('#slug').val()
+        var summary = $('textarea[name="summary"]').val()
+        var password = $('input[name="password"]').val()
+        var disallowComment = $('input[name="disallowComment"]:checked').val()
+        var topPriority = $('input[name="topPriority"]:checked').val()
+        var categoryIds = []
+        var tagIds = $('input[name="tags"]').val().split(',')
+        $('input[name="categories"]:checked').each(function () {
+            categoryIds.push($(this).val())
+        })
+        data = {
+            "id": id,
+            "title": title,
+            "originalContent": originalContent,
+            "slug": slug,
+            "summary": summary,
+            "password": password,
+            "disallowComment": disallowComment,
+            "topPriority": topPriority,
+            "status": "DRAFT",
+            "categoryIds": categoryIds,
+            "tagIds": tagIds
+        }
+        $.ajax({
+            url: /*[[@{/admin/blogs/}]]*/'/admin/blogs',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (data) {
+                window.location.href = "/admin/blogs"
             }
-            $.ajax({
-                url: /*[[@{/admin/blogs/}]]*/'/admin/blogs',
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                success: function (data) {
-                    window.location.href = "/admin/blogs"
-                }
-            })
         })
     })
+
     $('#publish-button').click(function () {
-        $('#blog-form').submit(function (event) {
-            event.preventDefault();  // 阻止默认表单的action功能
-            var id = $('#id').val()
-            var title = $('#title').val()
-            var originalContent = $('#content').val()
-            var summary = $('textarea[name="summary"]').val()
-            var password = $('input[name="password"]').val()
-            var disallowComment = $('input[name="disallowComment"]:checked').val()
-            var topPriority = $('input[name="topPriority"]:checked').val()
-            var categoryIds = []
-            var tagIds = $('input[name="tags"]').val().split(',')
-            $('input[name="categories"]:checked').each(function () {
-                categoryIds.push($(this).val())
-            })
-            data = {
-                "id": id,
-                "title": title,
-                "originalContent": originalContent,
-                "summary": summary,
-                "password": password,
-                "disallowComment": disallowComment,
-                "topPriority": topPriority,
-                "status": "PUBLISHED",
-                "categoryIds": categoryIds,
-                "tagIds": tagIds
+        var id = $('#id').val()
+        var title = $('#title').val()
+        var originalContent = $('#content').val()
+        var slug = $('#slug').val()
+        var summary = $('textarea[name="summary"]').val()
+        var password = $('input[name="password"]').val()
+        var disallowComment = $('input[name="disallowComment"]:checked').val()
+        var topPriority = $('input[name="topPriority"]:checked').val()
+        var categoryIds = []
+        var tagIds = $('input[name="tags"]').val().split(',')
+        $('input[name="categories"]:checked').each(function () {
+            categoryIds.push($(this).val())
+        })
+        data = {
+            "id": id,
+            "title": title,
+            "originalContent": originalContent,
+            "slug": slug,
+            "summary": summary,
+            "password": password,
+            "disallowComment": disallowComment,
+            "topPriority": topPriority,
+            "status": "PUBLISHED",
+            "categoryIds": categoryIds,
+            "tagIds": tagIds
+        }
+        $.ajax({
+            url: /*[[@{/admin/blogs/}]]*/'/admin/blogs',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function (data) {
+                window.location.href = "/admin/blogs"
             }
-            $.ajax({
-                url: /*[[@{/admin/blogs/}]]*/'/admin/blogs',
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                success: function (data) {
-                    window.location.href = "/admin/blogs"
-                }
-            })
         })
     })
 </script>

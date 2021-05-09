@@ -5,18 +5,18 @@ import lombok.Data;
 
 /**
  * @author NoahCode
- * @date 2020/9/28
+ * @date 12/31/2020
  * @description
  */
 @Data
 public class Category {
-    private Integer id;
+    private Long id;
 
     private String name;
 
     private String description;
 
-    private Integer parentId;
+    private Long parentId;
 
     private Date createTime;
 

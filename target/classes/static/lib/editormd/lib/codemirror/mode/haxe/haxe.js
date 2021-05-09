@@ -459,7 +459,7 @@ CodeMirror.defineMode("hxml", function () {
       var ch = stream.peek();
       var sol = stream.sol();
 
-      ///* comments */
+      ///* articleComments */
       if (ch == "#") {
         stream.skipToEnd();
         return "comment";

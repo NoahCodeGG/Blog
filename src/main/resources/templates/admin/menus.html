@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>菜单 - NoahCode's Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+<div th:replace="admin/_fragments :: header" class="ui top attached menu">
+    <a class="ui sidebar-icon item">
+        <i class="ui bars icon"></i>
+    </a>
+    <div class="ui right menu">
+        <a href="#" class="ui item">
+            <i class="ui linkify icon"></i>
+        </a>
+        <div class="ui top right message-icon pointing dropdown item">
+            <i class="ui bell outline icon"></i>
+            <div class="ui menu" style="width: 300px;">
+                <div class="ui header">
+                    <h3 class="ui dividing header">待审核评论</h3>
+                </div>
+                <div class="ui item">
+                    <div class="ui feed">
+                        <div class="ui event">
+                            <div class="label">
+                                <img src="../../static/images/icon.png">
+                            </div>
+                            <div class="ui content">
+                                <div class="ui summary"><a>NoahCode</a>:</div>
+                                <div class="ui extra text" style="word-wrap: break-word;white-space:normal;">
+                                    欢迎使用 Halo，这是你的第一条评论，头像来自 Gravatar，你也可以通过注册 Gravatar 来显示自己的头像。
+                                </div>
+                                <div class="ui extra date">3 天前</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui top right user pointing dropdown item">
+            <div class="ui circular mini image">
+                <img src="../../static/images/icon.png" alt="">
+            </div>
+            <div class="ui menu">
+                <div class="ui item">
+                    <i class="ui user outline icon"></i>个人信息
+                </div>
+                <div class="ui item">
+                    <i class="ui sign-out icon"></i>退出登录
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="admin/_fragments :: sidebar" class="ui tiny inverted left vertical sidebar menu">
+    <div class="ui item">
+        <img class="ui centered mini image" src="../../static/images/icon.png" alt="">
+        <h4 class="ui inverted centered header">NoahCode</h4>
+    </div>
+    <a class="ui item">仪表盘</a>
+    <a class="ui article item">
+        <i class="ui chevron down icon"></i>
+        文章
+    </a>
+    <div class="ui article inverted vertical menu" style="display: none;">
+        <a class="ui item">所有文章</a>
+        <a class="ui item">写文章</a>
+        <a class="ui item">分类目录</a>
+        <a class="ui item">标签</a>
+    </div>
+    <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
+    <a class="ui user item">
+        <i class="ui chevron down icon"></i>
+        用户
+    </a>
+    <div class="ui user inverted vertical menu" style="display: none;">
+        <a class="ui item">个人资料</a>
+    </div>
+    <a class="ui system item">
+        <i class="ui chevron down icon"></i>
+        系统
+    </a>
+    <div class="ui system inverted vertical menu" style="display: none;">
+        <a class="ui item">博客设置</a>
+        <a class="ui item">关于</a>
+    </div>
+</div>
+
+<!--面包屑导航条-->
+<div class="ui bottom attached segment">
+    <div class="ui breadcrumb">
+        <a class="ui section" href="index.html" th:href="@{/admin/index}">首页</a>
+        <div class="ui divider"> /</div>
+        <div class="ui section">外观</div>
+        <div class="ui divider"> /</div>
+        <div class="ui active section">菜单</div>
+    </div>
+</div>
+
+<div class="ui bottom attached">
+    <div class="ui deleteTeam tiny modal">
+        <div class="ui header">提示</div>
+        <div class="ui content">确定要删除当前分组以及所有菜单？</div>
+        <div class="ui actions">
+            <input class="ui basic button" type="button" value="取消" onclick="deleteHideModal('deleteTeam')">
+            <input class="ui primary button" type="button" value="确定" onclick="deleteTeamOrPage('deleteTeam','')">
+        </div>
+    </div>
+    <div class="ui deletePage tiny modal">
+        <div class="ui header">提示</div>
+        <div class="ui content">确定要删除当前菜单？</div>
+        <div class="ui actions">
+            <input id="deletePageId" type="hidden">
+            <input class="ui basic button" type="button" value="取消" onclick="deleteHideModal('deletePage')">
+            <input class="ui primary button" type="button" value="确定" onclick="deleteTeamOrPage('deletePage')">
+        </div>
+    </div>
+    <div class="ui relaxed grid" style="padding: 40px;">
+        <div class="ui two column row">
+            <div class="ui three wide column card">
+                <div class="ui content">
+                    <div class="header">
+                        <span class="ui header">分组</span>
+                        <button id="defaultTeamBtn" class="ui small right floated basic button">设为默认</button>
+                    </div>
+                </div>
+                <div class="ui content">
+                    <div id="teamList" class="ui fluid large secondary vertical pointing menu">
+                        <div class="ui item" th:each="team:${teams}"
+                             th:onclick="getPages('saving',$(this),[[${team}]])"
+                             th:classappend="${defaultMenuTeam}==${team} ? 'active'"
+                             style="cursor:pointer;">
+                            <span th:text="${team}==''?'未分组':${team}">未分组</span>
+                            <span th:if="${defaultMenuTeam}==${team}">（默认）</span>
+                        </div>
+                    </div>
+                    <button id="addTeamPopupBtn" class="ui fluid primary button">新增分组</button>
+                    <div class="ui popup card" style="width:300px;">
+                        <div class="ui content">
+                            <div class="ui header">新增分组</div>
+                        </div>
+                        <div class="ui content">
+                            <form class="ui form" method="get" action="#">
+                                <div class="ui fluid field">
+                                    <input id="teamName" name="name" type="text">
+                                </div>
+                                <div class="ui right floated actions">
+                                    <input id="addTeamBtn" type="button" class="ui primary button" value="新增"/>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui thirteen wide column card">
+                <div class="ui content">
+                    <div class="header">
+                        <span id="teamTitle" class="ui header"
+                              th:text="${defaultMenuTeam}==''?'未分组':${defaultMenuTeam}">未分组</span>
+                        <i id="newTeamTip" class="ui info circle icon" data-content="分组下的菜单为空时，该分组也不会保存"
+                           style="display: none;"></i>
+                        <div class="ui right floated buttonGroup">
+                            <button id="addPageBtn" class="ui blue basic button">新增</button>
+                            <button class="ui red button" onclick="deleteModal('deleteTeam')">删除</button>
+                            <!--<button class="ui icon basic button">其他 <i class="ui chevron down icon"></i></button>-->
+                        </div>
+                    </div>
+                </div>
+                <div id="addPageContent" class="ui content" style="display: none;">
+                    <form class="ui form" method="post" action="#">
+                        <div class="ui row">
+                            <div class="ui three column grid">
+                                <div class="ui column required field">
+                                    <label>名称：</label>
+                                    <input id="pageName" type="text" name="name">
+                                    <div class="ui meta">
+                                        * 页面上所显示的名称
+                                    </div>
+                                </div>
+                                <div class="ui column required field">
+                                    <label>地址：</label>
+                                    <input id="pageUrl" type="text" name="url">
+                                    <div class="ui meta">
+                                        * 菜单的地址
+                                    </div>
+                                </div>
+                                <div class="ui column field">
+                                    <label>图标：</label>
+                                    <input id="pageIcon" type="text" name="icon">
+                                    <div class="ui meta">
+                                        * 请根据主题的支持情况选填
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui row">
+                            <div class="ui three column grid">
+                                <div class="ui column form">
+                                    <label style="display: block;margin: 0 0 .28571429rem 0;color: rgba(0,0,0,.87);font-size: .92857143em;font-weight: 700;text-transform: none;">打开方式：</label>
+                                    <div class="ui inline fields" style="margin-top: 20px;">
+                                        <div class="ui field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="target" checked=""
+                                                       class="hidden" value="_self">
+                                                <label>当前窗口</label>
+                                            </div>
+                                        </div>
+                                        <div class="ui field">
+                                            <div class="ui radio checkbox">
+                                                <input type="radio" name="target" class="hidden" value="_blank">
+                                                <label>新窗口</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui column">
+                                    <div class="ui buttonGroup" style="margin-top: 20px;">
+                                        <input id="addPageSubmitBtn" class="ui primary button" type="button"
+                                               value="保存">
+                                        <input id="addPageCancelBtn" class="ui basic button" type="button" value="取消">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div th:fragment="pageList" id="pageList" class="ui content">
+                    <div class="ui selection middle aligned divided list" th:each="page:${pages}">
+                        <div class="ui pageItem two column grid item"
+                             onmouseover="showFunction($(this))" onmouseleave="hideFunction($(this))">
+                            <div class="ui thirteen wide column content" style="vertical-align:middle;">
+                                <div class="ui header" th:text="${page.name}">首页</div>
+                                <div class="ui description" th:text="${page.url}" style="margin-top: 10px;">/</div>
+                            </div>
+                            <div class="ui two wide column comment" style="vertical-align:middle;display: none;">
+                                <a th:onclick="deleteModal('deletePage',[[${page.id}]])">删除</a> |
+                                <a th:onclick="editPageContent([[${page.id}]])">编辑</a>
+                                <!--| <a>更多 <i class="ui chevron down icon"></i></a>-->
+                            </div>
+                        </div>
+                        <div th:id="'editPageContent-'+${page.id}" class="ui content" style="display: none;">
+                            <form class="ui form">
+                                <div class="ui row">
+                                    <div class="ui three column grid">
+                                        <div class="ui column required field">
+                                            <label>名称：</label>
+                                            <input th:id="'pageName-'+${page.id}" type="text" name="name"
+                                                   th:value="${page.name}">
+                                            <div class="ui meta">
+                                                * 页面上所显示的名称
+                                            </div>
+                                        </div>
+                                        <div class="ui column required field">
+                                            <label>地址：</label>
+                                            <input th:id="'pageUrl-'+${page.id}" type="text" name="url"
+                                                   th:value="${page.url}">
+                                            <div class="ui meta">
+                                                * 菜单的地址
+                                            </div>
+                                        </div>
+                                        <div class="ui column field">
+                                            <label>图标：</label>
+                                            <input th:id="'pageIcon-'+${page.id}" type="text" name="icon"
+                                                   th:value="${page.icon}">
+                                            <div class="ui meta">
+                                                * 请根据主题的支持情况选填
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui row">
+                                    <div class="ui three column grid">
+                                        <div class="ui column form">
+                                            <label style="display: block;margin: 0 0 .28571429rem 0;color: rgba(0,0,0,.87);font-size: .92857143em;font-weight: 700;text-transform: none;">打开方式：</label>
+                                            <div class="ui inline fields" style="margin-top: 20px;">
+                                                <div class="ui field">
+                                                    <div class="ui radio checkbox">
+                                                        <input type="radio" th:name="'target-'+${page.id}"
+                                                               class="hidden" value="_self"
+                                                               th:checked="${page.target}=='_self'">
+                                                        <label>当前窗口</label>
+                                                    </div>
+                                                </div>
+                                                <div class="ui field">
+                                                    <div class="ui radio checkbox">
+                                                        <input type="radio" th:name="'target-'+${page.id}"
+                                                               class="hidden" value="_blank"
+                                                               th:checked="${page.target}=='_blank'">
+                                                        <label>新窗口</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui column">
+                                            <div class="ui buttonGroup" style="margin-top: 20px;">
+                                                <input class="ui primary button" type="button"
+                                                       value="保存" th:onclick="editPage([[${page.id}]])">
+                                                <input class="ui basic button" type="button"
+                                                       value="取消" th:onclick="editPageCancel([[${page.id}]])">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.message-icon.dropdown.item')
+        .dropdown()
+
+    $('.ui.user.dropdown.item')
+        .dropdown()
+
+    $('.ui.sidebar-icon.item')
+        .click(function () {
+            $('.ui.left.sidebar').sidebar('toggle')
+        })
+
+    $('.ui.article.item')
+        .click(function () {
+            $('.ui.article.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(0)').toggleClass('down')
+                $('.ui.chevron.icon:eq(0)').toggleClass('up')
+            })
+        })
+
+    $('.ui.user.item')
+        .click(function () {
+            $('.ui.user.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(1)').toggleClass('down')
+                $('.ui.chevron.icon:eq(1)').toggleClass('up')
+            })
+        })
+
+    $('.ui.system.item')
+        .click(function () {
+            $('.ui.system.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(2)').toggleClass('down')
+                $('.ui.chevron.icon:eq(2)').toggleClass('up')
+            })
+        })
+</script>
+<!--/*/</th:block>/*/-->
+<script>
+    $('#addTeamPopupBtn').popup({
+        on: 'click',
+        position: 'bottom center',
+        popup: $('.ui.popup.card')
+    })
+
+    $('.ui.radio.checkbox').checkbox()
+
+    $('#addPageBtn').click(function () {
+        $('#addPageContent').toggle()
+    })
+
+    $('#addPageSubmitBtn').click(function () {
+        var name = $('#pageName').val()
+        var url = $('#pageUrl').val()
+        var icon = $('#pageIcon').val()
+        var team = $("#teamTitle").text()
+        if (team == '未分组') {
+            team = ''
+        }
+        var target = ''
+        $('input[name="target"]:checked').each(function () {
+            target = $(this).val()
+        })
+        data = {
+            "name": name,
+            "url": url,
+            "icon": icon,
+            "team": team,
+            "target": target
+        }
+        $.ajax({
+            url: '/admin/menus/add',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function () {
+                var defaultTeamBtn = $('#defaultTeamBtn')
+                $('#pageList').load('/admin/menus/team?team=' + team)
+                $('#newTeamTip').hide()
+                $('#addPageContent').hide()
+                if (defaultTeamBtn.hasClass('disabled')) {
+                    defaultTeamBtn.removeClass('disabled')
+                }
+            }
+        })
+    })
+
+    $('#addPageCancelBtn').click(function () {
+        $('#addPageContent').hide()
+    })
+
+    $('.ui.parent-id.dropdown')
+        .dropdown({
+            clearable: true
+        })
+
+    $('#addTeamBtn').click(function () {
+        var name = $("#teamName").val()
+        var teamList = $('#teamList')
+        $('.ui.active.item').removeClass("active")
+        var items = teamList.children('div.ui.item')
+        var isAdd = false
+        items.each(function () {
+            var item = $(this)
+            if (item.text() == name) {
+                isAdd = true
+                item.addClass('active')
+            }
+        })
+        if (!isAdd) {
+            teamList.append('<div class="ui active item" onclick="getPages(\'new\',$(this),\'' + name + '\')" style="cursor:pointer;">' + name + '</div>')
+        }
+        $('.ui.active.item').click()
+    })
+
+    $('#defaultTeamBtn').click(function () {
+        var team = $("#teamTitle").text()
+        if (team == '未分组') {
+            team = ''
+        }
+        data = {
+            "default_menu_team": team
+        }
+        $.ajax({
+            url: '/admin/options/saving',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function () {
+                window.location.href = "/admin/menus"
+            }
+        })
+    })
+
+    function deleteTeamOrPage(type, id) {
+        var team = $('#teamTitle').text()
+        if (team == '未分组') {
+            team = ''
+        }
+        var id = $('#deletePageId').val()
+        if (type == 'deleteTeam') {
+            $.ajax({
+                url: '/admin/menus/team/' + team + '/delete',
+                type: "GET",
+                success: function () {
+                    window.location.href = "/admin/menus"
+                }
+            })
+        } else {
+            $.ajax({
+                url: '/admin/menus/page/' + id + '/delete',
+                type: "GET",
+                success: function () {
+                    deleteHideModal(type)
+                    window.location.href = "/admin/menus"
+                }
+            })
+        }
+    }
+
+    function deleteModal(type, id) {
+        $('.ui.' + type + '.modal')
+            .modal({
+                centered: false
+            })
+            .modal('show')
+        if (type == 'deletePage') {
+            $('#deletePageId').val(id)
+        }
+    }
+
+    function deleteHideModal(type) {
+        $('.ui.' + type + '.modal')
+            .modal('hide')
+    }
+
+    function getPages(type, obj, team) {
+        var defaultTeamBtn = $('#defaultTeamBtn')
+        var teamName = $('#teamName')
+        var newTeamTip = $('#newTeamTip')
+        $('.ui.active.item').removeClass("active")
+        obj.addClass("active")
+        if (team === '') {
+            $('#teamTitle').text('未分组')
+        } else {
+            $('#teamTitle').text(team)
+        }
+        $('#pageList').load('/admin/menus/team?team=' + team)
+        if (type == 'new') {
+            newTeamTip.show()
+            newTeamTip.popup({
+                position: 'top center'
+            })
+            defaultTeamBtn.addClass('disabled')
+            teamName.val('')
+        } else {
+            newTeamTip.hide()
+            if (defaultTeamBtn.hasClass('disabled')) {
+                defaultTeamBtn.removeClass('disabled')
+            }
+        }
+    }
+
+    function showFunction(obj) {
+        obj.children('div.ui.two.wide.column.comment').show()
+    }
+
+    function hideFunction(obj) {
+        obj.children('div.ui.two.wide.column.comment').hide()
+    }
+
+    function editPageContent(id) {
+        $('#editPageContent-' + id).toggle()
+    }
+
+    function editPageCancel(id) {
+        $('#editPageContent-' + id).hide()
+    }
+
+    function editPage(id) {
+        var name = $('#pageName-' + id).val()
+        var url = $('#pageUrl-' + id).val()
+        var icon = $('#pageIcon-' + id).val()
+        var team = $('#teamTitle').text()
+        if (team == '未分组') {
+            team = ''
+        }
+        var target = ''
+        $('input[name="target-' + id + '"]:checked').each(function () {
+            target = $(this).val()
+        })
+        data = {
+            "name": name,
+            "url": url,
+            "icon": icon,
+            "team": team,
+            "target": target
+        }
+        $.ajax({
+            url: '/admin/menus/' + id + '/edit',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: function () {
+                $('#pageList').load('/admin/menus/team?team=' + team)
+            }
+        })
+    }
+
+    function deletePage(id) {
+        var team = $('#teamTitle').text()
+        $.ajax({
+            url: '/admin/menus/' + id + '/delete',
+            type: "GET",
+            success: function () {
+                $('#pageList').load('/admin/menus/team?team=' + team)
+            }
+        })
+    }
+
+    $('#addPage-submitBtn').click(function () {
+        var id = $("#id").val()
+        var title = $('#title').val()
+        var originalContent = $('#content').val()
+        data = {
+            "id": id,
+            "title": title,
+            "originalContent": originalContent,
+            "status": "DRAFT"
+        }
+        $.ajax({
+            url: '/admin/blogs',
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json",
+            success: window.location.href = "/admin/blogs"
+        })
+    })
+</script>
+</body>
+</html>

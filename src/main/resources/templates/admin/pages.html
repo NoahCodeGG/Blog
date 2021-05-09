@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <title>所有页面 - NoahCode's Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+<div th:replace="admin/_fragments :: header" class="ui top attached menu">
+    <a class="ui sidebar-icon item">
+        <i class="ui bars icon"></i>
+    </a>
+    <div class="ui right menu">
+        <a href="#" class="ui item">
+            <i class="ui linkify icon"></i>
+        </a>
+        <div class="ui top right message-icon pointing dropdown item">
+            <i class="ui bell outline icon"></i>
+            <div class="ui menu" style="width: 300px;">
+                <div class="ui header">
+                    <h3 class="ui dividing header">待审核评论</h3>
+                </div>
+                <div class="ui item">
+                    <div class="ui feed">
+                        <div class="ui event">
+                            <div class="label">
+                                <img src="../../static/images/icon.png">
+                            </div>
+                            <div class="ui content">
+                                <div class="ui summary"><a>NoahCode</a>:</div>
+                                <div class="ui extra text" style="word-wrap: break-word;white-space:normal;">
+                                    欢迎使用 Halo，这是你的第一条评论，头像来自 Gravatar，你也可以通过注册 Gravatar 来显示自己的头像。
+                                </div>
+                                <div class="ui extra date">3 天前</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui top right user pointing dropdown item">
+            <div class="ui circular mini image">
+                <img src="../../static/images/icon.png" alt="">
+            </div>
+            <div class="ui menu">
+                <div class="ui item">
+                    <i class="ui user outline icon"></i>个人信息
+                </div>
+                <div class="ui item">
+                    <i class="ui sign-out icon"></i>退出登录
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="admin/_fragments :: sidebar" class="ui tiny inverted left vertical sidebar menu">
+    <div class="ui item">
+        <img class="ui centered mini image" src="../../static/images/icon.png" alt="">
+        <h4 class="ui inverted centered header">NoahCode</h4>
+    </div>
+    <a class="ui item">仪表盘</a>
+    <a class="ui article item">
+        <i class="ui chevron down icon"></i>
+        文章
+    </a>
+    <div class="ui article inverted vertical menu" style="display: none;">
+        <a class="ui item">所有文章</a>
+        <a class="ui item">写文章</a>
+        <a class="ui item">分类目录</a>
+        <a class="ui item">标签</a>
+    </div>
+    <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
+    <a class="ui user item">
+        <i class="ui chevron down icon"></i>
+        用户
+    </a>
+    <div class="ui user inverted vertical menu" style="display: none;">
+        <a class="ui item">个人资料</a>
+    </div>
+    <a class="ui system item">
+        <i class="ui chevron down icon"></i>
+        系统
+    </a>
+    <div class="ui system inverted vertical menu" style="display: none;">
+        <a class="ui item">博客设置</a>
+        <a class="ui item">关于</a>
+    </div>
+</div>
+
+<!--面包屑导航条-->
+<div class="ui bottom attached segment">
+    <div class="ui breadcrumb">
+        <a class="ui section" href="index.html" th:href="@{/admin/index}">首页</a>
+        <div class="ui divider"> /</div>
+        <div class="ui active section">页面</div>
+        <div class="ui divider"> /</div>
+        <div class="ui active section">所有页面</div>
+    </div>
+</div>
+
+<div class="ui bottom attached pushable">
+    <div class="ui relaxed" style="padding: 20px;">
+        <div class="ui top attached tabular menu">
+            <a class="active item" data-tab="independent">独立页面</a>
+            <a class="item" data-tab="customize">自定义页面</a>
+        </div>
+        <div class="ui bottom attached active tab segment" data-tab="independent">
+            <div style="padding-left: 30px;">
+                <table class="ui very basic table">
+                    <thead>
+                    <tr>
+                        <th>页面名称</th>
+                        <th>访问地址</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="independent:${independents}">
+                        <td th:text="${independent.title}">友情链接</td>
+                        <td th:text="${blogUrl}+'/'+${independent.url}">http://127.0.0.1:8090/links</td>
+                        <td>可用</td>
+                        <td>
+                            <a th:href="'/admin/'+${independent.url}">管理</a>
+                            | <a th:href="'/'+${independent.url}">访问</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="ui bottom attached tab segment" data-tab="customize">
+            <div style="padding-left: 30px;">
+                <table th:fragment="pages" id="pages" class="ui very basic table">
+                    <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>状态</th>
+                        <th>评论量</th>
+                        <th>访问量</th>
+                        <th>发布时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="customize:${customizes}">
+                        <td>
+                            <a th:text="${customize.title}">关于页面</a>
+                        </td>
+                        <td th:switch="${customize.status}">
+                            <div th:case="0">
+                                <i class="ui green empty circular label"></i>
+                                <span>已发布</span>
+                            </div>
+                            <div th:case="1">
+                                <i class="ui yellow empty circular label"></i>
+                                <span>草稿</span>
+                            </div>
+                            <div th:case="2">
+                                <i class="ui red empty circular label"></i>
+                                <span>回收站</span>
+                            </div>
+                        </td>
+                        <td>
+                            <a class="ui red circular label" th:text="${customize.commentCount}">2</a>
+                        </td>
+                        <td>
+                            <a class="ui blue circular label" th:text="${customize.visits}">2</a>
+                        </td>
+                        <td>
+                            <span th:text="${#dates.format(customize.updateTime,'yyyy-MM-dd HH:mm:ss')}">1分钟前</span>
+                        </td>
+                        <td th:switch="${customize.status}">
+                            <span th:case="2">
+                                <a style="cursor:pointer"
+                                   th:onclick="reductionPopup($(this),[[${customize.id}]],[[${customize.title}]],[[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">还原</a> |
+                                <a id="delete-button" style="cursor:pointer"
+                                   th:onclick="deletePopup($(this),[[${customize.id}]],[[${customize.title}]],[[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">删除</a> |
+                            </span>
+                            <span th:case="*">
+                                <a th:href="@{/admin/pages/{id}/input(id=${customize.id})}">编辑</a> |
+                                <a class="recycle" th:id="'recycle-button-'+${customize.id}" style="cursor:pointer"
+                                   th:onclick="recyclePopup($(this),[[${customize.id}]],[[${customize.title}]],[[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">回收站</a> |
+                            </span>
+                            <a id="setting-button" style="cursor:pointer"
+                               th:onclick="openSettingSidebar([[${customize}]])">设置</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th colspan="9">
+                            <div class="ui right floated pagination menu">
+                                <a class="icon item" href="#"
+                                   th:href="'/admin/pages?pageNum='+${pageInfo.prePage}+'&pageSize='+${pageInfo.pageSize}+'#/customize'">
+                                    <i class="left chevron icon"></i>
+                                </a>
+                                <a class="item" th:each="nav:${pageInfo.navigatepageNums}" th:text="${nav}"
+                                   th:href="'/admin/pages?pageNum='+${nav}+'&pageSize='+${pageInfo.pageSize}+'#/customize'">1</a>
+                                <a class="icon item"
+                                   th:href="'/admin/pages?pageNum='+${pageInfo.nextPage}+'&pageSize='+${pageInfo.pageSize}+'#/customize'">
+                                    <i class="right chevron icon"></i>
+                                </a>
+                                <div class="ui page-size compact selection dropdown">
+                                    <input type="hidden" name="pageSize" value="10" th:value="${pageInfo.pageSize}">
+                                    <i class="ui dropdown icon"></i>
+                                    <div class="ui text">10条/页</div>
+                                    <div class="ui menu">
+                                        <a class="ui item" data-value="1"
+                                           th:href="'/admin/pages?pageNum='+${pageInfo.pageNum}+'&pageSize=1#/customize'">1条/页</a>
+                                        <a class="ui item" data-value="2"
+                                           th:href="'/admin/pages?pageNum='+${pageInfo.pageNum}+'&pageSize=2#/customize'">2条/页</a>
+                                        <a class="ui item" data-value="5"
+                                           th:href="'/admin/pages?pageNum='+${pageInfo.pageNum}+'&pageSize=5#/customize'">5条/页</a>
+                                        <a class="ui item" data-value="10"
+                                           th:href="'/admin/pages?pageNum='+${pageInfo.pageNum}+'&pageSize=10#/customize'">10条/页</a>
+                                        <a class="ui item" data-value="20"
+                                           th:href="'/admin/pages?pageNum='+${pageInfo.pageNum}+'&pageSize=20#/customize'">20条/页</a>
+                                        <a class="ui item" data-value="50"
+                                           th:href="'/admin/pages?pageNum='+${pageInfo.pageNum}+'&pageSize=50#/customize'">50条/页</a>
+                                        <a class="ui item" data-value="100"
+                                           th:href="'/admin/pages?pageNum='+${pageInfo.pageNum}+'&pageSize=100#/customize'">100条/页</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--右侧边栏-->
+<div class="ui right vertical wide sidebar menu">
+    <form class="ui form">
+        <input id="id" type="hidden" name="id">
+        <div class="ui item">
+            <i class="ui small close icon" style="cursor: pointer;"></i>
+            页面设置
+        </div>
+        <div class="ui fragment item">
+            <div class="ui field">
+                <h4 class="ui header">基本设置</h4>
+            </div>
+            <div class="ui field">
+                <label>开启评论</label>
+                <div class="ui inline fields">
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="disallowComment" class="hidden"
+                                   value="true">
+                            <label>开启</label>
+                        </div>
+                    </div>
+                    <div class="ui field">
+                        <div class="ui radio checkbox">
+                            <input type="radio" name="disallowComment" class="hidden" value="false">
+                            <label>关闭</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui field">
+                <label>摘要</label>
+                <textarea rows="2" name="summary"></textarea>
+            </div>
+            <div class="ui error message"></div>
+        </div>
+        <div class="ui field">
+            <div class="ui basic right floated segment">
+                <input id="publish-button" class="ui submit blue publish button" type="button" value="保存"
+                       th:onclick="setting([[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])"/>
+            </div>
+        </div>
+    </form>
+</div>
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.message-icon.dropdown.item')
+        .dropdown()
+    $('.ui.user.dropdown.item')
+        .dropdown()
+    $('.ui.sidebar-icon.item')
+        .click(function () {
+            $('.ui.sidebar').sidebar('toggle')
+        })
+    $('.ui.article.item')
+        .click(function () {
+            $('.ui.article.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(0)').toggleClass('down')
+                $('.ui.chevron.icon:eq(0)').toggleClass('up')
+            })
+        })
+    $('.ui.user.item')
+        .click(function () {
+            $('.ui.user.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(1)').toggleClass('down')
+                $('.ui.chevron.icon:eq(1)').toggleClass('up')
+            })
+        })
+    $('.ui.system.item')
+        .click(function () {
+            $('.ui.system.vertical.menu').toggle('fast', function () {
+                $('.ui.chevron.icon:eq(2)').toggleClass('down')
+                $('.ui.chevron.icon:eq(2)').toggleClass('up')
+            })
+        })
+    $('.ui.state.dropdown')
+        .dropdown()
+</script>
+<!--/*/</th:block>/*/-->
+<script>
+    $('.ui.state.dropdown')
+        .dropdown()
+
+    $('.ui.page-size.dropdown')
+        .dropdown()
+
+    $('.ui.tags.dropdown')
+        .dropdown({
+            clearable: true,
+            allowAdditions: true
+        })
+
+    $('.ui.tabular.menu .item')
+        .tab({
+            history: true
+        })
+
+    $('.ui.tag-clear.button').click(function () {
+        $('.ui.tags.dropdown').dropdown('clear')
+    })
+
+    $('.ui.close.icon')
+        .click(function () {
+            $('.ui.right.sidebar').sidebar('hide')
+        })
+
+    $('.ui.radio.checkbox').checkbox()
+
+    function recyclePopup(obj, id, title, pageNum, pageSize) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将【' + title + '】页面移到回收站吗？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toRecycle(' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function deletePopup(obj, id, title, pageNum, pageSize) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要永久删除【' + title + '】页面？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toDelete(' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function reductionPopup(obj, id, title, pageNum, pageSize) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要发布【' + title + '】？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toReduction(' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function hoverPopup() {
+        $('.ui.popup.transition.visible').transition('zoom')
+    }
+
+    function toRecycle(id, pageNum, pageSize) {
+        $('#pages').load('/admin/pages/' + id + '/recycle?pageNum=' + pageNum + '&pageSize=' + pageSize + '#/customize')
+    }
+
+    function toDelete(id, pageNum, pageSize) {
+        $('#pages').load('/admin/pages/' + id + '/delete?pageNum=' + pageNum + '&pageSize=' + pageSize + '#/customize')
+    }
+
+    function toReduction(id, pageNum, pageSize) {
+        $('#pages').load('/admin/pages/' + id + '/reduction?pageNum=' + pageNum + '&pageSize=' + pageSize + '#/customize')
+    }
+
+    function openSettingSidebar(page) {
+        var id = $('#id')
+        var disallowComment = $('input[name="disallowComment"]')
+        var summary = $('input[name="summary"]')
+        //初始化id
+        id.val(page.id)
+
+        //初始化评论单选按钮
+        disallowComment.eq(0).removeAttr('checked')
+        disallowComment.eq(1).removeAttr('checked')
+        if (page.disallowComment) {
+            disallowComment.eq(1).attr('checked', 'checked')
+        } else {
+            disallowComment.eq(0).attr('checked', 'checked')
+        }
+
+        summary.text(page.summary)
+
+        //打开侧边栏
+        $('.ui.right.sidebar')
+            .sidebar('setting', 'transition', 'overlay')
+            .sidebar('toggle')
+    }
+
+    function setting(pageNum, pageSize) {
+        var id = $('#id').val()
+        var summary = $('textarea[name="summary"]').val()
+        var disallowComment = $('input[name="disallowComment"]:checked').val()
+        $('input[name="categories"]:checked').each(function () {
+            categoryIds.push($(this).val())
+        })
+        data = {
+            "summary": summary,
+            "disallowComment": disallowComment
+        }
+        console.log(data)
+        $.ajax({
+            url: '/admin/pages/' + id + '/setting?pageNum=' + pageNum + '&pageSize=' + pageSize,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json;",
+            success: function (data) {
+                $('.ui.right.sidebar').sidebar('hide')
+                window.location.href = "/admin/pages#/customize"
+            }
+        })
+    }
+</script>
+</body>

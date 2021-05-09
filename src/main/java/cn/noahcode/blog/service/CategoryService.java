@@ -12,7 +12,7 @@ import java.util.List;
 public interface CategoryService {
 
 
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Long id);
 
     int insert(Category record);
 
@@ -22,11 +22,14 @@ public interface CategoryService {
 
     int updateByPrimaryKey(Category record);
 
-    Category selectByPrimaryKey(Integer id);
+    Category selectByPrimaryKey(Long id);
 
     Category selectByName(String name);
 
-    List<Category> selectByBlogId(Integer blogId);
+    List<Category> selectByPostId(Long blogId);
 
     List<Category> listCategory();
+
+    int categoryCount();
 }
+

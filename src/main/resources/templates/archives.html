@@ -1,341 +1,518 @@
 <!DOCTYPE html>
-<html lang="zh">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="zh" class="" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
     <meta name="keywords" content="NoahCode's Blog,后端,Java博客,技术分享,程序员">
-    <meta name="description" content="NoahCode's Blog致力于Java技术的学习交流，记录自己的所学所感">
-    <link rel="shortcut icon" type="images/x-icon" href="../static/images/icon.ico">
-    <link rel="stylesheet" href="../static/css/style.css">
-    <link rel="stylesheet" href="../static/css/main.min.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" type="text/css"
-          media="all">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/viewerjs@1.5.0/dist/viewer.min.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/css/share.min.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    <meta name="description" content="NoahCode's Blog致力于Java技术的学习交流，记录所学所感，涉及前端技术、Java后端、服务器运维和作品设计">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="generator" content="Halo 1.4.2">
+    <link rel="shortcut icon" type="images/x-icon"
+          href="https://picsum.photos/id/10/1920/1080">
+    <script src="https://zz.bdstatic.com/linksubmit/push.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/volfclub/travellings/assets/travelling.min.js"></script>
+    <meta name="google-site-verification" content="cH9NFZpPFO51sBXAKWIksozvZpk5BVY3Adn-EL6t_1w">
+    <script data-ad-client="ca-pub-5596873171318955" async=""
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <title>归档 | NoahCode's Blog</title>
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+    <style type="text/css">
+        :root {
+            --base-bg-color: #fff;
+            --header-bg-color: #fff;
+            --link-color: #52616a;
+            --header-text-color: #252c41;
+            --header-link-color: #252c41;
+            --toc-active-color: #dddfe6;
+            --base-hover-color: #f1404b;
+            --base-hl-color: #f1404b;
+            --page-text-color: #fff;
+            --cover-no-img-bg: #fff;
+            --cover-default-bg: #101012;
+            --menu-btn-color: #52616a;
+            --header-sub-bg-color: #f0f5f9;
+            --header-sub-hover-bg-color: #c9d6de;
+            --base-color: #4facfe;
+            --cd-hover-color: #E53A40;
+            --btn-pri-bg-color: #E53A40;
+            --base-txt-color: #363636;
+
+
+            /*--btn-pri-bg-color: #ff5f5f;*/
+            --text-color: #333333;
+            --text-hover-color: #4facfe;
+            --toc-bg-color: #8e8787;
+            /*夜晚默认*/
+            --night-toc-bg-color: #e5e5e5;
+            --night-tag-txt-color: #e5e5e5;
+            --night-tag-bg-color: #555;
+            --night-link-card-bg-color: rgba(0, 0, 0, .4);
+            --night-background: #292a2d;
+            --night-txt-color: #a9a9b3;
+            --night-input-backgrround: #2d2d2d;
+            --night-code-txt-color: #c5c8c6;
+            --night-code-color: #969896;
+            --night-code-bg-color: #2d2d2d;
+            --night-code-hljs-string-color: #0857b3;
+            --night-page-a-color: #fff;
+            --monospace: "Lucida Console", Consolas, "Courier", monospace;
+        }
+
+
+        @media only screen and (min-width: 861px) {
+            .home-cover {
+                height: 100vh !important;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@1.4.6/dist/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.1.2/styles/github-gist.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+          integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.css">
+    <link href="https://cdn.jsdelivr.net/gh/xzzai/static@master/css/jqcloud.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
 </head>
 <body>
-<aside class="sidebar side-bar-val" id="sidebar" style="overflow-y: auto !important;">
-    <div class="inner">
-        <div class="widget-area">
-            <nav class="site-navigation">
-                <ul class="menu">
-                    <li class="menu-item nav-menu-item ">
-                        <a href="/" data-ajax="" target="_self">首页</a>
-                    </li>
-                    <li class="menu-item nav-menu-item ">
-                        <a href="/archives" data-ajax="" target="_self">归档</a>
-                    </li>
-                    <!--<li class="menu-item nav-menu-item ">-->
-                    <!--    <a href="/journals" data-ajax="" target="_self">动态</a>-->
-                    <!--</li>-->
-                    <!--<li class="menu-item nav-menu-item ">-->
-                    <!--    <a href="/photos" data-ajax="" target="_self">画簿</a>-->
-                    <!--</li>-->
-                    <!--<li class="menu-item nav-menu-item ">-->
-                    <!--    <a href="/links" data-ajax="" target="_self">友链</a>-->
-                    <!--</li>-->
-                    <!--<li class="menu-item nav-menu-item ">-->
-                    <!--    <a href="https://github.com/wuGuangLei" data-ajax="" target="_blank">Github</a>-->
-                    <!--</li>-->
-                    <li class="menu-item nav-menu-item ">
-                        <a href="/about" data-ajax="" target="_self">关于我</a>
-                    </li>
-                    <li class="menu-item home nav-menu-item">
-                        <i class="fa night-mode fa-moon-o" id="nightModeSmall" aria-hidden="true"></i>
-                    </li>
-                    <li class="menu-item home nav-menu-item">
-                        <i class="fa fa-search js-toggle-search iconsearch" aria-hidden="true"
-                           style="font-size: 20px;"></i>
-                    </li>
-                </ul>
-            </nav>
+<header th:replace="_fragments :: header(${menus})" class="nav-wrapper -sticky" id="navHeader">
+    <button class="collapse-nav" onclick="collapseNav()" id="collapseNav" style="">
+        <div class="collapse-burger -squeeze">
+            <span class="burger-lines"></span>
         </div>
-    </div>
-</aside>
-<header class="site-header" id="siteHeader">
-    <div id="scrollMenu" class="scroll-menu header-inner">
-        <div class="menu-items">
-            <ul>
-                <li>
-                    <a href="https://guqing.xyz" data-ajax="" id="headerLogo"
-                       style="margin-right: 0; display: inline-block;height: 100%; line-height: 52px;"
-                       onfocus="this.blur();">
-                        <img src="../static/images/icon.png" alt="NoahCode's Blog" style="height: 20px ">
-                    </a>
+    </button>
+    <nav class="nav slideOut opacity-0" id="nav">
+        <button class="toggle-nav">
+            <div class="burger -squeeze">
+                <span class="burger-lines"></span>
+            </div>
+        </button>
+        <ul class="nav-list" role="navigation">
+            <div class="list -left " id="menuLinks">
+                <li class="item ">
+                    <a class="link md:text-base sm:text-sm" href="/" target="_self">首页</a>
                 </li>
-                <li class="menu-scroll-item">
-                    <a href="/" data-ajax="" target="_self">首页</a>
+                <li class="item ">
+                    <a class="link md:text-base sm:text-sm" href="/archives" target="_self">归档</a>
                 </li>
-                <li class="menu-scroll-item">
-                    <a href="/archives" data-ajax="" target="_self" class="active-current">归档</a>
+                <!--<li class="item ">-->
+                <!--    <a class="link md:text-base sm:text-sm" href="/journals" target="_self">动态</a>-->
+                <!--</li>-->
+                <!--<li class="item ">-->
+                <!--    <a class="link md:text-base sm:text-sm" href="/photos" target="_self">画簿</a>-->
+                <!--</li>-->
+                <!--<li class="item ">-->
+                <!--    <a class="link md:text-base sm:text-sm" href="/links" target="_self">友链</a>-->
+                <!--</li>-->
+                <li class="item ">
+                    <a class="link md:text-base sm:text-sm" href="https://github.com/guqing" target="_blank">Github</a>
                 </li>
-                <!--<li class="menu-scroll-item">-->
-                <!--    <a href="/journals" data-ajax="" target="_self">动态</a>-->
-                <!--</li>-->
-                <!--<li class="menu-scroll-item">-->
-                <!--    <a href="/photos" data-ajax="" target="_self">画簿</a>-->
-                <!--</li>-->
-                <!--<li class="menu-scroll-item">-->
-                <!--    <a href="/links" data-ajax="" target="_self">友链</a>-->
-                <!--</li>-->
-                <!--<li class="menu-scroll-item">-->
-                <!--    <a href="https://github.com/wuGuangLei" data-ajax="" target="_blank">Github</a>-->
-                <!--</li>-->
-                <li class="menu-scroll-item">
-                    <a href="/about" data-ajax="" target="_self">关于我</a>
+                <li class="item ">
+                    <a class="link md:text-base sm:text-sm" href="/me/about" target="_self">关于我</a>
                 </li>
-            </ul>
-        </div>
-        <div class="other-ctl" id="headerCtrl">
-            <i class="fa fa-search js-toggle-search iconsearch" aria-hidden="true"></i>
-            <i class="fa night-mode fa-moon-o" id="nightMode" aria-hidden="true"></i>
-        </div>
-    </div>
-    <a class="sidebar-toggle" id="sidebarToggle">
-<span class="icon-menu cross">
-<span class="middle" aria-hidden="true"></span>
-</span>
-    </a>
-</header>
-<div id="page" class="site">
-    <main class="site-main" id="main">
-        <div class="site-content">
-            <header class="bg-cover page-header">
-                <div class="cover-bg">
-                    <img src="https://picsum.photos/id/10/1920/1080"
-                         alt="归档">
-                </div>
-                <div class="cover-content">
-                    <div class="inner">
-                        <div class="post-count"></div>
-                        <h1 class="page-title" style="font-size: 46px;">归档</h1>
+            </div>
+            <div class="list -right">
+                <div class="overlay"></div>
+            </div>
+        </ul>
+        <div class="day-switch" style="position: relative; right: 40px">
+            <div class="day-night-switch" role="button" onclick="dayNightSwitch()">
+                <div class="onOff daySwitch" id="daySwitch">
+                    <div class="star star1"></div>
+                    <div class="star star2"></div>
+                    <div class="star star3"></div>
+                    <div class="star star4"></div>
+                    <div class="star star5"></div>
+                    <div class="star sky"></div>
+                    <div class="sunMoon">
+                        <div class="crater crater1"></div>
+                        <div class="crater crater2"></div>
+                        <div class="crater crater3"></div>
+                        <div class="cloud part1"></div>
+                        <div class="cloud part2"></div>
                     </div>
                 </div>
-            </header>
-            <div id="post-list" class="post-list inner" style="padding-top: 30px;margin-bottom: 30px;">
-                <article class="post">
-                    <header class="post-header" style="margin-bottom: 0 !important;">
-                        <div class="post-header-wrap">
-                            <div class="post-meta">
-                                <time class="published published-txt" style="font-weight: bolder;"
-                                      datetime="{archive.year?c}">
-                                    2020年9月
-                                </time>
-                            </div>
-                            <div class="post-title archives-list" style="margin-bottom: 0 !important;">
-                                <div class="read-more">
-                                    <a class="button" href="#" data-ajax="">
-                                        09-12 测试
-                                        <span aria-hidden="true"></span>
-                                        <span class="line left"></span>
-                                        <span class="line top"></span>
-                                        <span class="line right"></span>
-                                        <span class="line bottom"></span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </header>
-                </article>
             </div>
         </div>
-    </main>
-</div>
-<footer class="site-footer" id="siteFooter">
-    <div class="inner">
-        <div class="offsite-links">
-            <a href="https://weibo.com/guqing3478520" class="circle" target="_blank" rel="noopener">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
-                    <path fill="none" d="M0 0h24v24H0z"></path>
-                    <path d="M17.525 11.378c1.263.392 2.669 1.336 2.669 3.004 0 2.763-3.98 6.239-9.964 6.239-4.565 0-9.23-2.213-9.23-5.852 0-1.902 1.204-4.102 3.277-6.177 2.773-2.77 6.004-4.033 7.219-2.816.537.537.588 1.464.244 2.572-.178.557.525.25.525.25 2.24-.938 4.196-.994 4.909.027.38.543.343 1.306-.008 2.19-.163.407.048.471.36.563zm-7.282 7.939c3.641-.362 6.401-2.592 6.167-4.983-.237-2.391-3.382-4.038-7.023-3.677-3.64.36-6.403 2.59-6.167 4.98.237 2.394 3.382 4.039 7.023 3.68zM6.16 14.438c.754-1.527 2.712-2.39 4.446-1.94 1.793.463 2.707 2.154 1.976 3.8-.744 1.682-2.882 2.578-4.695 1.993-1.752-.566-2.493-2.294-1.727-3.853zm1.446 2.587c.568.257 1.325.013 1.676-.55.346-.568.163-1.217-.407-1.459-.563-.237-1.291.008-1.64.553-.354.547-.189 1.202.371 1.456zm2.206-1.808c.219.092.501-.012.628-.231.123-.22.044-.466-.178-.548-.216-.084-.486.018-.613.232-.123.214-.054.458.163.547zM19.873 9.5a.725.725 0 1 1-1.378-.451 1.38 1.38 0 0 0-.288-1.357 1.395 1.395 0 0 0-1.321-.425.723.723 0 1 1-.303-1.416 2.836 2.836 0 0 1 3.29 3.649zm-3.916-6.575A5.831 5.831 0 0 1 21.5 4.72a5.836 5.836 0 0 1 1.22 5.704.838.838 0 0 1-1.06.54.844.844 0 0 1-.542-1.062 4.143 4.143 0 0 0-4.807-5.327.845.845 0 0 1-.354-1.65z"></path>
-                </svg>
+    </nav>
+</header>
+<main class="mx-auto home-page" id="container">
+    <header class="bg-cover post-cover">
+        <div class="cover-bg">
+            <img src="https://picsum.photos/id/10/1920/1080" class="z-auto" alt="归档">
+        </div>
+        <div class="cover-content flex justify-center">
+            <!-- 封面内容 -->
+            <div class="inner flex flex-col justify-center">
+                <p class="cover-title text-base md:text-4xl lg:text-4xl xl:text-5xl">归档</p>
+            </div>
+        </div>
+    </header>
+    <div class="container mx-auto px-4 mt-16 max-w-6xl tracking-wider md:leading-relaxed sm:leading-normal ct-container cn-pd content-container"
+         id="pageContainer">
+        <section class="arch-year" th:each="yearArchive:${archives}">
+            <h1 class="year-title bg-fff relative" th:text="${yearArchive.key}">2021</h1>
+            <div class="relative pl-12" th:each="monthArchive:${yearArchive.value}">
+                <header class="absolute mh-hd bg-fff af-bg-fff mh-bg " th:text="${monthArchive.key}"> 1 月</header>
+                <span class="" th:each="archive:${monthArchive.value}">
+                    <a class="ah-hf ah-hv"
+                       th:href="'/blog/'+${archive.id}">
+                        <span class="ah-dt" th:text="${#dates.format(archive.createTime,'MM-dd')}">01-07</span>
+                        <span class="ah-tt" th:text="${archive.title}">测试</span>
+                    </a>
+                </span>
+            </div>
+        </section>
+    </div>
+</main>
+<footer th:replace="_fragments :: footer" class="footer mt-8">
+    <div class="inner container mx-auto flex flex-row lg:justify-between  md:justify-center items-center grid lg:grid-cols-2 md:grid-cols-1">
+        <div class="offsite-links flex flex-row justify-center flex-wrap">
+            <a href="https://weibo.com/guqing3478520" class="circle pad-10" target="_blank" rel="noopener">
+                <span class="iconfont icon-weibo"> </span>
             </a>
-            <a href="https://t.me/guching" class="circle" target="_blank" rel="noopener" title="Telegram Chat">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
-                    <path fill="none" d="M0 0h24v24H0z"></path>
-                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-3.11-8.83l.013-.007.87 2.87c.112.311.266.367.453.341.188-.025.287-.126.41-.244l1.188-1.148 2.55 1.888c.466.257.801.124.917-.432l1.657-7.822c.183-.728-.137-1.02-.702-.788l-9.733 3.76c-.664.266-.66.638-.12.803l2.497.78z"></path>
-                </svg>
+            <a href="https://t.me/guching" class="circle pad-10" target="_blank" rel="noopener" title="Telegram Chat">
+                <span class="iconfont icon-telegram"> </span>
             </a>
-            <a href="https://github.com/guqing" class="circle" target="_blank" rel="noopener" title="Github">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
-                    <path fill="none" d="M0 0h24v24H0z"></path>
-                    <path d="M12 2C6.475 2 2 6.475 2 12a9.994 9.994 0 0 0 6.838 9.488c.5.087.687-.213.687-.476 0-.237-.013-1.024-.013-1.862-2.512.463-3.162-.612-3.362-1.175-.113-.288-.6-1.175-1.025-1.413-.35-.187-.85-.65-.013-.662.788-.013 1.35.725 1.538 1.025.9 1.512 2.338 1.087 2.912.825.088-.65.35-1.087.638-1.337-2.225-.25-4.55-1.113-4.55-4.938 0-1.088.387-1.987 1.025-2.688-.1-.25-.45-1.275.1-2.65 0 0 .837-.262 2.75 1.026a9.28 9.28 0 0 1 2.5-.338c.85 0 1.7.112 2.5.337 1.912-1.3 2.75-1.024 2.75-1.024.55 1.375.2 2.4.1 2.65.637.7 1.025 1.587 1.025 2.687 0 3.838-2.337 4.688-4.562 4.938.362.312.675.912.675 1.85 0 1.337-.013 2.412-.013 2.75 0 .262.188.574.688.474A10.016 10.016 0 0 0 22 12c0-5.525-4.475-10-10-10z"></path>
-                </svg>
+            <a href="https://github.com/guqing" class="circle pad-10" target="_blank" rel="noopener" title="Github">
+                <span class="iconfont icon-github"> </span>
             </a>
-            <a href="https://guqing.xyz/atom.xml" class="circle" target="_blank" rel="noopener" title="RSS">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36">
-                    <path fill="none" d="M0 0h24v24H0z"></path>
-                    <path d="M3 3c9.941 0 18 8.059 18 18h-3c0-8.284-6.716-15-15-15V3zm0 7c6.075 0 11 4.925 11 11h-3a8 8 0 0 0-8-8v-3zm0 7a4 4 0 0 1 4 4H3v-4z"></path>
-                </svg>
+            <a href="https://www.guqing.xyz/atom.xml" class="circle pad-10" target="_blank" rel="noopener" title="RSS">
+                <span class="iconfont icon-rss"> </span>
             </a>
         </div>
-        <div class="site-info">
-            <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-143641169-1"></script>
-            <script>window.dataLayer = window.dataLayer || [];
 
-            function gtag() {
-                dataLayer.push(arguments);
-            }
+        <div class="site-info flex flex-col justify-center">
+            <script>
+                window.dataLayer = window.dataLayer || [];
 
-            gtag('js', new Date());
-            gtag('config', 'UA-143641169-1');</script>
-            <p>Copyright © 2020<a href="https://guqing.xyz"> NoahCode's Blog</a></p>
-            <p>Theme by <a target="_blank" href="https://github.com/GalaxySuze/gridea-theme-subtle-galaxy">Subtle
-                Galaxy</a> • REFERENCE FROM <a href="https://github.com/hshanx/halo-theme-hshan.git">寒山</a></p>
-            <p>本站运行：<span id="span_dt_dt">430天18小时32分58秒</span></p>
-            <p>
-                <span id="busuanzi_container_site_uv" style="display: inline;">感谢<span
-                        id="busuanzi_value_site_uv">4368</span>位小伙伴的</span>
-                <span id="busuanzi_container_site_pv" style="display: inline;"><span
-                        id="busuanzi_value_site_pv">9342</span>次访问</span>
-            </p>
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+
+                gtag('js', new Date());
+                gtag('config', 'UA-143641169-1');
+            </script>
+
+            <!-- 请尊重作者，请务必保留版权 -->
+            <div class="badges">
+                <div class="github-badge">
+                    <a style="color: #fff" rel="license" href="http://halo.run" target="_blank">
+                        <span class="badge-subject">Powered</span>
+                        <span class="badge-value bg-blue">Halo</span>
+                    </a>
+                </div>
+                <div class="github-badge">
+                    <a style="color: #fff" rel="license" href="https://github.com/xzzai/halo-theme-xue.git"
+                       target="_blank">
+                        <span class="badge-subject">Theme</span>
+                        <span class="badge-value bg-red">Xue</span>
+                    </a>
+                </div>
+
+                <div class="github-badge">
+                    <a style="color: #fff" rel="license" href="javascript:void(0)">
+                        <span class="badge-subject">运行</span>
+                        <span class="badge-value bg-orange" id="span_dt_dt">558天16小时48分45秒</span>
+                    </a>
+                </div>
+            </div>
         </div>
-        <a href="#page" class="arrow-up" data-scroll=""><span class="screen-reader-text">Back to the top</span></a>
     </div>
 </footer>
-<div class="searchbox ins-search search-popup">
-    <div class="searchbox-container ins-search-container">
-        <div class="searchbox-input-wrapper">
-            <form method="get" action="/search">
-                <input type="text" class="searchbox-input ins-search-input" name="keyword" placeholder="请输入关键字"
-                       autocomplete="off">
-            </form>
-            <span class="searchbox-close ins-close ins-selectable" onclick="closeSearchPanel()"><i
-                    class="fa fa-times"></i></span>
+
+<div class="moon-menu" id="moonMenu">
+    <div class="moon-menu-items">
+        <span class="moon-menu-item pl-6 iconfont icon-up" onclick="ckBack2Top()"> </span>
+        <span class="moon-menu-item pl-6 iconfont icon-down" onclick="ckBack2Bottom()"> </span>
+        <span class="moon-menu-item pl-6 iconfont icon-search" onclick="toggleSearchBox()"></span>
+        <span class="moon-menu-item pl-6 iconfont icon-toc hidden" onclick="ckShowContent()" id="smallToc"></span>
+    </div>
+
+    <div class="moon-menu-button" onclick="ckMoonButton()">
+        <svg class="moon-menu-bg">
+            <circle class="moon-menu-cricle" cx="50%" cy="50%" r="44%"></circle>
+            <circle class="moon-menu-border" cx="50%" cy="50%" r="48%" style="stroke-dasharray: 0, 196;"></circle>
+            <g class="moon-dot" style="">
+                <circle r=".2rem" cx="0" cy="-.8rem"></circle>
+                <circle r=".2rem"></circle>
+                <circle r=".2rem" cx="0" cy=".8rem"></circle>
+            </g>
+        </svg>
+        <div class="moon-menu-content">
+            <div class="moon-menu-icon" style="display: block;"></div>
+            <div class="moon-menu-text" style="display: none;">1%</div>
         </div>
-        <div class="searchbox-result-wrapper ins-section-wrapper">
-            <div class="ins-section-container">
-                <section class="ins-section">
-                    <header class="ins-section-header">最新文章</header>
-                    <a href="https://guqing.xyz/archives/20200420204031">
-                        <div class="ins-selectable ins-search-item">
-                            <header><i class="fa fa-file"></i><span class="ins-title">测试</span>
-                            </header>
-                            <p class="ins-search-preview">测试</p>
-                        </div>
-                    </a>
-                </section>
-                <section class="ins-section">
-                    <header class="ins-section-header">分类</header>
-                    <div class="level">
-                        <div class="columns is-multiline">
-                            <a href="https://guqing.xyz/categories/Linux">
-                                <div class="ins-selectable ins-search-item">
-                                    <header>
-                                        <i class="fa fa-folder"></i>
-                                        <span class="ins-title">Linux</span>
-                                        <span class="ins-slug">Linux</span>
-                                    </header>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </section>
-                <section class="ins-section">
-                    <header class="ins-section-header">标签</header>
-                    <div class="level">
-                        <div class="columns is-multiline">
-                            <a href="https://guqing.xyz/tags/linux">
-                                <div class="ins-selectable ins-search-item">
-                                    <header>
-                                        <i class="fa fa-tag"></i>
-                                        <span class="ins-title">Linux</span>
-                                        <span class="ins-slug">linux</span>
-                                    </header>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </section>
+    </div>
+</div>
+
+<div class="moon-content menu-bg" id="moonToc">
+</div>
+
+<form method="get" action="/search">
+    <div class="hidden search-box" id="searchBox">
+        <div class="search-ipt ipt ipt-w">
+            <div class="ipt-ct ct-bg search-container" id="searchInput">
+                <label class="sh-lab">
+                    <input class="sh-ipt" maxlength="30" name="keyword" id="searchBoxInput" spellcheck="false"
+                           placeholder="Search" autofocus="autofocus" autocomplete="off">
+                    <i class="sh-icon iconfont icon-search"></i>
+                </label>
+                <a class="sh-exit iconfont icon-exit" onclick="toggleSearchBox()"></a>
             </div>
         </div>
     </div>
-</div>
-<div class="search-mask"></div>
-<script>function openSearchPanel() {
-    $(".search-popup").velocity("transition.expandIn", {duration: 300});
-}
+</form>
 
-function closeSearchPanel() {
-    $(".search-popup").velocity("transition.expandOut", {duration: 300});
-}
-</script>
-
-<script src="//cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"></script>
-<script src="../static/js/utils.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
-<script src="../static/js/plugins.min.js"></script>
-<script src="../static/js/main.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/velocity-animate@1.5.2/velocity.ui.min.js"></script>
-<script src="//cdn.jsdelivr.net/gh/hshanx/halo-comment-normal@v1.0.0/dist/halo-comment.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<!-- markdown 插件 -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<!--图片预览插件-->
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/xzzai/static@master/js/highlight.lang.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tocbot@4.11.2/dist/tocbot.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/isotope-layout@3.0.6/dist/isotope.pkgd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/xzzai/static@master/js/moon.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/hshanx/static@master/js/simply-nav.js"></script>
 <script type="text/javascript">
-    var nightModeStartTime = 20;
-    var nightModeEndTime = 7;
-</script>
-<script src="../static/js/night-mode.min.js"></script>
-<script async="" src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<script defer="" src="//cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
-<script defer="" src="//cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"
-        onload="if (document.getElementById('post-content') ) {renderMathInElement(document.getElementById('post-content'),katex_config)}"></script>
-<script src="//cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
-<script data-pjax-viewer="" src="//cdn.jsdelivr.net/npm/viewerjs@1.5.0/dist/viewer.min.js"></script>
-<script data-gallery="" src="../static/js/gallery.js"></script>
-<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.0.0/build/highlight.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/highlightjs-line-numbers.js@2.7.0/dist/highlightjs-line-numbers.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/social-share.js@1.0.16/dist/js/social-share.min.js"></script>
-<div class="qr-code-wrap" role="dialog">
-    <div role="document" class="qr-code" style="transform-origin: 201px 294px;">
-<span class="closinglayer"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="close" width="1em"
-                                height="1em" fill="currentColor" aria-hidden="true"><path
-        d="M563.8 512l262.5-312.9c4.4-5.2.7-13.1-6.1-13.1h-79.8c-4.7 0-9.2 2.1-12.3 5.7L511.6 449.8 295.1 191.7c-3-3.6-7.5-5.7-12.3-5.7H203c-6.8 0-10.5 7.9-6.1 13.1L459.4 512 196.9 824.9A7.95 7.95 0 0 0 203 838h79.8c4.7 0 9.2-2.1 12.3-5.7l216.5-258.1 216.5 258.1c3 3.6 7.5 5.7 12.3 5.7h79.8c6.8 0 10.5-7.9 6.1-13.1L563.8 512z"></path></svg>
-</span>
-        <div style="text-align: center;padding: 10px 0;">
-        </div>
-    </div>
-</div>
-<script src="//cdn.jsdelivr.net/npm/tocbot@4.4.2/dist/tocbot.min.js"></script>
-<script type="application/javascript">
-    var displayReadProgress = true;
-</script>
-<script src="../static/js/post.min.js"></script>
-<style>#readProgress .read-progress-bar {
-    background: #fb6290 !important;
-    height: 0.1875rem;
-}</style>
-<script type="text/javascript">function show_date_time() {
-    if ($("#span_dt_dt").length > 0) {
-        window.setTimeout("show_date_time()", 1000);
-        BirthDay = new Date("7/9/2019 23:34");
-        today = new Date();
-        timeold = (today.getTime() - BirthDay.getTime());
-        sectimeold = timeold / 1000;
-        secondsold = Math.floor(sectimeold);
-        msPerDay = 24 * 60 * 60 * 1000;
-        e_daysold = timeold / msPerDay;
-        daysold = Math.floor(e_daysold);
-        e_hrsold = (e_daysold - daysold) * 24;
-        hrsold = Math.floor(e_hrsold);
-        e_minsold = (e_hrsold - hrsold) * 60;
-        minsold = Math.floor((e_hrsold - hrsold) * 60);
-        seconds = Math.floor((e_minsold - minsold) * 60);
-        span_dt_dt.innerHTML = daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒";
-    }
-}
+    let openKatex = false;
+    const katex_config = {
+        delimiters:
+            [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\(", right: "\\)", display: false},
+                {left: "\\[", right: "\\]", display: true},
+            ]
+    };
+    openKatex = true;
 
-show_date_time();</script>
-<input type="file" id="" name="file" style="display: none;">
-<!--<div data-v-cef78672="" class="container_selected_area"-->
-<!--     style="cursor: url(&quot;chrome-extension://ialiedlpfknneamnbemcgmaboleiccdd/assets/images/cursor-imagen.svg&quot;) 9 9, crosshair;">-->
-<!--    <div data-v-cef78672="" class="area"></div>-->
-<!--</div>-->
+    // 是否开启代码高亮
+    let enableCodeHighlight = false;
+    enableCodeHighlight = true;
+    let enableLineNumber = false;
+
+    // 是否开启行号
+
+    function renderTagCloud() {
+        // 标签云
+        var tagCloud = $("#tagCloud");
+        if (!(tagCloud && tagCloud.children().length === 0)) {
+            return;
+        }
+        // 标签
+        var tagArray = [
+            {'text': 'Linux', 'weight': '9', 'link': 'https://www.guqing.xyz/tags/linux'},
+            {'text': 'MySQL', 'weight': '4', 'link': 'https://www.guqing.xyz/tags/mysql'},
+            {'text': 'Lambda', 'weight': '3', 'link': 'https://www.guqing.xyz/tags/lambda'},
+            {'text': 'redis', 'weight': '3', 'link': 'https://www.guqing.xyz/tags/redis'},
+            {'text': 'Vue', 'weight': '12', 'link': 'https://www.guqing.xyz/tags/vue'},
+            {'text': 'gis', 'weight': '3', 'link': 'https://www.guqing.xyz/tags/gis'},
+            {'text': 'javascript', 'weight': '13', 'link': 'https://www.guqing.xyz/tags/javascript'},
+            {'text': 'tools', 'weight': '3', 'link': 'https://www.guqing.xyz/tags/tools'},
+            {'text': 'arcgis', 'weight': '2', 'link': 'https://www.guqing.xyz/tags/arcgis'},
+            {'text': '设计模式', 'weight': '3', 'link': 'https://www.guqing.xyz/tags/1562730997438'},
+            {'text': 'Git', 'weight': '1', 'link': 'https://www.guqing.xyz/tags/git'},
+            {'text': 'Java', 'weight': '22', 'link': 'https://www.guqing.xyz/tags/java'},
+        ];
+
+        // 标签云
+        tagCloud.jQCloud(tagArray, {autoResize: true, delayedMode: true});
+
+    }
+
+    function renderCategoryCloud() {
+        // 分类云
+        var categoryCloud = $("#categoryCloud");
+        if (!(categoryCloud && categoryCloud.children().length === 0)) {
+            return;
+        }
+        // 分类
+        var array = [
+            {
+                'text': 'Linux',
+                'weight': '9',
+                'link': 'https://www.guqing.xyz/categories/Linux'
+            },
+            {
+                'text': 'Web前端',
+                'weight': '17',
+                'link': 'https://www.guqing.xyz/categories/Web'
+            },
+            {
+                'text': '工具',
+                'weight': '1',
+                'link': 'https://www.guqing.xyz/categories/Utils'
+            },
+            {
+                'text': 'Java后端',
+                'weight': '25',
+                'link': 'https://www.guqing.xyz/categories/Java'
+            },
+        ];
+
+        categoryCloud.jQCloud(array, {autoResize: true, delayedMode: true});
+    }
+</script>
+
+<script src="https://www.guqing.xyz/themes/bao/source/js/main.js?ver=202011011234"></script>
+<script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.1/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+        integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+        crossorigin="anonymous"></script>
+<script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+        integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+        crossorigin="anonymous"></script>
+<script type="text/javascript">
+    // console.clear();
+    console.log("%c 有朋自远方来, 不亦说乎.", "background:#24272A; color:#ffffff", "");
+    console.log("%c Github %c", "background:#24272A; color:#ffffff", "", "https://github.com/guqing");
+</script>
+
+<script type="text/javascript">
+    const loading = "https://www.guqing.xyz/themes/bao/source/images/loading-45.svg";
+    var photoList = ``;
+    var photos = []
+    if (photoList && photoList.trim() !== '') {
+        if (photoList.endsWith(';')) {
+            photoList = photoList.substring(0, photoList.length - 1);
+        }
+        photos = photoList.split(";");
+    }
+    // 默认收缩菜单
+    var hideMenu = false;
+    hideMenu = true;
+
+    var autoNightMode = false
+    autoNightMode = true;
+</script>
+
+<script type="text/javascript">
+    // 建站时间统计
+    function show_date_time() {
+        if ($("#span_dt_dt").length > 0) {
+            BirthDay = new Date("7/9/2019 23:34");
+            today = new Date();
+            timeold = (today.getTime() - BirthDay.getTime());
+            sectimeold = timeold / 1000;
+            secondsold = Math.floor(sectimeold);
+            msPerDay = 24 * 60 * 60 * 1000;
+            e_daysold = timeold / msPerDay;
+            daysold = Math.floor(e_daysold);
+            e_hrsold = (e_daysold - daysold) * 24;
+            hrsold = Math.floor(e_hrsold);
+            e_minsold = (e_hrsold - hrsold) * 60;
+            minsold = Math.floor((e_hrsold - hrsold) * 60);
+            seconds = Math.floor((e_minsold - minsold) * 60);
+            span_dt_dt.innerHTML = daysold + "天" + hrsold + "小时" + minsold + "分" + seconds + "秒";
+        }
+    }
+
+    show_date_time();
+</script>
+<script src="https://cdn.jsdelivr.net/gh/xzzai/static@master/js/jquery.pjax.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css">
+<script type="text/javascript">
+    $(document).pjax(
+        'a[href]:not([href^="#"]):not([data-not-pjax]):not([target^="_blank"]), form',
+        '#container', {fragment: '#container', timeout: 8000});
+
+    $(document).on('pjax:send', function () {
+        NProgress.start();
+    })
+
+    $(document).on('pjax:complete', function () {
+        NProgress.done();
+
+        // 检查夜间模式
+        checkNightMode()
+
+        // 自动切换夜间模式
+        if (autoNightMode) {
+            autoDayNight();
+        }
+
+        // 删除listener
+        removeScrollTocFixed();
+
+        // 重新加载 评论
+        $('script[data-pjax-comment]').each(function () {
+            var commentParent = $(this).parent()
+            var comment = $(this).remove();
+            commentParent.append(comment);
+        });
+
+        if ($('#container').find('.ziyan').length > 0) {
+            // 计算时间
+            setTimeAgo();
+
+            // 自言代码高亮
+            hljsZiYanCode()
+
+        }
+
+        // 存在 markdown 页面的功能
+        if ($("#container").find('.md-content').length > 0) {
+            // 格式化内容
+            // 格式化markdown文章
+            const format = formatContent();
+
+            if ($('#container').find('.md-content').length > 0 && format) {
+                return;
+            } else {
+                loadGallery();
+                lazyloadImg();
+            }
+
+            // 小屏幕下面初始化 toc
+            if (typeof tocbot !== "undefined" && document.getElementById("toc")) {
+                dealContentToc()
+            }
+        }
+
+        // 相册页面功能
+        if ($("#container").find('.photos-page').length > 0) {
+            loadGallery();
+        }
+
+        // 图片懒加载
+        lazyloadImg()
+
+        //重载
+        if (typeof _hmt !== 'undefined') {
+            // support 百度统计
+            _hmt.push(['_trackPageview', location.pathname + location.search]);
+        }
+        if (typeof ga !== 'undefined') {
+            // support google analytics
+            ga('send', 'pageview', location.pathname + location.search);
+        }
+
+        if ($('#container').find('.jqcloud').length > 0) {
+            if (typeof $.fn.jQCloud !== "function") {
+                $.getScript(
+                    "https://cdn.jsdelivr.net/gh/xzzai/static@master/js/jqcloud-1.0.4.min.js",
+                    function () {
+                        renderTagCloud();
+                        renderCategoryCloud();
+                    });
+            } else {
+                renderTagCloud();
+                renderCategoryCloud();
+            }
+
+        }
+
+        ;
+
+    });
+
+    $(document).on('pjax:error', function () {
+        NProgress.done();
+    });
+
+</script>
+<!--/*/</th:block>/*/-->
 </body>
 </html>

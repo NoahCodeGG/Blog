@@ -71,6 +71,13 @@
         <a class="ui item">标签</a>
     </div>
     <a class="ui item">评论</a>
+    <a class="ui exterior item">
+        <i class="ui chevron down icon"></i>
+        外观
+    </a>
+    <div class="ui exterior inverted vertical menu" style="display: none;">
+        <a class="ui item" href="menus.html">菜单</a>
+    </div>
     <a class="ui user item">
         <i class="ui chevron down icon"></i>
         用户
@@ -91,7 +98,7 @@
 <!--面包屑导航条-->
 <div class="ui bottom attached segment">
     <div class="ui breadcrumb">
-        <a class="ui section">首页</a>
+        <a class="ui section" href="index.html" th:href="@{/admin/index}">首页</a>
         <div class="ui divider"> /</div>
         <div class="ui section">文章</div>
         <div class="ui divider"> /</div>
@@ -99,70 +106,66 @@
     </div>
 </div>
 
-<div class="ui bottom attached">
-    <div style="padding-top: 20px;padding-left: 100px;">
+<div class="ui bottom attached" th:fragment="categories">
+    <div style="padding:20px 40px;">
         <header>
             <span>关键词：</span>
             <div class="ui input">
-                <input type="text">
+                <input id="keyword" type="text" name="keyword">
             </div>
             <span style="margin-left: 20px;">文章状态：</span>
-            <div class="ui state selection dropdown">
+            <div id="status" class="ui state selection dropdown">
                 <input type="hidden" name="state">
                 <i class="dropdown icon"></i>
                 <div class="default text">请选择文章状态</div>
                 <div class="menu">
-                    <div class="ui item">已发布</div>
-                    <div class="ui item">草稿</div>
-                    <div class="ui item">回收站</div>
-                    <div class="ui item">私密</div>
+                    <div class="ui item" data-value="PUBLISH">已发布
+                    </div>
+                    <div class="ui item" data-value="DRAFT">草稿
+                    </div>
+                    <div class="ui item" data-value="RECYCLE">回收站
+                    </div>
+                    <div class="ui item" data-value="INTIMATE">私密
+                    </div>
                 </div>
             </div>
             <span style="margin-left: 20px;">分类目录：</span>
-            <div class="ui state selection dropdown">
-                <input type="hidden" name="state">
+            <div id="categoryId" class="ui categoryId selection dropdown">
+                <input type="hidden" name="categoryId">
                 <i class="dropdown icon"></i>
                 <div class="default text">请选择分类</div>
                 <div class="menu">
-                    <div class="ui item">默认分类（1）</div>
+                    <div class="ui item" th:each="category:${categories}" th:text="${category.name}"
+                         th:data-value="${category.id}">默认分类（1）
+                    </div>
                 </div>
             </div>
-            <button class="ui primary button" style="margin-left: 20px;">查询</button>
-            <button class="ui button" style="margin-left: 10px;">重置</button>
+            <button class="ui primary button" style="margin-left: 20px;"
+                    th:onclick="search([[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">查询
+            </button>
+            <button class="ui button" style="margin-left: 10px;" onclick="reset()">重置</button>
         </header>
         <div class="ui row" style="padding-top: 20px;padding-bottom: 20px;">
             <a class="ui primary button" th:href="@{blogs/input}">
                 <i class="ui plus icon"></i> 写文章
             </a>
         </div>
-        <table id="blogs" th:fragment="blogs" class="ui very basic collapsing celled table">
+        <table th:fragment="blogs" id="blogs" class="ui very basic table">
             <thead>
             <tr>
-                <th>
-                    <div class="ui fitted checkbox">
-                        <input type="checkbox" disabled="disabled" style="cursor: not-allowed;">
-                        <label></label>
-                    </div>
-                </th>
-                <th class="two wide">标题</th>
+                <th>标题</th>
                 <th>状态</th>
-                <th class="four wide">分类</th>
-                <th class="four wide">标签</th>
+                <th>分类</th>
+                <th>标签</th>
                 <th>评论</th>
                 <th>访问</th>
-                <th class="two wide">发布时间</th>
-                <th class="two wide">操作</th>
+                <th>发布时间</th>
+                <th>操作</th>
             </tr>
             </thead>
-            <tbody th:each="blog,blogStat:${blogs}" class="tbody">
-            <tr>
-                <td>
-                    <div class="ui fitted checkbox">
-                        <input type="checkbox" disabled="disabled" style="cursor: not-allowed;">
-                        <label></label>
-                    </div>
-                    <input type="hidden" th:value="${blog.id}">
-                </td>
+            <tbody class="tbody">
+            <tr th:each="blog:${blogs}">
+                <input type="hidden" th:value="${blog.id}">
                 <td th:switch="${blog.status}">
                     <div th:case="2">
                         <span th:text="${blog.title}" style="color:rgba(0,0,0,.25);cursor:default;">测试</span>
@@ -192,13 +195,13 @@
                 </td>
                 <td>
                     <a class="ui blue label" th:each="category:${blog.categories}"
-                       th:text="${category.name}">默认分类</a>
+                       th:text="${category.name}" style="margin: 3px;">默认分类</a>
                 </td>
                 <td>
-                    <a class="ui green label" th:each="tag:${blog.tags}" th:text="${tag.name}">测试</a>
+                    <a class="ui green label" th:each="tag:${blog.tags}" th:text="${tag.name}" style="margin: 3px;">测试</a>
                 </td>
                 <td>
-                    <a class="ui red circular label">2</a>
+                    <a class="ui red circular label" th:text="${blog.commentCount}">2</a>
                     <!--<a class="ui red circular label" th:text="@{blog.comments}">2</a>-->
                 </td>
                 <td>
@@ -209,12 +212,14 @@
                 </td>
                 <td th:switch="${blog.status}">
                     <span th:case="2">
-                        <a href="#" th:id="'reduction-button-'+${blog.id}" style="cursor:pointer">还原</a> |
-                        <a id="delete-button" th:id="'delete-button-'+${blog.id}" style="cursor:pointer">删除</a> |
+                        <a style="cursor:pointer"
+                           th:onclick="reductionPopup($(this),[[${blog.id}]],[[${blog.title}]],[[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">还原</a> |
+                        <a id="delete-button" style="cursor:pointer"
+                           th:onclick="deletePopup($(this),[[${blog.id}]],[[${blog.title}]],[[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">删除</a> |
                     </span>
                     <span th:case="*">
-                        <a href="#" th:href="@{/admin/blogs/{id}/input(id=${blog.id})}">编辑</a> |
-                        <a id="recycle-button" th:id="'recycle-button-'+${blog.id}" style="cursor:pointer"
+                        <a th:href="@{/admin/blogs/{id}/input(id=${blog.id})}">编辑</a> |
+                        <a class="recycle" th:id="'recycle-button-'+${blog.id}" style="cursor:pointer"
                            th:onclick="recyclePopup($(this),[[${blog.id}]],[[${blog.title}]],[[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])">回收站</a> |
                     </span>
                     <a id="setting-button" style="cursor:pointer"
@@ -267,7 +272,7 @@
 
 <!--右侧边栏-->
 <div class="ui right vertical wide sidebar menu">
-    <form id="blog-form" class="ui form" method="post" action="#">
+    <form th:fragment="setting" id="setting" class="ui form">
         <input id="id" type="hidden" name="id">
         <div class="ui item">
             <i class="ui small close icon" style="cursor: pointer;"></i>
@@ -277,7 +282,15 @@
             <div class="ui field">
                 <h4 class="ui header">基本设置</h4>
             </div>
-            <div class="ui field">
+            <div class="ui required field">
+                <label>文章标题：</label>
+                <input id="title" type="text" name="title">
+            </div>
+            <div class="ui required field">
+                <label>文章别名：</label>
+                <input id="slug" type="text" name="slug">
+            </div>
+            <div class="ui required field">
                 <label>开启评论</label>
                 <div class="ui inline fields">
                     <div class="ui field">
@@ -295,7 +308,7 @@
                     </div>
                 </div>
             </div>
-            <div class="ui field">
+            <div class="ui required field">
                 <label>是否置顶</label>
                 <div class="ui inline fields">
                     <div class="ui field">
@@ -323,13 +336,14 @@
             <div class="ui divider"></div>
             <div class="ui field">
                 <label>分类目录：</label>
-                <div class="ui categories grouped fields">
-                    <!--<div class="ui field">-->
-                    <!--    <div class="ui checkbox">-->
-                    <!--        <input id="categories" type="checkbox" name="categories" value="0">-->
-                    <!--        <label>默认分类</label>-->
-                    <!--    </div>-->
-                    <!--</div>-->
+                <div class="ui grouped fields">
+                    <div class="ui field" th:each="category:${categories}">
+                        <div class="ui checkbox">
+                            <input type="checkbox" name="categories" value="0"
+                                   th:value="${category.id}">
+                            <label th:text="${category.name}">默认分类</label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="ui field">
@@ -364,11 +378,11 @@
             <div class="ui field">
                 <label>标签</label>
                 <div class="ui tags multiple search selection dropdown" style="float: left;width: 220px;">
-                    <input id="tags" type="hidden" name="tags">
-                    <i class="ui tags dropdown icon"></i>
+                    <input type="hidden" name="tags">
+                    <i class="ui dropdown icon"></i>
                     <div class="ui default text">选择或输入标签</div>
-                    <div class="ui tags menu">
-                        <div class="ui item" value="1" th:each="tag:${tags}" th:data-value="${tag.id}"
+                    <div class="ui menu">
+                        <div class="ui item" th:each="tag:${tags}" th:data-value="${tag.id}"
                              th:text="${tag.name}">
                             测试
                         </div>
@@ -387,7 +401,8 @@
         </div>
         <div class="ui field">
             <div class="ui basic right floated segment">
-                <input id="publish-button" class="ui submit blue publish button" type="submit" value="保存"/>
+                <input id="publish-button" class="ui submit blue publish button" type="button" value="保存"
+                       th:onclick="setting([[${pageInfo.pageNum}]],[[${pageInfo.pageSize}]])"/>
             </div>
         </div>
     </form>
@@ -436,7 +451,14 @@
 <!--/*/</th:block>/*/-->
 <script>
     $('.ui.state.dropdown')
-        .dropdown()
+        .dropdown({
+            clearable: true
+        })
+
+    $('.ui.categoryId.dropdown')
+        .dropdown({
+            clearable: true
+        })
 
     $('.ui.page-size.dropdown')
         .dropdown()
@@ -459,8 +481,7 @@
     $('.ui.radio.checkbox').checkbox()
 
     function recyclePopup(obj, id, title, pageNum, pageSize) {
-        console.log(obj)
-        obj[0].popup({
+        obj.popup({
             on: 'click',
             position: 'top center',
             html: '<div class="ui basic segment" style="width:300px;">' +
@@ -471,62 +492,90 @@
                 '       </div>' +
                 '</div>'
         })
+        obj.removeAttr('onclick')
+    }
+
+    function deletePopup(obj, id, title, pageNum, pageSize) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要永久删除【' + title + '】文章？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toDelete(' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
+    }
+
+    function reductionPopup(obj, id, title, pageNum, pageSize) {
+        obj.popup({
+            on: 'click',
+            position: 'top center',
+            html: '<div class="ui basic segment" style="width:300px;">' +
+                '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要发布【' + title + '】文章？</div>' +
+                '       <div class="ui basic right floated segment">' +
+                '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
+                '           <input onclick="toReduction(' + id + ',' + pageNum + ',' + pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
+                '       </div>' +
+                '</div>'
+        })
+        obj.removeAttr('onclick')
     }
 
     function hoverPopup() {
         $('.ui.popup.transition.visible').transition('zoom')
     }
 
-    function toRecycle(blogId, pageNum, pageSize) {
-        $.ajax({
-            url: '/admin/blogs/' + blogId + '/recycle',
-            type: "GET",
-            success: $('#blogs').load('/admin/blogs/' + blogId + '/recycle?pageNum=' + pageNum + '&pageSize=' + pageSize)
-        })
+    function toRecycle(id, pageNum, pageSize) {
+        $('#blogs').load('/admin/blogs/' + id + '/recycle?pageNum=' + pageNum + '&pageSize=' + pageSize)
     }
 
-    function toDelete(blogId, pageNum, pageSize) {
-        $.ajax({
-            url: '/admin/blogs/' + blogId + '/delete',
-            type: "GET",
-            success: $('#blogs').load('/admin/blogs/' + blogId + '/delete?pageNum=' + pageNum + '&pageSize=' + pageSize)
-        })
+    function toDelete(id, pageNum, pageSize) {
+        $('#blogs').load('/admin/blogs/' + id + '/delete?pageNum=' + pageNum + '&pageSize=' + pageSize)
     }
 
-    function toReduction(blogId, pageNum, pageSize) {
-        $.ajax({
-            url: '/admin/blogs/' + blogId + '/reduction',
-            type: "GET",
-            success: $('#blogs').load('/admin/blogs/' + blogId + '/reduction?pageNum=' + pageNum + '&pageSize=' + pageSize)
-        })
+    function toReduction(id, pageNum, pageSize) {
+        $('#blogs').load('/admin/blogs/' + id + '/reduction?pageNum=' + pageNum + '&pageSize=' + pageSize)
     }
 
     function openSettingSidebar(categories, tags, blog) {
         var id = $('#id')
+        var title = $('#title')
+        var slug = $('#slug')
         var disallowComment = $('input[name="disallowComment"]')
         var topPriority = $('input[name="topPriority"]')
+        var summary = $('input[name="summary"]')
         var password = $('#access-password')
         var categoriesList = $('.ui.categories.grouped.fields')
 
         //初始化id
         id.val(blog.id)
 
+        title.val(blog.title)
+
+        slug.val(blog.slug)
+
+        summary.innerText = blog.summary
+
         //初始化评论、置顶单选按钮
+        disallowComment.eq(1).removeAttr('checked')
+        disallowComment.eq(0).removeAttr('checked')
         if (blog.disallowComment) {
             disallowComment.eq(0).attr('checked', 'checked')
-            disallowComment.eq(1).removeAttr('checked', '')
         } else {
-            disallowComment.eq(0).removeAttr('checked')
             disallowComment.eq(1).attr('checked', 'checked')
         }
+        topPriority.eq(1).removeAttr('checked')
+        topPriority.eq(0).removeAttr('checked')
         if (blog.topPriority) {
             topPriority.eq(0).attr('checked', 'checked')
-            topPriority.eq(1).removeAttr('checked', '')
         } else {
-            topPriority.eq(0).removeAttr('checked')
             topPriority.eq(1).attr('checked', 'checked')
         }
-        if (blog.password.length != 0) {
+        if (blog.password != null) {
             password.val(blog.password)
         }
 
@@ -535,6 +584,7 @@
         $.each(categories, function (index, category) {
             var isAdd = false
             $.each(blog.categories, function (index, blogCategory) {
+                console.log('blogCategory.id=' + blogCategory.id + 'category.id=' + category.id)
                 if (blogCategory.id === category.id) {
                     categoriesList.append(
                         '<div class="ui field">' +
@@ -564,85 +614,70 @@
             .sidebar('setting', 'transition', 'overlay')
             .sidebar('toggle')
     }
-</script>
-<script th:inline="javascript">
-    var blogs = [[${blogs}]]
-    var pageInfo = [[${pageInfo}]]
-    $.each(blogs, function (index, blog) {
-        var recycleId = '#' + 'recycle-button-' + blog.id
-        // $(recycleId)
-        //     .popup({
-        //         on: 'click',
-        //         position: 'top center',
-        //         html: '<div class="ui basic segment" style="width:300px;">' +
-        //             '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要将【' + blog.title + '】文章移到回收站吗？</div>' +
-        //             '       <div class="ui basic right floated segment">' +
-        //             '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
-        //             '           <input onclick="toRecycle(' + blog.id + ',' + pageInfo.pageNum + ',' + pageInfo.pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
-        //             '       </div>' +
-        //             '</div>'
-        //     })
-        var reductionId = '#' + 'reduction-button-' + blog.id
-        $(reductionId)
-            .popup({
-                on: 'click',
-                position: 'top center',
-                html: '<div class="ui basic segment" style="width:300px;">' +
-                    '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要发布【' + blog.title + '】文章？</div>' +
-                    '       <div class="ui basic right floated segment">' +
-                    '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
-                    '           <input onclick="toReduction(' + blog.id + ',' + pageInfo.pageNum + ',' + pageInfo.pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
-                    '       </div>' +
-                    '</div>'
-            })
-        var deleteId = '#' + 'delete-button-' + blog.id
-        $(deleteId)
-            .popup({
-                on: 'click',
-                position: 'top center',
-                html: '<div class="ui basic segment" style="width:300px;">' +
-                    '       <div class="ui content"><i class="ui yellow exclamation circle icon"></i>你确定要永久删除【' + blog.title + '】文章？</div>' +
-                    '       <div class="ui basic right floated segment">' +
-                    '           <input onclick="hoverPopup()" class="ui mini basic button" type="button" value="取消">' +
-                    '           <input onclick="toDelete(' + blog.id + ',' + pageInfo.pageNum + ',' + pageInfo.pageSize + ')" class="ui mini primary button" type="button" value="确定">' +
-                    '       </div>' +
-                    '</div>'
-            })
-    })
 
-    $('#publish-button').click(function () {
-        console.log($('#id').val())
-        $('#blog-form').submit(function (event) {
-            event.preventDefault();  // 阻止默认表单的action功能
-            var id = $('#id').val()
-            var summary = $('textarea[name="summary"]').val()
-            var password = $('input[name="password"]').val()
-            var disallowComment = $('input[name="disallowComment"]:checked').val()
-            var topPriority = $('input[name="topPriority"]:checked').val()
-            var categoryIds = []
-            var tagIds = $('input[name="tags"]').val().split(',')
-            $('input[name="categories"]:checked').each(function () {
-                categoryIds.push($(this).val())
-            })
-            data = {
-                "summary": summary,
-                "password": password,
-                "disallowComment": disallowComment,
-                "topPriority": topPriority,
-                "categoryIds": categoryIds,
-                "tagIds": tagIds
-            }
-            console.log(data)
-            $.ajax({
-                url: '/admin/blogs/' + id + '/setting?pageSize=' + pageInfo.pageSize,
-                type: "POST",
-                data: JSON.stringify(data),
-                contentType: "application/json;",
-                success: function (data) {
-                    window.location.href = "/admin/blogs"
-                }
-            })
+    // function openSettingSidebar(id, pageNum, pageSize) {
+    //     $('#setting').load('/admin/blogs/' + id + '/setting?pageNUm=' + pageNum + '&pageSize=' + pageSize)
+    //     //打开侧边栏
+    //     $('.ui.right.sidebar')
+    //         .sidebar('setting', 'transition', 'overlay')
+    //         .sidebar('toggle')
+    // }
+
+    function setting(pageNum, pageSize) {
+        var id = $('#id').val()
+        var title = $('#title').val()
+        var slug = $('#slug').val()
+        var summary = $('textarea[name="summary"]').text()
+        var password = $('input[name="password"]').val()
+        var disallowComment = $('input[name="disallowComment"]:checked').val()
+        var topPriority = $('input[name="topPriority"]:checked').val()
+        var categoryIds = []
+        var tagIds = $('input[name="tags"]').val().split(',')
+        $('input[name="categories"]:checked').each(function () {
+            categoryIds.push($(this).val())
         })
-    })
+        data = {
+            "title": title,
+            "slug": slug,
+            "summary": summary,
+            "password": password,
+            "disallowComment": disallowComment,
+            "topPriority": topPriority,
+            "categoryIds": categoryIds,
+            "tagIds": tagIds
+        }
+        $.ajax({
+            url: '/admin/blogs/' + id + '/setting?pageNum=' + pageNum + '&pageSize=' + pageSize,
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json;",
+            success: function () {
+                window.location.href = "/admin/blogs"
+            }
+        })
+    }
+
+    function search(pageNum, pageSize) {
+        var keyword = $('#keyword').val()
+        var status = $('#status').children('input').val()
+        var categoryId = $('#categoryId').children('input').val()
+        var url = '/admin/blogs/search?'
+        url += 'keyword=' + keyword
+        if (status.length != 0 && status != null && status != '') {
+            url += '&status=' + status
+        }
+        if (categoryId.length != 0 && categoryId != null && categoryId != '') {
+            url += '&categoryId=' + categoryId
+        }
+        url += '&pageNum=' + pageNum + '&pageSize=' + pageSize
+        $('#blogs').load(url)
+    }
+
+    function reset() {
+        $('#keyword').val('')
+        $('#status').dropdown('clear')
+        $('#categoryId').dropdown('clear')
+        $('#blogs').load('/admin/blogs/search?keyword')
+    }
 </script>
 </body>

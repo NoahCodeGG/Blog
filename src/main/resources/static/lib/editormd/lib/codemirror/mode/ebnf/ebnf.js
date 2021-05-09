@@ -41,10 +41,10 @@
             state.stringType = stream.peek();
             stream.next(); // Skip quote
             state.stack.unshift(stateType._string);
-          } else if (stream.match(/^\/\*/)) { //comments starting with /*
+          } else if (stream.match(/^\/\*/)) { //articleComments starting with /*
             state.stack.unshift(stateType.comment);
             state.commentType = commentType.slash;
-          } else if (stream.match(/^\(\*/)) { //comments starting with (*
+          } else if (stream.match(/^\(\*/)) { //articleComments starting with (*
             state.stack.unshift(stateType.comment);
             state.commentType = commentType.parenthesis;
           }

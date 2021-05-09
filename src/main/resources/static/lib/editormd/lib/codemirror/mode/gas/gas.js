@@ -22,7 +22,7 @@ CodeMirror.defineMode("gas", function(_config, parserConfig) {
   // The symbol used to start a line comment changes based on the target
   // architecture.
   // If no architecture is pased in "parserConfig" then only multiline
-  // comments will have syntax support.
+  // articleComments will have syntax support.
   var lineCommentStartSymbol = "";
 
   // These directives are architecture independent.
